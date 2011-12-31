@@ -8,11 +8,22 @@ Listes des features
 
 = Already implemented =
 
-
+== Tile Engine ==
+  * SDLInterface (affichage) encapsulé
+    * affiche texte et image facilement
+  * Boucle de jeu (Géré par FPS)
+  * Brouillon de classes
 
 = Work in progress =
 
+  * Tile Engine Générique
+  * Le jeu RPG/Minecraft/dynamic/générique/etc Style
+    * Documentation relative au jeu
 
+== Tile Engine ==
+  * World affichage
+  * Random World generation
+  * SDL Sounds
 
 = Would be could to have =
 
@@ -26,3 +37,6 @@ Listes des features
   * pluie
   * Flying monster
   * Big monster
+  * Crafting
+  * Avertissement proche de la mort
+  * Crier pour avertir les personnages autour
