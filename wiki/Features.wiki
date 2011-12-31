@@ -37,6 +37,8 @@ Listes des features
   * pluie
   * Flying monster
   * Big monster
-  * Crafting
+  * Crafting interessant
+    * alchemy qui vaut la peine, pas de crap useless puis longue
   * Avertissement proche de la mort
   * Crier pour avertir les personnages autour
+  * Dynamic lighting
