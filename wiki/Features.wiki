@@ -45,3 +45,4 @@ Listes des features
   * Avertissement proche de la mort
   * Crier pour avertir les personnages autour
   * Dynamic lighting
+  * Précision?
