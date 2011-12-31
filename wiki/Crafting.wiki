@@ -1,10 +1,10 @@
-
+#labels Phase-Design
 Lumberjacking (Différentes essence de bois, différentes qualité de buche, certaines sont juste esthétique (ébène, bois noir super classe, ou encore du chaine, 
 couleur normale mais fucking resistante)
 
 Herboristerie (Mining mais avec des plantes, fonctionne sur le même principe)
 
-MÉTIER DE PRODUCTION
+= MÉTIER DE PRODUCTION =
 
 Cultivateur 
 
@@ -13,7 +13,7 @@ Les récoltes dépendent du biome, certaines plantes sont plus a l'aise dans un 
 Basé sur des propriétés/modifier dans le système de stat, à disctuer
 
 
-MÉTIER DE TRANSFORMATION
+= MÉTIER DE TRANSFORMATION =
 
 Tailoring : Permet de faire des armures en cuir, en os, des vetements, transformer les fibres obtenus en cultivant en tissus etc
 
@@ -27,7 +27,7 @@ Alchimie : Poison, potions, bandages etc
 
 Blacksmithing : Self-explanatory
 
-*****************************************************
+----
 
 Chaque skill permet des spécialisations, niveau de détails a discuter
 
