@@ -25,7 +25,7 @@ Listes des features
   * Random World generation
   * SDL Sounds
 
-= Would be could to have =
+= Would be cool to have =
 
   * Transporter quelqu'un
   * Spell/whatever qui affecte la vision du joueur
