@@ -13,6 +13,10 @@ Les récoltes dépendent du biome, certaines plantes sont plus a l'aise dans un 
 Basé sur des propriétés/modifier dans le système de stat, à disctuer
 
 
+Fishing - Permet de pêcher divers types de poisson, des items randoms (des bottes .. ) des cartes aux trésors
+
+
+
 = MÉTIER DE TRANSFORMATION =
 
 Tailoring : Permet de faire des armures en cuir, en os, des vetements, transformer les fibres obtenus en cultivant en tissus etc
