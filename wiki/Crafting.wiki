@@ -1,16 +1,18 @@
+#summary Crafting
 #labels Phase-Design
-Crafting
 
-*Système de ressources qu'on acquert selon le biome et le climat
-*Région minière, foret dense, différentes essences de bois, minérais variés
+== Crafting ==
+
+Système de ressources qu'on acquert selon le biome et le climat
+Région minière, foret dense, différentes essences de bois, minérais variés
 
 Grandes catégories : Ressource naturelles, produit
 
 Profession de gathering et de transformation
 
-GATHERING
+== MÉTIER DE GATHERING ==
 
-Mining :
+=== Mining : ===
 
 En bordure de montagne, ou dans différentes régions on retrouve du minérais
 Le minérais dépend de l'endroit et non du skill
@@ -34,39 +36,50 @@ Il y a aussi une partie de hasard dans la trouvaille, un bon mineur peu quand me
 
 Des mécaniques similaires vont s'appliquer aux autres domaines
 
-Lumberjacking (Différentes essence de bois, différentes qualité de buche, certaines sont juste esthétique (ébène, bois noir super classe, ou encore du chaine, 
+=== Lumberjacking ===
+(Différentes essence de bois, différentes qualité de buche, certaines sont juste esthétique (ébène, bois noir super classe, ou encore du chaine, 
 couleur normale mais fucking resistante)
 
-Herboristerie (Mining mais avec des plantes, fonctionne sur le même principe)
+=== Herboristerie ===
+(Mining mais avec des plantes, fonctionne sur le même principe)
 
-= MÉTIER DE PRODUCTION =
+== MÉTIER DE PRODUCTION ==
 
-Cultivateur 
+=== Cultivateur ===
 
 On ramasse des seeds avec herboristerie qui permet d'ensemancer des champs (faire pousser des ingrédients d'alchimie, de la nourriture, des plantes)
 Les récoltes dépendent du biome, certaines plantes sont plus a l'aise dans un climat froid, certains ont besoin de beaucoup de pluie etc
 Basé sur des propriétés/modifier dans le système de stat, à disctuer
 
 
-Fishing - Permet de pêcher divers types de poisson, des items randoms (des bottes .. ) des cartes aux trésors
+=== Fishing ===  
+Permet de pêcher divers types de poisson, des items randoms (des bottes .. ) des cartes aux trésors
 
 
 
-= MÉTIER DE TRANSFORMATION =
+== MÉTIER DE TRANSFORMATION ==
 
-Tailoring : Permet de faire des armures en cuir, en os, des vetements, transformer les fibres obtenus en cultivant en tissus etc
+=== Tailoring : === 
+Permet de faire des armures en cuir, en os, des vetements, transformer les fibres obtenus en cultivant en tissus etc
 
-Tinkering : Faire des outils, des gadget, plus mécanique/engineering
+=== Tinkering : ===
+Faire des outils, des gadget, plus mécanique/engineering
 
-Fletching : Faire des arcs et des flèches
+=== Fletching : === 
+Faire des arcs et des flèches
 
-Ébénisterie : Fait des meubles, bateaux, etc plus décoratif, transforme le bois en planche etc
+=== Ébénisterie : === 
+Fait des meubles, bateaux, etc plus décoratif, transforme le bois en planche etc
 
-Alchimie : Poison, potions, bandages etc
+=== Alchimie : === 
+Poison, potions, bandages etc
 
-Blacksmithing : Self-explanatory
+=== Blacksmithing : === 
+Self-explanatory
 
 ----
+
+== Notes ==
 
 Chaque skill permet des spécialisations, niveau de détails a discuter
 
