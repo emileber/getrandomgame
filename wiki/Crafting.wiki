@@ -1,4 +1,39 @@
 #labels Phase-Design
+Crafting
+
+*Système de ressources qu'on acquert selon le biome et le climat
+*Région minière, foret dense, différentes essences de bois, minérais variés
+
+Grandes catégories : Ressource naturelles, produit
+
+Profession de gathering et de transformation
+
+GATHERING
+
+Mining :
+
+En bordure de montagne, ou dans différentes régions on retrouve du minérais
+Le minérais dépend de l'endroit et non du skill
+Le skill influence le nombre et la qualité de la ressource qu'on gather
+En minant on retrouve des ore de différente qualité/densité qui doivent etre fondu en lingot pour l'utilisation
+
+Exemple : mithril (minerais above average) on le retrouve à partir d'un certaine hauteur, ou d'une certaine profondeur,
+ou selon un certain climat
+
+Le mithril nécessite par exemple 70 mining puisque c'est un minerai quand même rare
+
+A 70 on obtient du minérai standard, si notre skill est plus bas, on a quand meme une chance dans trouver par hasard ou en gossant,
+mais en plus petite concentration (ca en prend plus pour faire des lingots)
+
+L'inverse est aussi vrai, avec mettons 90 mining c'est vraiment facile de miner un niveau 70 alors on est plus en mesure de <
+l'extraire correctement
+
+Donc nécessite 3 sprite, ore normal style coal dans minecraft, l'ore egrainé parce qu'on l'a mal miné, et une grosse roche parce qu'on est bon
+
+Il y a aussi une partie de hasard dans la trouvaille, un bon mineur peu quand meme trouvé de l'ore de marde
+
+Des mécaniques similaires vont s'appliquer aux autres domaines
+
 Lumberjacking (Différentes essence de bois, différentes qualité de buche, certaines sont juste esthétique (ébène, bois noir super classe, ou encore du chaine, 
 couleur normale mais fucking resistante)
 
