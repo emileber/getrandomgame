@@ -51,10 +51,26 @@ Includes > Include paths (-I)
 MinGW C++ Linker > Libraries
 add the folowing libraries (Libraries -l)
   * mingw32
-  * SDL_ttf
-  * SDL_image
+    * SDL_ttf
+    * SDL_image
+    * (même chose pour les autres extensions SDL)
   * SDLmain
   * SDL
 
 MinGW C++ Linker > Miscellaneous
 Linker flags: -mwindows
+
+=== SDL Extension Libraries ===
+
+Chaque bibliothèque SDL possède trois parties essentielles :
+
+  * Les fichiers d'entête (*.h)
+  * Le fichier lib
+  * Le(s) fichier(s) dll
+
+==== [http://www.libsdl.org/projects/SDL_image/ SDL image] ====
+
+#include "SDL/SDL_image.h"
+
+[http://loka.developpez.com/tutoriel/sdl/bibliotheques/bib_codeblocks/images/SDL_image_CodeBlocks.png]
+
