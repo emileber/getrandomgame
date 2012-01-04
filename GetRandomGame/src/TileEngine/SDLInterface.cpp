@@ -21,6 +21,9 @@ SDLInterface::SDLInterface() {
 	_fontSize = 15; // default 15
 	SDL_Color color = { 255, 255, 255 };
 	_fontColor = color; // default white
+	_transColor.r = 0;
+	_transColor.g = 255;
+	_transColor.b = 255;
 	cout << "new SDLInterface::End" << endl;
 }
 
@@ -83,6 +86,12 @@ void SDLInterface::setTextColor(Uint8 r, Uint8 g, Uint8 b) {
 	_fontColor.b = b;
 }
 
+void SDLInterface::setTransparentColor(int r, int g, int b) {
+	_transColor.r = r;
+	_transColor.g = g;
+	_transColor.b = b;
+}
+
 /**
  * Load an image and return an optimized SDL_Surface version of it
  *
@@ -108,8 +117,11 @@ SDL_Surface * SDLInterface::load_image(string filename) {
 		//si l'image optimisée créé est bonne
 		if (optimizedImage != NULL) {
 			//transparence
-			SDL_SetColorKey(optimizedImage, SDL_RLEACCEL | SDL_SRCCOLORKEY,
-					SDL_MapRGB(optimizedImage->format, 0, 0xFF, 0xFF));
+			SDL_SetColorKey(
+					optimizedImage,
+					SDL_RLEACCEL | SDL_SRCCOLORKEY,
+					SDL_MapRGB(optimizedImage->format, _transColor.r,
+							_transColor.g, _transColor.b));
 		}
 	}
 
@@ -121,8 +133,15 @@ SDL_Surface * SDLInterface::load_image(string filename) {
  * Apply an image "source" onto an image "destination"
  * Set "destination" to Null to apply on screen by default
  */
-void SDLInterface::apply_surface(int x, int y, SDL_Surface* source,
-		SDL_Surface* destination, SDL_Rect* clip = NULL) {
+void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
+		SDL_Surface* destination, SDL_Rect* clip) {
+
+	if ((alpha < 0) || (alpha > 255)) {
+		return;
+	}
+
+	SDL_SetAlpha(source, SDL_SRCALPHA | SDL_RLEACCEL, alpha);
+
 	SDL_Rect offset;
 
 	offset.x = x;
@@ -138,18 +157,22 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source,
 }
 
 bool SDLInterface::renderText(int x, int y, string text,
-		SDL_Surface * destination, SDL_Rect* clip = NULL) {
+		int alpha, SDL_Surface * destination, SDL_Rect* clip) {
+
+	if ((alpha < 0) || (alpha > 255)) {
+		return false;
+	}
 
 	// Create a temp surface with the text
 	SDL_Surface * textSurface = TTF_RenderText_Solid(_font, text.c_str(),
 			_fontColor);
 
-	if (textSurface == NULL){
+	if (textSurface == NULL) {
 		return false;
 	}
 
 	// Apply that text surface on the destination
-	apply_surface(x, y, textSurface, destination, clip);
+	apply_surface(x, y, textSurface, alpha, destination, clip);
 
 	// then free the text surface
 	SDL_FreeSurface(textSurface);

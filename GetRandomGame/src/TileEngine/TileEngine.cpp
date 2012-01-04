@@ -57,7 +57,7 @@ void TileEngine::fpsRegulator() {
 	sprintf(caption, "FPS: %f", (float) _fps);
 
 	// Render the FPS on screen
-	_sdl->renderText(SCREEN_WIDTH - 100, 5, caption, NULL, NULL);
+	_sdl->renderText(SCREEN_WIDTH - 100, 5, caption, 150);
 
 	//Si une seconde est passee depuis la derniere mise à jour de la barre caption
 	if (_fpsTimer.get_ticks() > 1000) {
@@ -110,8 +110,8 @@ void TileEngine::run() {
 		 * TEST ZONE
 		 */
 		//cout << " game looping... ";
-		_sdl->apply_surface(0, 0, hello, NULL, NULL);
-		_sdl->renderText(300, 200, "BOOBS", NULL, NULL);
+		_sdl->apply_surface(0, 0, hello);
+		_sdl->renderText(300, 200, "BOOBS", 150);
 
 		/**
 		 * each iteration, do this:
