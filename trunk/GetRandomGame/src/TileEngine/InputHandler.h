@@ -15,8 +15,8 @@ class InputHandler {
 public:
 	InputHandler();
 	virtual ~InputHandler();
-	bool handleInput(Environment*);
-private:
+	virtual bool handleInput(Environment*);
+protected:
 	SDL_Event event;
 };
 

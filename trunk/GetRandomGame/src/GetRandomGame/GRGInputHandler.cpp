@@ -1,32 +1,32 @@
 /*
- * InputHandler.cpp
+ * GRGInputHandler.cpp
  *
- *  Created on: 2011-12-28
+ *  Created on: 2012-01-04
  *      Author: Emile
  */
 
-#include "InputHandler.h"
+#include "GRGInputHandler.h"
 #include <iostream>
 
 using namespace std;
 
-InputHandler::InputHandler() {
+GRGInputHandler::GRGInputHandler() {
 	// TODO Auto-generated constructor stub
 
 }
 
-InputHandler::~InputHandler() {
+GRGInputHandler::~GRGInputHandler() {
 	// TODO Auto-generated destructor stub
 }
 
-bool InputHandler::handleInput(Environment * environment) {
-	cout << "InputHandler::handleInput" << endl;
+bool GRGInputHandler::handleInput(Environment* environment) {
+	//cout << "GRGInputHandler::handleInput" << endl;
 	//Get the keystates, used to know if a key is currently pressed
 	Uint8 *keystates = SDL_GetKeyState(NULL);
 
 	// Key event : This "if" returns true only if a key have been pressed
 	while (SDL_PollEvent(&event)) {
-		cout << "InputHandler::handleInput Event: " << event.type << endl;
+		cout << "GRGInputHandler::handleInput Event: " << event.type << endl;
 		if (event.type == SDL_QUIT) {
 			//Quit the program
 			return true;
@@ -61,9 +61,9 @@ bool InputHandler::handleInput(Environment * environment) {
 		cout << "right key is held down" << endl;
 	}
 
-// End of the key handler
+	// End of the key handler
 
-//If the user has Xed out the window
+	//If the user has Xed out the window
 	else if (event.type == SDL_QUIT) {
 		//Quit the program
 		return true;
