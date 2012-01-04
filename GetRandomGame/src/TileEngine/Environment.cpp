@@ -16,3 +16,10 @@ Environment::Environment(){
 	cout << "new Environment::End" << endl;
 }
 
+void Environment::update(){
+	cout << "Environment::update()" << endl;
+}
+
+void Environment::close(){
+	cout << "Environment::close()" << endl;
+}

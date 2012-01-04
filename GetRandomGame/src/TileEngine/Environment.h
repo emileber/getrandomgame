@@ -12,11 +12,16 @@
 #include "Singleton.h"
 #include "SDLInterface.h"
 
-class Environment: public Singleton<Environment> {
-	friend class Singleton<Environment>;
-private:
-	Environment();
+class Environment {
 public:
+	Environment(); // generic constructor
+	virtual ~Environment(){}
+	virtual void init() {} // subclass specific initialization
+	virtual void update(); // generic function, redefine by the subclass
+	virtual void close(); // generic function, redefine by the subclass
+
+protected:
+
 	World * _world;
 	SDLInterface * _sdl;
 

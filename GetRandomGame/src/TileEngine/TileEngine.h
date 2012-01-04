@@ -24,15 +24,16 @@ private:
 	InputHandler * _inputHandler;
 	Timer _frameTimer; // used to calculate the time taken each game loop
 	Timer _fpsTimer; // used to calculate the FPS of the game
-	int _frame, _fps;
-	bool _quit;
+	int _frame, _fps, _screenWidth, _screenHeight;
+	bool _quit, _init;
 
-	void init(Environment*, InputHandler*);
 	void run();
 	void fpsRegulator();
 
 public:
-	void start(Environment*, InputHandler*);
+	void init(int, int, std::string, std::string, Environment *, InputHandler *);
+	void start();
+	void stop();
 
 };
 
