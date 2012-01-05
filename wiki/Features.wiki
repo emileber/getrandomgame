@@ -27,6 +27,8 @@ Listes des features
 
 = Would be cool to have =
 
+  * Dynamic Events could be triggered with a scripting system that would execute events when the conditions for these events are met.
+
   * Transporter quelqu'un
   * Spell/whatever qui affecte la vision du joueur
   * Distance de vision variable (capacité à faire un zoom-out)
@@ -46,3 +48,4 @@ Listes des features
   * Crier pour avertir les personnages autour
   * Dynamic lighting
   * Précision?
+  * Loans, ou commanditaires
