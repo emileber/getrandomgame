@@ -17,7 +17,7 @@ Environment::Environment(){
 }
 
 void Environment::update(){
-	cout << "Environment::update()" << endl;
+	//cout << "Environment::update()" << endl;
 }
 
 void Environment::close(){
