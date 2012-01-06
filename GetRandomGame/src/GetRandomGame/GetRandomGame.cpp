@@ -27,14 +27,20 @@ void GetRandomGame::init(){
 
 void GetRandomGame::update() {
 	//cout << "GetRandomGame::update()" << endl;
+
+	Environment::update(); // generic update
+	// then game specific update
+
 	/**
 	 * TEST ZONE
 	 */
 	_sdl->apply_surface(-5, -5, _background);
-	_sdl->renderText(300, 200, "BOOBS", 150);
+	_sdl->renderText(300, 200, "BOOBS");
 }
 
 void GetRandomGame::close() {
 	cout << "GetRandomGame::close()" << endl;
+	Environment::close(); // call the generic close function to close general stuff
+
 	SDL_FreeSurface(_background); // test
 }
