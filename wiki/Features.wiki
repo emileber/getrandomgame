@@ -2,6 +2,13 @@
 #labels Featured,Phase-Design
 
 = Introduction =
+<g:plusone size="medium"></g:plusone>
+
+[http://code.google.com/p/getrandomgame/wiki/Setup Setup ton Environnement de développement]
+
+Then take a look at [http://code.google.com/p/getrandomgame/wiki/Crafting Craftings]
+
+Tu veux aider, va voir les [http://code.google.com/p/getrandomgame/issues/list issues]
 
 Listes des features
 
@@ -30,7 +37,16 @@ Listes des features
   * Dynamic Events could be triggered with a scripting system that would execute events when the conditions for these events are met.
 
   * Transporter quelqu'un
-  * Spell/whatever qui affecte la vision du joueur
+  * Spell
+    * qui affecte la vision du joueur
+    * Téléportation de groupe
+    * Lévitation
+    * Aura
+    * Summon
+    * ressurection
+    * souhait
+    * COMBINAISON de spell
+    * [http://faqs.ign.com/articles/913/913599p1.html Lost odyssey spell list]
   * Distance de vision variable (capacité à faire un zoom-out)
   * Possibilité d'avoir des ailes
   * Personnages jouables dans des mondes différents
@@ -49,3 +65,6 @@ Listes des features
   * Dynamic lighting
   * Précision?
   * Loans, ou commanditaires
+  * GUILD
+  * grappling hook
+  * Dimension/Plan (Éthéré, mort, etc)
