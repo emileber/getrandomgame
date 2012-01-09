@@ -17,7 +17,8 @@ public:
 	virtual ~GetRandomGame(){}
 	virtual void update();
 	virtual void close();
-	virtual void init();
+	virtual void init(int, int);
+
 };
 
 #endif /* GETRANDOMGAME_H_ */
