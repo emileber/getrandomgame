@@ -17,16 +17,19 @@ class Environment {
 public:
 	Environment(); // generic constructor
 	virtual ~Environment(){}
-	virtual void init() {} // subclass specific initialization
+	virtual void init(int, int); // subclass specific initialization
 	virtual void update(); // generic function, redefine by the subclass
 	virtual void close(); // generic function, redefine by the subclass
+
+	void outputTime(); // output the time on screen on demand
+	std::string intToString(int);
 
 protected:
 
 	World * _world;
 	SDLInterface * _sdl;
 	Timer _gameTime;
-	int _frameCount;
+	int _screenWidth, _screenHeight, _frameCount;
 
 };
 

@@ -68,7 +68,7 @@ void TileEngine::init(int screenW, int screenH, string caption, string fontFile,
 	}
 
 
-	_environment->init();
+	_environment->init(_screenWidth, _screenHeight);
 
 	_init = true;
 
@@ -143,7 +143,7 @@ void TileEngine::fpsRegulator() {
 	sprintf(caption, "FPS: %f", (float) _fps);
 
 	// Render the FPS on screen
-	_sdl->renderText(_screenWidth - 100, 5, caption, 150);
+	_sdl->renderText(10, 5, caption, 200);
 
 	//Si une seconde est passee depuis la derniere mise à jour de la barre caption
 	if (_fpsTimer.get_ticks() > 1000) {
