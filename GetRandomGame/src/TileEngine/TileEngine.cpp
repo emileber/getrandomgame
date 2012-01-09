@@ -60,7 +60,7 @@ void TileEngine::init(int screenW, int screenH, string caption, string fontFile,
 	_sdl = SDLInterface::getInstance();
 
 	// then init the interface with default values
-	if (_sdl->init(_screenWidth, _screenHeight, SCREEN_BPP, caption) == false) {
+	if (_sdl->init(_screenWidth, _screenHeight, SCREEN_BPP, caption, 3) == false) {
 		cout << "TileEngine::init sdl init = ERROR" << endl;
 	}
 	if (_sdl->setFont(fontFile, 15) == false) {

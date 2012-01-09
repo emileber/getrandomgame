@@ -13,6 +13,7 @@ Environment::Environment(){
 	cout << "new Environment" << endl;
 	_world = new World();
 	_sdl = SDLInterface::getInstance();
+	_frameCount = 0;
 	cout << "new Environment::End" << endl;
 }
 
