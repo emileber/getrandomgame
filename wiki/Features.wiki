@@ -3,21 +3,21 @@
 
 [http://www.thespecialistsltd.com/files/RPG7-(replica)_0.jpg]
 = RPG: Role Playing.. Gun? =
-<g:plusone size="medium"></g:plusone>
+	<g:plusone size="medium"></g:plusone>
 
-[http://code.google.com/p/getrandomgame/wiki/Setup Setup ton Environnement de développement]
+	[http://code.google.com/p/getrandomgame/wiki/Setup Setup ton Environnement de développement]
 
-Then take a look at [http://code.google.com/p/getrandomgame/wiki/Crafting Craftings]
+	Then take a look at [http://code.google.com/p/getrandomgame/wiki/Crafting Craftings]
 
-Tu veux aider, va voir les [http://code.google.com/p/getrandomgame/issues/list issues] ou commente cette page.
+	Tu veux aider, va voir les [http://code.google.com/p/getrandomgame/issues/list issues] ou commente cette page.
 
-Listes des features
+	Listes des features
 
-Take a look at [Features#Would_be_cool_to_have What would be cool to have]
+	Take a look at [Features#Would_be_cool_to_have What would be cool to have]
 
 = Already implemented =
 [http://www.refrag.com/wp-content/uploads/2009/03/tileset2.png]
-== Tile Engine ==
+	== Tile Engine ==
   * SDLInterface (affichage) encapsulé
     * affiche texte et image facilement
     * Layers
@@ -30,21 +30,21 @@ Take a look at [Features#Would_be_cool_to_have What would be cool to have]
   * Le jeu RPG/Minecraft/dynamic/générique/etc Style
     * Documentation relative au jeu
 
-== Tile Engine ==
+	== Tile Engine ==
   * World affichage
   * Random World generation
   * SDL Sounds
 
 = Would be cool to have =
 
-== World Related ==
+	== World Related ==
   * Dimension/Plan (Éthéré, mort, etc)
   * Triggered Dynamic Events
 [http://cdn.gamefront.com/wp-content/uploads/2011/08/Terraria4.jpg]
   * Dynamic lighting
 
-== Magie ==
-=== Buff et Curse ===
+	== Magie ==
+	=== Buff et Curse ===
   * l'état du personnage affecte les actions qu'il porte
 [http://www.foxnews.com/images/267901/3_61_captain_america.jpg]
 
@@ -53,7 +53,7 @@ Take a look at [Features#Would_be_cool_to_have What would be cool to have]
   * Stun / aveuglé / paralysé / Silence / Pétrifié / en feu / Gelé / Sourd / confu / sleep / bleeding / poisonned / slowed
   * État permanent (Vampire / lycanthropie
 
-=== Spell ===
+	=== Spell ===
 [http://cdn.gamerant.com/wp-content/uploads/Skyrim-Magic-Spells.jpg]
   * qui affecte la vision du joueur (tenebre, lumière)
   * Possibilité de Critique
@@ -67,10 +67,9 @@ Take a look at [Features#Would_be_cool_to_have What would be cool to have]
   * MASS DESTRUCTION
   * [http://faqs.ign.com/articles/913/913599p1.html Lost odyssey spell list]
 
-== Crafting ==
+	== Crafting ==
   * Potions:
     * vision nocturne
-
   * Récupération d'équipement Magique (shard, ou rune, etc)
   * Alchemy qui vaut la peine, pas de crap useless puis longue
   * Crafting diversifié (Un personnage devrait pouvoir etre un artisan si il le décide)
@@ -78,7 +77,7 @@ Take a look at [Features#Would_be_cool_to_have What would be cool to have]
   * Métier d'artisanat (Créer des tables, des coffres, des lits pour meubler les maisons)
   * Métier de crafting, gathering (Ramasser des plantes pour faire des remedes, bucher du bois pour faire des meubles)
 
-== Other Stuff ==
+	== Other Stuff ==
   * Transporter quelqu'un
   * Distance de vision variable (capacité à faire un zoom-out)
   * Possibilité d'avoir des ailes
