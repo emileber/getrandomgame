@@ -37,15 +37,24 @@ Listes des features
   * Dynamic Events could be triggered with a scripting system that would execute events when the conditions for these events are met.
 
   * Transporter quelqu'un
+  * Buff et Curse
+    * l'état du personnage affecte les actions qu'il porte 
+    * Finish moves/special ou des buffs après plusieurs hit de suite
+    * Stun / aveuglé / paralysé / Silence / Pétrifié / en feu / Gelé / Sourd / confu / sleep / bleeding / poisonned / slowed
+    * État permanent (Vampire / lycanthropie
+  * Potion
+    * vision nocturne
   * Spell
-    * qui affecte la vision du joueur
-    * Téléportation de groupe
+    * qui affecte la vision du joueur (tenebre, lumière)
+    * Possibilité de Critique
+    * Téléportation de groupe (création de portail)
     * Lévitation
     * Aura
     * Summon
     * ressurection
     * souhait
     * COMBINAISON de spell
+    * MASS DESTRUCTION
     * [http://faqs.ign.com/articles/913/913599p1.html Lost odyssey spell list]
   * Distance de vision variable (capacité à faire un zoom-out)
   * Possibilité d'avoir des ailes
@@ -55,6 +64,7 @@ Listes des features
   * Flying monster
   * Big monster
   * Crafting interessant
+    * Récupération d'équipement Magique (shard, ou rune, etc)
     * Alchemy qui vaut la peine, pas de crap useless puis longue
     * Crafting diversifié (Un personnage devrait pouvoir etre un artisan si il le décide)
     * Possibilité de miner, de cultiver des herbes, de bucher du bois (style Ultima Online)
