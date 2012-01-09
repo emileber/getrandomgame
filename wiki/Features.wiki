@@ -1,20 +1,22 @@
 #summary Features qui sont incluses présentement et qui seront incluses
 #labels Featured,Phase-Design
 
-= Introduction =
+[http://www.thespecialistsltd.com/files/RPG7-(replica)_0.jpg]
+= RPG: Role Playing.. Gun? =
 <g:plusone size="medium"></g:plusone>
 
 [http://code.google.com/p/getrandomgame/wiki/Setup Setup ton Environnement de développement]
 
 Then take a look at [http://code.google.com/p/getrandomgame/wiki/Crafting Craftings]
 
-Tu veux aider, va voir les [http://code.google.com/p/getrandomgame/issues/list issues]
+Tu veux aider, va voir les [http://code.google.com/p/getrandomgame/issues/list issues] ou commente cette page.
 
 Listes des features
 
+Take a look at [Features#Would_be_cool_to_have What would be cool to have]
 
 = Already implemented =
-
+[http://www.refrag.com/wp-content/uploads/2009/03/tileset2.png]
 == Tile Engine ==
   * SDLInterface (affichage) encapsulé
     * affiche texte et image facilement
@@ -38,16 +40,21 @@ Listes des features
 == World Related ==
   * Dimension/Plan (Éthéré, mort, etc)
   * Triggered Dynamic Events
+[http://cdn.gamefront.com/wp-content/uploads/2011/08/Terraria4.jpg]
   * Dynamic lighting
 
 == Magie ==
 === Buff et Curse ===
-  * l'état du personnage affecte les actions qu'il porte 
+  * l'état du personnage affecte les actions qu'il porte
+[http://www.foxnews.com/images/267901/3_61_captain_america.jpg]
+
+(Difficile d'attaquer lorsqu'on est presque mort)
   * Finish moves/special ou des buffs après plusieurs hit de suite
   * Stun / aveuglé / paralysé / Silence / Pétrifié / en feu / Gelé / Sourd / confu / sleep / bleeding / poisonned / slowed
   * État permanent (Vampire / lycanthropie
 
 === Spell ===
+[http://cdn.gamerant.com/wp-content/uploads/Skyrim-Magic-Spells.jpg]
   * qui affecte la vision du joueur (tenebre, lumière)
   * Possibilité de Critique
   * Téléportation de groupe (création de portail)
