@@ -18,6 +18,7 @@ Listes des features
 == Tile Engine ==
   * SDLInterface (affichage) encapsulé
     * affiche texte et image facilement
+    * Layers
   * Boucle de jeu (Géré par FPS)
   * Brouillon de classes
 
@@ -34,28 +35,44 @@ Listes des features
 
 = Would be cool to have =
 
-  * Dynamic Events could be triggered with a scripting system that would execute events when the conditions for these events are met.
+== World Related ==
+  * Dimension/Plan (Éthéré, mort, etc)
+  * Triggered Dynamic Events
+  * Dynamic lighting
 
-  * Transporter quelqu'un
-  * Buff et Curse
-    * l'état du personnage affecte les actions qu'il porte 
-    * Finish moves/special ou des buffs après plusieurs hit de suite
-    * Stun / aveuglé / paralysé / Silence / Pétrifié / en feu / Gelé / Sourd / confu / sleep / bleeding / poisonned / slowed
-    * État permanent (Vampire / lycanthropie
-  * Potion
+== Magie ==
+=== Buff et Curse ===
+  * l'état du personnage affecte les actions qu'il porte 
+  * Finish moves/special ou des buffs après plusieurs hit de suite
+  * Stun / aveuglé / paralysé / Silence / Pétrifié / en feu / Gelé / Sourd / confu / sleep / bleeding / poisonned / slowed
+  * État permanent (Vampire / lycanthropie
+
+=== Spell ===
+  * qui affecte la vision du joueur (tenebre, lumière)
+  * Possibilité de Critique
+  * Téléportation de groupe (création de portail)
+  * Lévitation
+  * Aura
+  * Summon
+  * ressurection
+  * souhait
+  * COMBINAISON de spell
+  * MASS DESTRUCTION
+  * [http://faqs.ign.com/articles/913/913599p1.html Lost odyssey spell list]
+
+== Crafting ==
+  * Potions:
     * vision nocturne
-  * Spell
-    * qui affecte la vision du joueur (tenebre, lumière)
-    * Possibilité de Critique
-    * Téléportation de groupe (création de portail)
-    * Lévitation
-    * Aura
-    * Summon
-    * ressurection
-    * souhait
-    * COMBINAISON de spell
-    * MASS DESTRUCTION
-    * [http://faqs.ign.com/articles/913/913599p1.html Lost odyssey spell list]
+
+  * Récupération d'équipement Magique (shard, ou rune, etc)
+  * Alchemy qui vaut la peine, pas de crap useless puis longue
+  * Crafting diversifié (Un personnage devrait pouvoir etre un artisan si il le décide)
+  * Possibilité de miner, de cultiver des herbes, de bucher du bois (style Ultima Online)
+  * Métier d'artisanat (Créer des tables, des coffres, des lits pour meubler les maisons)
+  * Métier de crafting, gathering (Ramasser des plantes pour faire des remedes, bucher du bois pour faire des meubles)
+
+== Other Stuff ==
+  * Transporter quelqu'un
   * Distance de vision variable (capacité à faire un zoom-out)
   * Possibilité d'avoir des ailes
   * Personnages jouables dans des mondes différents
@@ -63,18 +80,9 @@ Listes des features
   * Température/climat visible
   * Flying monster
   * Big monster
-  * Crafting interessant
-    * Récupération d'équipement Magique (shard, ou rune, etc)
-    * Alchemy qui vaut la peine, pas de crap useless puis longue
-    * Crafting diversifié (Un personnage devrait pouvoir etre un artisan si il le décide)
-    * Possibilité de miner, de cultiver des herbes, de bucher du bois (style Ultima Online)
-    * Métier d'artisanat (Créer des tables, des coffres, des lits pour meubler les maisons)
-    * Métier de crafting, gathering (Ramasser des plantes pour faire des remedes, bucher du bois pour faire des meubles)
   * Avertissement proche de la mort
   * Crier pour avertir les personnages autour
-  * Dynamic lighting
   * Précision?
   * Loans, ou commanditaires
-  * GUILD
+  * GUILDS
   * grappling hook
-  * Dimension/Plan (Éthéré, mort, etc)
