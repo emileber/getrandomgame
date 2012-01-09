@@ -11,6 +11,7 @@
 #include "World.h"
 #include "Singleton.h"
 #include "SDLInterface.h"
+#include "Timer.h"
 
 class Environment {
 public:
@@ -24,6 +25,8 @@ protected:
 
 	World * _world;
 	SDLInterface * _sdl;
+	Timer _gameTime;
+	int _frameCount;
 
 };
 

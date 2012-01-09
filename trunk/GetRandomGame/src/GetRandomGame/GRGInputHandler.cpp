@@ -26,7 +26,7 @@ bool GRGInputHandler::handleInput(Environment* environment) {
 
 	// Key event : This "if" returns true only if a key have been pressed
 	while (SDL_PollEvent(&event)) {
-		cout << "GRGInputHandler::handleInput Event: " << event.type << endl;
+		//cout << "GRGInputHandler::handleInput Event: " << event.type << endl;
 		if (event.type == SDL_QUIT) {
 			//Quit the program
 			return true;

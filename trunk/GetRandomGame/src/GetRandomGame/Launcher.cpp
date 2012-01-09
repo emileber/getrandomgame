@@ -12,8 +12,8 @@
 using namespace std;
 
 const int DEFAULT_FONT_SIZE = 15;
-const int SCREEN_WIDTH = 640;
-const int SCREEN_HEIGHT = 480;
+const int SCREEN_WIDTH = 1000;
+const int SCREEN_HEIGHT = 600;
 
 int main(int argc, char* args[]) {
 	cout << "Main START" << endl;

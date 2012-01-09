@@ -6,11 +6,13 @@
  */
 
 #include "GetRandomGame.h"
+#include "Sprite.h"
 #include <iostream>
 
 using namespace std;
 
-SDL_Surface * _background;
+Sprite * _background, *_hello;
+int test = 0;
 
 GetRandomGame::GetRandomGame() {
 	cout << "new GetRandomGame()" << endl;
@@ -18,15 +20,17 @@ GetRandomGame::GetRandomGame() {
 	cout << "new GetRandomGame()::End" << endl;
 }
 
-void GetRandomGame::init(){
+void GetRandomGame::init() {
 	cout << "GetRandomGame::init()" << endl;
-	_background = _sdl->load_image("background.bmp");
+	_background = new Sprite(0, 0, "background.bmp");
+	_hello = new Sprite(250, 190, "hello_world.bmp");
+	_sdl->setTextColor(255, 0, 0);
+	_gameTime.start();
 	cout << "GetRandomGame::init()::End" << endl;
 }
 
-
 void GetRandomGame::update() {
-	//cout << "GetRandomGame::update()" << endl;
+	cout << "GetRandomGame::update()" << endl;
 
 	Environment::update(); // generic update
 	// then game specific update
@@ -34,13 +38,18 @@ void GetRandomGame::update() {
 	/**
 	 * TEST ZONE
 	 */
-	_sdl->apply_surface(-5, -5, _background);
-	_sdl->renderText(300, 200, "BOOBS");
+
+	if (_gameTime.get_ticks() < 5000) {
+		_sdl->pushSprite(_hello, 1);
+		_sdl->pushSprite(new Sprite(900, test++, _hello), 1);
+	}
+	_sdl->pushSprite(_background, 0);
+	_sdl->renderText(300, 200, "BOOBS", test++);
 }
 
 void GetRandomGame::close() {
 	cout << "GetRandomGame::close()" << endl;
 	Environment::close(); // call the generic close function to close general stuff
 
-	SDL_FreeSurface(_background); // test
+	delete _background; // test
 }

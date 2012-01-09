@@ -24,6 +24,8 @@ SDLInterface::SDLInterface() {
 	_transColor.r = 0;
 	_transColor.g = 255;
 	_transColor.b = 255;
+
+	_nbLayer = 1;
 	cout << "new SDLInterface::End" << endl;
 }
 
@@ -31,7 +33,12 @@ SDLInterface::SDLInterface() {
  * intialize the SDL stuff
  *
  */
-bool SDLInterface::init(int w, int h, int bpp, string caption) {
+bool SDLInterface::init(int w, int h, int bpp, string caption, int nbLayer) {
+	if (nbLayer < 1) {
+		nbLayer = 1; // force to have at least ONE layer
+	}
+	_nbLayer = nbLayer;
+
 	//initialisation de tous les sous-systemes de sdl
 	if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
 		return false;
@@ -43,6 +50,12 @@ bool SDLInterface::init(int w, int h, int bpp, string caption) {
 	//Si il y a une erreur lors de la mise en place de l'ecran
 	if (_screen == NULL) {
 		return false;
+	}
+
+	// set the number of layer you'll have
+	for (int i = 0; i < _nbLayer; i++) {
+		queue<Sprite*> temp;
+		_layer.push_back(temp);
 	}
 
 	//Initialisation de SDL_ttf
@@ -92,7 +105,18 @@ void SDLInterface::setTransparentColor(int r, int g, int b) {
 	_transColor.b = b;
 }
 
+SDL_Surface * SDLInterface::createSurface(int width, int height,
+		SDL_Surface* display) {
+	// 'display' is the surface whose format you want to match
+	//  if this is really the display format, then use the surface returned from SDL_SetVideoMode
+
+	const SDL_PixelFormat& fmt = *(display->format);
+	return SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, fmt.BitsPerPixel,
+			fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
+}
+
 /**
+ * load_image
  * Load an image and return an optimized SDL_Surface version of it
  *
  */
@@ -130,11 +154,33 @@ SDL_Surface * SDLInterface::load_image(string filename) {
 }
 
 /**
- * Apply an image "source" onto an image "destination"
- * Set "destination" to Null to apply on screen by default
+ * createTextSurface
+ * Return an SDL_Surface out of a text
  */
+SDL_Surface * SDLInterface::createTextSurface(string text) {
+	return TTF_RenderText_Solid(_font, text.c_str(), _fontColor);
+}
+
+/**
+ * pushSprite
+ * Add sprite to the desired int Layer.
+ *
+ */
+void SDLInterface::pushSprite(Sprite * sprite, int layer) {
+	//cout << "pushSprite layer: " << layer << endl;
+	if ((layer >= 0) && (layer < _nbLayer)) {
+		_layer.at(layer).push(sprite);
+	}
+	//cout << "pushSprite::END" << endl;
+}
+
+/**
+ * Apply an image "source" onto the Surface[layer]
+ * Apply on screen by default
+ */
+
 void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
-		SDL_Surface* destination, SDL_Rect* clip) {
+		SDL_Rect* clip) {
 
 	if ((alpha < 0) || (alpha > 255)) {
 		return;
@@ -143,49 +189,62 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
 	SDL_SetAlpha(source, SDL_SRCALPHA | SDL_RLEACCEL, alpha);
 
 	SDL_Rect offset;
-
 	offset.x = x;
 	offset.y = y;
 
-	// apply the image on the screen by default
-	if (destination == NULL) {
-		destination = _screen;
-	}
-
 	//on blit la surface
-	SDL_BlitSurface(source, clip, destination, &offset);
+	SDL_BlitSurface(source, clip, _screen, &offset);
 }
 
-bool SDLInterface::renderText(int x, int y, string text,
-		int alpha, SDL_Surface * destination, SDL_Rect* clip) {
+/**
+ * Apply a text "text" onto the Surface[layer]
+ * Apply on screen by default
+ */
+bool SDLInterface::renderText(int x, int y, string text, int alpha,
+		SDL_Rect* clip) {
 
 	if ((alpha < 0) || (alpha > 255)) {
-		return false;
+		alpha = 255;
 	}
 
 	// Create a temp surface with the text
-	SDL_Surface * textSurface = TTF_RenderText_Solid(_font, text.c_str(),
-			_fontColor);
+	SDL_Surface * textSurface = createTextSurface(text);
 
 	if (textSurface == NULL) {
 		return false;
 	}
 
 	// Apply that text surface on the destination
-	apply_surface(x, y, textSurface, alpha, destination, clip);
+	//apply_surface(x, y, textSurface, alpha, clip);
+	pushSprite(new Sprite(x, y, textSurface, alpha), _nbLayer-1);
 
 	// then free the text surface
-	SDL_FreeSurface(textSurface);
+	//SDL_FreeSurface(textSurface);
 
 	return true;
 }
 
 /**
  * Flip the screen
- *
+ * but apply all the layer on the sreen first
  */
 void SDLInterface::render() {
+	// TODO correct the bug here
+	cout << "SDLInterface::render" << endl;
+	for (int i = 0; i < _nbLayer; i++) {
+		//cout << "_layer at (" << i << ") = " << _layer.at(i).empty() << endl;
+		if (!_layer.at(i).empty()) {
+			queue<Sprite*> * tempSpriteQu = &_layer.at(i);
+			while (!tempSpriteQu->empty()) {
+				Sprite * tSprite = tempSpriteQu->front();
+				apply_surface(tSprite->getX(), tSprite->getY(),
+						tSprite->getSurface(), tSprite->getAlpha());
+				tempSpriteQu->pop();
+			}
+		}
+	}
 	SDL_Flip(_screen);
+	cout << "SDLInterface::render::END" << endl;
 }
 
 /**
@@ -193,7 +252,9 @@ void SDLInterface::render() {
  *
  */
 void SDLInterface::cleanUp() {
-
+	for (int i = 0; i < _nbLayer; i++) {
+		//SDL_FreeSurface(&_layer[i]);
+	}
 	//On ferme le font qu'on a utilisé
 	TTF_CloseFont(_font);
 
