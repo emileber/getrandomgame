@@ -18,6 +18,7 @@ SDLInterface::SDLInterface() {
 	cout << "new SDLInterface" << endl;
 	//font variables init
 	_font = NULL;
+	_fontFilename = "";
 	_fontSize = 15; // default 15
 	SDL_Color color = { 255, 255, 255 };
 	_fontColor = color; // default white
@@ -86,7 +87,13 @@ bool SDLInterface::setFont(string filename, int size) {
 		return false;
 	}
 
+	_fontFilename = filename;
+
 	return true;
+}
+
+void SDLInterface::setFontSize(int size){
+	_font = TTF_OpenFont(_fontFilename.c_str(), size);
 }
 
 /**
@@ -186,6 +193,10 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
 		return;
 	}
 
+	if (source == NULL){
+		return;
+	}
+
 	SDL_SetAlpha(source, SDL_SRCALPHA | SDL_RLEACCEL, alpha);
 
 	SDL_Rect offset;
@@ -200,12 +211,14 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
  * Apply a text "text" onto the Surface[layer]
  * Apply on screen by default
  */
-bool SDLInterface::renderText(int x, int y, string text, int alpha,
+bool SDLInterface::renderText(int x, int y, string text, int alpha, int size,
 		SDL_Rect* clip) {
 
 	if ((alpha < 0) || (alpha > 255)) {
 		alpha = 255;
 	}
+
+	setFontSize(size);
 
 	// Create a temp surface with the text
 	SDL_Surface * textSurface = createTextSurface(text);
@@ -214,12 +227,10 @@ bool SDLInterface::renderText(int x, int y, string text, int alpha,
 		return false;
 	}
 
+	setFontSize(15);
 	// Apply that text surface on the destination
 	//apply_surface(x, y, textSurface, alpha, clip);
 	pushSprite(new Sprite(x, y, textSurface, alpha), _nbLayer-1);
-
-	// then free the text surface
-	//SDL_FreeSurface(textSurface);
 
 	return true;
 }
@@ -230,7 +241,7 @@ bool SDLInterface::renderText(int x, int y, string text, int alpha,
  */
 void SDLInterface::render() {
 	// TODO correct the bug here
-	cout << "SDLInterface::render" << endl;
+	//cout << "SDLInterface::render" << endl;
 	for (int i = 0; i < _nbLayer; i++) {
 		//cout << "_layer at (" << i << ") = " << _layer.at(i).empty() << endl;
 		if (!_layer.at(i).empty()) {
@@ -244,7 +255,7 @@ void SDLInterface::render() {
 		}
 	}
 	SDL_Flip(_screen);
-	cout << "SDLInterface::render::END" << endl;
+	//cout << "SDLInterface::render::END" << endl;
 }
 
 /**

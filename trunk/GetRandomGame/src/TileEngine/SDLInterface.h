@@ -27,6 +27,7 @@ private:
 	SDL_Surface * _screen;
 	std::vector<std::queue<Sprite *> > _layer;
 	TTF_Font * _font;
+	std::string _fontFilename;
 	int _fontSize, _nbLayer;
 	SDL_Color _fontColor;
 	SDL_Color _transColor;
@@ -38,12 +39,13 @@ public:
 	SDL_Surface* createSurface(int, int, SDL_Surface*);
 
 	bool setFont(std::string, int);
+	void setFontSize(int);
 	void setTextColor(Uint8, Uint8, Uint8);
 	void setTransparentColor(int, int, int);
 
 	void pushSprite(Sprite *, int = 0);
 	void apply_surface(int, int, SDL_Surface*, int = 255, SDL_Rect* = NULL);
-	bool renderText(int, int, std::string, int = 255, SDL_Rect * = NULL);
+	bool renderText(int, int, std::string, int = 255, int = 15, SDL_Rect * = NULL);
 
 	void render();
 	void cleanUp();

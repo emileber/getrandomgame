@@ -6,6 +6,7 @@
  */
 #include "Environment.h"
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 
@@ -35,20 +36,18 @@ void Environment::close() {
 void Environment::outputTime() {
 	// Render the FPS on screen
 	int total = _gameTime.get_ticks();
-	//int minute = total / 60000;
-	//int second = total % 60000;
+	int minute = abs(total / 60000);
+	int second = abs((total % 60000) / 1000);
+	int milisec = abs((total % 60000) - (second*1000));
 
-	//string timeString = "Time: " + intToString(minute) + ":" + intToString(second);
-	string timeString = "Time: " + intToString(total);
+	string timeString = "Time: " + intToString(minute) + ":"
+			+ intToString(second) + "." + intToString(milisec);
+	//string timeString = "Time: " + intToString(total);
 	_sdl->renderText(10, 20, timeString, 200);
 }
 
 string Environment::intToString(int number) {
-	//Une chaine de caracteres temporaire
-	char caption[64];
-
-	//On calcule le nombre de frames par seconde et on cree la chaine de caracteres
-	sprintf(caption, "%f", (float) number);
-
-	return static_cast<string>(caption);
+	stringstream ss; //create a stringstream
+	ss << number; //add number to the stream
+	return ss.str(); //return a string with the contents of the stream
 }
