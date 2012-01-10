@@ -5,7 +5,7 @@ Documentation de DUPA sur ce que DUPA connait :
 
 = le WAT? (pas de h) =
 
-	Getarandomgame est une idée qu'on a eu en ne travaillant pas a la job, l'idée est de faire un monde ou vous n'êtes PAS le héro, ou vou n'ête PAS l'élu et ou vous n'êtes PAS le meilleur dans quoi que ce soit. 
+	Getarandomgame est une idée qu'on a 888888888888888888888888888888888, l'idée est de faire un monde ou vous n'êtes PAS le héro, ou vou n'ête PAS l'élu et ou vous n'êtes PAS le meilleur dans quoi que ce soit. 
 
 	À la base Getarandomgame est un jue ou le monde est généré aléatoirement et ou l'évolution est dynamique. Qu'entend-je par là? En gros l'univers de Getarandomgame n'evolue pas uniquement autour du joueur mais autour d'interaction pertinentes entre NPCs; Le joueur pourrait patienter jusqu'a mourir de faim et le monde évoluerait pareil. Le monde n'ayant donc pas besoin du joueur pour avancé celui-ci est laissé libre d'agir come il lui plait dans l'univers qui lui est présenté.
 
