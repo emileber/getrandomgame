@@ -31,7 +31,7 @@ void GetRandomGame::init(int w, int h) {
 }
 
 void GetRandomGame::update() {
-	cout << "GetRandomGame::update()" << endl;
+	//cout << "GetRandomGame::update()" << endl;
 
 	Environment::update(); // generic update
 	// then game specific update
@@ -45,7 +45,7 @@ void GetRandomGame::update() {
 	}
 	_sdl->pushSprite(new Sprite(900, 0, _hello), 1);
 	_sdl->pushSprite(_background, 0);
-	_sdl->renderText(300, 200, "BOOBS", test++);
+	_sdl->renderText(300, 200, "BOOBS", test++, 40);
 	outputTime();
 }
 

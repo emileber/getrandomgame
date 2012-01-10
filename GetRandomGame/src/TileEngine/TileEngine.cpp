@@ -136,14 +136,8 @@ void TileEngine::fpsRegulator() {
 
 	_frame++; // incremente à chaque frame
 
-	//Une chaine de caracteres temporaire
-	char caption[64];
-
-	//On calcule le nombre de frames par seconde et on cree la chaine de caracteres
-	sprintf(caption, "FPS: %f", (float) _fps);
-
 	// Render the FPS on screen
-	_sdl->renderText(10, 5, caption, 200);
+	_sdl->renderText(10, 5, "FPS: "+_environment->intToString(_fps), 200);
 
 	//Si une seconde est passee depuis la derniere mise à jour de la barre caption
 	if (_fpsTimer.get_ticks() > 1000) {
