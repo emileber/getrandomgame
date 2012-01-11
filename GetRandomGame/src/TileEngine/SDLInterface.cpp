@@ -71,6 +71,12 @@ bool SDLInterface::init(int w, int h, int bpp, string caption, int nbLayer) {
 	return true;
 }
 
+string SDLInterface::intToString(int number) {
+	stringstream ss; //create a stringstream
+	ss << number; //add number to the stream
+	return ss.str(); //return a string with the contents of the stream
+}
+
 /**
  * Set the font to use and its size
  *
@@ -240,22 +246,28 @@ bool SDLInterface::renderText(int x, int y, string text, int alpha, int size,
  * but apply all the layer on the sreen first
  */
 void SDLInterface::render() {
-	// TODO correct the bug here
-	//cout << "SDLInterface::render" << endl;
+	//cout << "SDLInterface::render()" << endl;
 	for (int i = 0; i < _nbLayer; i++) {
 		//cout << "_layer at (" << i << ") = " << _layer.at(i).empty() << endl;
 		if (!_layer.at(i).empty()) {
 			queue<Sprite*> * tempSpriteQu = &_layer.at(i);
+
+			// Apply all the sprites
 			while (!tempSpriteQu->empty()) {
+				// Handle the next Sprite
 				Sprite * tSprite = tempSpriteQu->front();
+
+				// Apply the temp sprite on the screen
 				apply_surface(tSprite->getX(), tSprite->getY(),
-						tSprite->getSurface(), tSprite->getAlpha());
-				tempSpriteQu->pop();
-			}
+						tSprite->getSurface(), tSprite->getAlpha(), tSprite->getClip());
+
+				tempSpriteQu->pop(); // remove pointer to the applied sprite
+			} // do that until it has been emptied
 		}
 	}
+
+	// Show the updated screen
 	SDL_Flip(_screen);
-	//cout << "SDLInterface::render::END" << endl;
 }
 
 /**

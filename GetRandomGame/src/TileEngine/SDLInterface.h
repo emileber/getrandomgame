@@ -18,6 +18,7 @@
 #include <string>
 #include <queue>
 #include <vector>
+#include <sstream>
 
 class SDLInterface: public Singleton<SDLInterface> {
 	friend class Singleton<SDLInterface> ;
@@ -49,6 +50,8 @@ public:
 
 	void render();
 	void cleanUp();
+
+	std::string intToString(int);
 };
 
 #endif /* SDLINTERFACE_H_ */

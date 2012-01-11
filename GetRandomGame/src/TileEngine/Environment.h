@@ -22,7 +22,6 @@ public:
 	virtual void close(); // generic function, redefine by the subclass
 
 	void outputTime(); // output the time on screen on demand
-	std::string intToString(int);
 
 protected:
 

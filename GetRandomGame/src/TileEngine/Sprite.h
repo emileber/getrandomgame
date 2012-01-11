@@ -38,12 +38,24 @@ public:
 		return _height;
 	}
 
-	std::string getFileName(){
+	int getNbImage() {
+		return _nbImage;
+	}
+
+	std::string getFileName() {
 		return _fileName;
 	}
 
-	SDL_Surface * getSurface(){
+	SDL_Surface * getSurface() {
 		return _spriteSheet;
+	}
+
+	SDL_Rect * getClipRect() {
+		return _clip;
+	}
+
+	SDL_Rect * getClip(){
+		return &_clip[_frame % _nbImage];
 	}
 
 	void setPoint(int x, int y) {
@@ -63,11 +75,18 @@ public:
 	}
 
 	void setSprite(std::string);
+	void nextFrame(){
+		_frame++;
+	}
 
 private:
-	int _x, _y, _width, _height, _alpha;
+	int _x, _y, _width, _height, _alpha, _nbImage, _frame;
 	SDL_Surface * _spriteSheet;
+	SDL_Rect * _clip;
 	std::string _fileName;
+
+	void placeRect(int, int, int);
+	void setRect(int, int, int, int = 0, int = 0);
 };
 
 #endif /* SPRITE_H_ */

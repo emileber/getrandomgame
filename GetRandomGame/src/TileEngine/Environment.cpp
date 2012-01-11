@@ -6,7 +6,6 @@
  */
 #include "Environment.h"
 #include <iostream>
-#include <sstream>
 
 using namespace std;
 
@@ -40,14 +39,8 @@ void Environment::outputTime() {
 	int second = abs((total % 60000) / 1000);
 	int milisec = abs((total % 60000) - (second*1000));
 
-	string timeString = "Time: " + intToString(minute) + ":"
-			+ intToString(second) + "." + intToString(milisec);
+	string timeString = "Time: " + _sdl->intToString(minute) + ":"
+			+ _sdl->intToString(second) + "." + _sdl->intToString(milisec);
 	//string timeString = "Time: " + intToString(total);
 	_sdl->renderText(10, 20, timeString, 200);
-}
-
-string Environment::intToString(int number) {
-	stringstream ss; //create a stringstream
-	ss << number; //add number to the stream
-	return ss.str(); //return a string with the contents of the stream
 }
