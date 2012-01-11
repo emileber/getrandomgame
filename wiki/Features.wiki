@@ -5,6 +5,10 @@
 = RPG: Role Playing.. Gun? =
 	<g:plusone size="medium"></g:plusone>
 
+	Last video of the project:
+
+	<wiki:video url="http://www.youtube.com/watch?v=bEBxr5hiRTg"/>
+
 	[http://code.google.com/p/getrandomgame/wiki/Setup Setup ton Environnement de développement]
 
 	Then take a look at [http://code.google.com/p/getrandomgame/wiki/Crafting Craftings]
