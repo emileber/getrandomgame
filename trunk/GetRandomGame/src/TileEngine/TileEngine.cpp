@@ -60,13 +60,13 @@ void TileEngine::init(int screenW, int screenH, string caption, string fontFile,
 	_sdl = SDLInterface::getInstance();
 
 	// then init the interface with default values
-	if (_sdl->init(_screenWidth, _screenHeight, SCREEN_BPP, caption, 3) == false) {
+	if (_sdl->init(_screenWidth, _screenHeight, SCREEN_BPP, caption, 3)
+			== false) {
 		cout << "TileEngine::init sdl init = ERROR" << endl;
 	}
 	if (_sdl->setFont(fontFile, 15) == false) {
 		cout << "TileEngine::init setFont = ERROR" << endl;
 	}
-
 
 	_environment->init(_screenWidth, _screenHeight);
 
@@ -128,7 +128,10 @@ void TileEngine::run() {
 			;
 
 	} // End of the GAME LOOP
+
+	// Stop the program correctly
 	stop();
+
 	cout << "TileEngine run::End" << endl;
 }
 
@@ -137,7 +140,7 @@ void TileEngine::fpsRegulator() {
 	_frame++; // incremente à chaque frame
 
 	// Render the FPS on screen
-	_sdl->renderText(10, 5, "FPS: "+_environment->intToString(_fps), 200);
+	_sdl->renderText(10, 5, "FPS: " + _sdl->intToString(_fps), 200);
 
 	//Si une seconde est passee depuis la derniere mise à jour de la barre caption
 	if (_fpsTimer.get_ticks() > 1000) {
@@ -149,7 +152,7 @@ void TileEngine::fpsRegulator() {
 	}
 }
 
-void TileEngine::stop(){
+void TileEngine::stop() {
 	_environment->close();
 	_sdl->cleanUp();
 }
