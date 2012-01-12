@@ -1,5 +1,5 @@
 #summary This is the Game document
-#labels Phase-Requirements,Phase-Design
+#labels Phase-Design
 
 Documentation de DUPA sur ce que DUPA connait :
 
@@ -94,4 +94,19 @@ Je n'ai utilisé aucun algorythme formel pour avoir ca, mais ca donne une idée.
 Reste qu'a repassé l'agorythem diamond square(plus haut) pour avoir une map complete
 	On fait ca pour les quatres map (altitude, température,  précipitation, végétation)  et chaque case a assez d'information pour savoir quelle genre de case elle est(désert foret taiga tundra...), on a donc un monde vierge
 
-Je vais continuer ca plus tard, reste a placer des villes des villages, des points cools, et plein de stock...
+EDIT : vue le test de émille, on s'est rendu compte que c'est vachement important de smoother le random ou on a un monde de bouette. donc le principe c'est de se gosser une variable x qui va diviser le résultat du random pour chaque iteration de de diamond square. donc avant de repasse un diamond square on divise les bornes du random par x.
+
+allright maintenant on a un monde vierge dans lequel on peut disposer des ressources naturelles qui vont amener des villes.
+
+Donc pour placer des trucs sur la map il faut commencer par la splitter par agglomération naturel(grosse montagne, lac, forêt tropicale), chacun de ses agglomérations devront se peupler seul. Chaque agglomération a un certain nombre de ressource spéciale(arbre de magie, mine de sel, thorium) et de quartier/point d’intérêt(combiné) a placer dans sa superficie, proportionnelle a la taille de la dite agglomération avec un peu de random, quand même. 
+
+donc on fait l'agglomération en vérifiant la qualité d'une tuile, et des tuiles voisine qui partagent ses qualités, récursivement, donc l'algorithme va parcourir la map un peu comme djikstra le ferais jusqua ce que tous les agglomérations soit highligthés.
+  
+
+L’agglomération place en premier ses ressources naturelles, réparties aux hasard a travers sa superficie, de maniere complètement aveugle.
+
+ensuite on place les viles/points d’intérêts, on les éloignes les un des autres et on les place de manière pertinente en fonction du type d'Agglomération et des ressources naturelles placées(pas de villes en plein millieu de l'océan les villages minier sont proche des mines). Lorsque l'agglomération place une villes elle détermine la taille de la ville, en quartier, et les place généralement en cercle/carré , collé un sur l'autre, comme l’agglomération a uniquement un nombre de quartier le random peux placé plusieurs petits villages ou une énorme ville, la taille maximum de la ville est aussi décidé par le type d'aglomération.  
+
+on peux scrapper ces agglomérations après la générations des villes/ressources/point d'intèrets.
+
+reste a peaufiner ca et génère des plus petites région.
