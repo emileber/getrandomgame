@@ -118,14 +118,25 @@ void SDLInterface::setTransparentColor(int r, int g, int b) {
 	_transColor.b = b;
 }
 
+/**
+ * Create a transparent Surface
+ *
+ */
 SDL_Surface * SDLInterface::createSurface(int width, int height,
 		SDL_Surface* display) {
+	if (display == NULL){
+		display = _screen;
+	}
 	// 'display' is the surface whose format you want to match
 	//  if this is really the display format, then use the surface returned from SDL_SetVideoMode
 
+	SDL_Surface * tempSurf = NULL;
 	const SDL_PixelFormat& fmt = *(display->format);
-	return SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, fmt.BitsPerPixel,
+	tempSurf = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, fmt.BitsPerPixel,
 			fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
+	SDL_FillRect(tempSurf, NULL, SDL_MapRGB(&fmt,0,255,255));
+	SDL_SetColorKey(tempSurf, SDL_RLEACCEL | SDL_SRCCOLORKEY, SDL_MapRGB(tempSurf->format, 0, 255, 255));
+	return tempSurf;
 }
 
 /**
@@ -193,7 +204,11 @@ void SDLInterface::pushSprite(Sprite * sprite, int layer) {
  */
 
 void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
-		SDL_Rect* clip) {
+		SDL_Rect* clip, SDL_Surface * destination) {
+
+	if (destination == NULL){
+		destination = _screen;
+	}
 
 	if ((alpha < 0) || (alpha > 255)) {
 		return;
@@ -210,7 +225,7 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
 	offset.y = y;
 
 	//on blit la surface
-	SDL_BlitSurface(source, clip, _screen, &offset);
+	SDL_BlitSurface(source, clip, destination, &offset);
 }
 
 /**

@@ -24,4 +24,6 @@
 	 TOTAL_LAYER = 12
  };
 
+//#define
+
 #endif /* ENUMERATION_H_ */

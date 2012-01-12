@@ -46,7 +46,7 @@ public:
 	void setTransparentColor(int, int, int);
 
 	void pushSprite(Sprite *, int = 0);
-	void apply_surface(int, int, SDL_Surface*, int = 255, SDL_Rect* = NULL);
+	void apply_surface(int, int, SDL_Surface*, int = 255, SDL_Rect* = NULL, SDL_Surface * = NULL);
 	bool renderText(int, int, int, std::string, int = 255, int = 15, SDL_Rect * = NULL);
 
 	void render();

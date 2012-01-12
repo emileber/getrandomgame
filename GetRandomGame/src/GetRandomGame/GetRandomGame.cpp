@@ -13,7 +13,7 @@
 
 using namespace std;
 
-Sprite * _background, *_hello, *_cat, *_pave;
+Sprite * _background, *_hello, *_cat, *_pave, *_semiTransSurf;
 int test = 0;
 
 GetRandomGame::GetRandomGame() {
@@ -53,6 +53,8 @@ void GetRandomGame::update() {
 	/**
 	 * TEST ZONE
 	 */
+	//_semiTransSurf = ;
+	_sdl->pushSprite(new Sprite(400,0,_sdl->createSurface(50,500,NULL)), DEBUG_LAYER);
 	_sdl->pushSprite(_background, BACKGROUND_LAYER);
 	_sdl->pushSprite(new Sprite(_background->getWidth(), 0, _background),
 			BACKGROUND_LAYER);
@@ -84,4 +86,5 @@ void GetRandomGame::close() {
 	delete _background;
 	delete _cat;
 	delete _hello;
+	delete _pave;
 }
