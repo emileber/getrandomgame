@@ -119,10 +119,10 @@ void TileEngine::run() {
 		if (DEBUG) {
 			fpsRegulator();
 		}
-
+		//cout << "after FPS reg" << endl;
 		// finally, flip the screen
 		_sdl->render();
-
+		//cout << "after render()" << endl;
 		// wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
 		while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
 			;

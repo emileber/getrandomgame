@@ -9,6 +9,7 @@
 #define SPRITE_H_
 #include <string>
 #include "SDL/SDL.h"
+#include <iostream>
 //#include "SDLInterface.h"
 
 class Sprite {
@@ -44,9 +45,15 @@ public:
 		return _spriteSheet;
 	}
 
-	int getNbImage() {
+	virtual int getNbImage() const {
+		//std::cout << "Sprite nbImage " << _fileName << std::endl;
 		return 1;
 	}
+
+	virtual int getClipId() const{
+		return 0;
+	}
+
 	void setPoint(int x, int y) {
 		_x = x;
 		_y = y;
@@ -63,14 +70,30 @@ public:
 		_alpha = alpha;
 	}
 
+	virtual void setClipId(int id) {
+
+	}
+
 	virtual SDL_Rect * getClip() {
 		return NULL;
 	}
 	virtual SDL_Rect * getClipRect() {
 		return NULL;
 	}
-	virtual void nextFrame(int);
-	virtual void reset();
+
+	virtual int getFrametTime() {
+		return 1;
+	}
+
+//	virtual void setSprite(std::string) {
+//		// Do nothing, for futur uses
+//	}
+	virtual void nextFrame(int time) {
+
+	}
+
+	virtual void reset() {
+	}
 
 protected:
 	int _x, _y, _width, _height, _alpha;
