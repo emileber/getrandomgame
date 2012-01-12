@@ -72,13 +72,6 @@ Sprite::Sprite(int x, int y, Sprite * sprite) {
 }
 
 Sprite::~Sprite() {
+	cout << "delete " << _fileName << endl;
 	SDL_FreeSurface(_spriteSheet);
-}
-
-void Sprite::nextFrame(int time){
-	cout << "Sprite::nextFrame()" << endl;
-}
-
-void Sprite::reset(){
-
 }

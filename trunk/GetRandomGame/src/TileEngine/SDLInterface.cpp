@@ -98,7 +98,7 @@ bool SDLInterface::setFont(string filename, int size) {
 	return true;
 }
 
-void SDLInterface::setFontSize(int size){
+void SDLInterface::setFontSize(int size) {
 	_font = TTF_OpenFont(_fontFilename.c_str(), size);
 }
 
@@ -199,7 +199,7 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
 		return;
 	}
 
-	if (source == NULL){
+	if (source == NULL) {
 		return;
 	}
 
@@ -217,15 +217,15 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
  * Apply a text "text" onto the Surface[layer]
  * Apply on screen by default
  */
-bool SDLInterface::renderText(int x, int y, int layer, string text, int alpha, int size,
-		SDL_Rect* clip) {
+bool SDLInterface::renderText(int x, int y, int layer, string text, int alpha,
+		int size, SDL_Rect* clip) {
 
 	if ((alpha < 0) || (alpha > 255)) {
 		alpha = 255;
 	}
 
-	if ((layer < 0) || (layer >= _nbLayer)){
-		layer = _nbLayer -1;
+	if ((layer < 0) || (layer >= _nbLayer)) {
+		layer = _nbLayer - 1;
 	}
 
 	setFontSize(size);
@@ -263,13 +263,16 @@ void SDLInterface::render() {
 
 				// Apply the temp sprite on the screen
 				apply_surface(tSprite->getX(), tSprite->getY(),
-						tSprite->getSurface(), tSprite->getAlpha(), tSprite->getClip());
+						tSprite->getSurface(), tSprite->getAlpha(),
+						tSprite->getClip());
 
 				tempSpriteQu->pop(); // remove pointer to the applied sprite
 			} // do that until it has been emptied
+
+			//cout << "just emptied: " << i << endl;
 		}
 	}
-
+	//cout << "before flip screen" << endl;
 	// Show the updated screen
 	SDL_Flip(_screen);
 }
