@@ -6,12 +6,12 @@
  */
 
 #include "GetRandomGame.h"
-#include "Sprite.h"
+#include "Animation.h"
 #include <iostream>
 
 using namespace std;
 
-Sprite * _background, *_hello, *_cat;
+Animation * _background, *_hello, *_cat;
 int test = 0, catTimer = 250;
 
 GetRandomGame::GetRandomGame() {
@@ -31,9 +31,9 @@ void GetRandomGame::init(int w, int h) {
 	 * TEST ZONE
 	 *
 	 */
-	_background = new Sprite(0, 0, "background.bmp");
-	_hello = new Sprite(250, 190, "hello_world.bmp");
-	_cat = new Sprite(500, 190, 95, 120, "cat.bmp", 4);
+	_background = new Animation(0, 0, "background.bmp");
+	_hello = new Animation(250, 190, "hello_world.bmp");
+	_cat = new Animation(500, 190, 95, 120, "cat.bmp", 4);
 	_sdl->setTextColor(255, 0, 0);
 
 	cout << "GetRandomGame::init()::End" << endl;
@@ -50,11 +50,11 @@ void GetRandomGame::update() {
 	 * TEST ZONE
 	 */
 	_sdl->pushSprite(_background, 0);
-	_sdl->pushSprite(new Sprite(_background->getWidth(), 0, _background), 0);
+	_sdl->pushSprite(new Animation(_background->getWidth(), 0, _background), 0);
 	_sdl->pushSprite(
-			new Sprite(_background->getWidth(), _background->getHeight(),
+			new Animation(_background->getWidth(), _background->getHeight(),
 					_background), 0);
-	_sdl->pushSprite(new Sprite(0, _background->getHeight(), _background), 0);
+	_sdl->pushSprite(new Animation(0, _background->getHeight(), _background), 0);
 
 	if (_gameTime.get_ticks() < 5000) {
 		_sdl->pushSprite(_hello, 1);

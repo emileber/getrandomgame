@@ -5,7 +5,7 @@
  *      Author: Emile
  */
 
-#include "Sprite.h"
+#include "Animation.h"
 #include "SDLInterface.h"
 
 #include <iostream>
@@ -16,7 +16,7 @@ using namespace std;
  * new sprite w/o image
  *
  */
-Sprite::Sprite() {
+Animation::Animation() {
 	_x = 0;
 	_y = 0;
 	setSize(0, 0);
@@ -32,7 +32,7 @@ Sprite::Sprite() {
  * New sprite with ONE (1) IMAGE to LOAD
  *
  */
-Sprite::Sprite(int x, int y, std::string filename, int alpha) {
+Animation::Animation(int x, int y, std::string filename, int alpha) {
 	// coordinate
 	_x = x;
 	_y = y;
@@ -53,7 +53,7 @@ Sprite::Sprite(int x, int y, std::string filename, int alpha) {
  * New Sprite with ONE (1) SURFACE to Point
  *
  */
-Sprite::Sprite(int x, int y, SDL_Surface * surface, int alpha) {
+Animation::Animation(int x, int y, SDL_Surface * surface, int alpha) {
 	_x = x;
 	_y = y;
 	_nbImage = 1;
@@ -70,7 +70,7 @@ Sprite::Sprite(int x, int y, SDL_Surface * surface, int alpha) {
  * New Sprite with "nbImage" IMAGE to LOAD
  *
  */
-Sprite::Sprite(int x, int y, int w, int h, std::string filename, int nbImage,
+Animation::Animation(int x, int y, int w, int h, std::string filename, int nbImage,
 		int alpha) {
 	// coordinate and Size
 	_x = x;
@@ -94,7 +94,7 @@ Sprite::Sprite(int x, int y, int w, int h, std::string filename, int nbImage,
  * New Sprite that point stuff of another sprite
  *
  */
-Sprite::Sprite(int x, int y, Sprite * sprite) {
+Animation::Animation(int x, int y, Animation * sprite) {
 	_x = x;
 	_y = y;
 	_nbImage = sprite->getNbImage();
@@ -109,11 +109,11 @@ Sprite::Sprite(int x, int y, Sprite * sprite) {
 	_clip = sprite->getClipRect();
 }
 
-Sprite::~Sprite() {
+Animation::~Animation() {
 	SDL_FreeSurface(_spriteSheet);
 }
 
-void Sprite::setRect(int indice, int x, int y, int w, int h) {
+void Animation::setRect(int indice, int x, int y, int w, int h) {
 	_clip[indice].x = x;
 	_clip[indice].y = y;
 	_clip[indice].w = w;
@@ -127,7 +127,7 @@ void Sprite::setRect(int indice, int x, int y, int w, int h) {
  * |     |     |     |     |     |     |
  * *************************************
  */
-void Sprite::placeRect(int nbImage, int w, int h) {
+void Animation::placeRect(int nbImage, int w, int h) {
 	cout << "Sprite::placeRect(" << endl;
 
 	_clip = new SDL_Rect[nbImage];
