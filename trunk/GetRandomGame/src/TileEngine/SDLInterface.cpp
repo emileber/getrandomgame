@@ -55,7 +55,7 @@ bool SDLInterface::init(int w, int h, int bpp, string caption, int nbLayer) {
 
 	// set the number of layer you'll have
 	for (int i = 0; i < _nbLayer; i++) {
-		queue<Animation*> temp;
+		queue<Sprite*> temp;
 		_layer.push_back(temp);
 	}
 
@@ -179,7 +179,7 @@ SDL_Surface * SDLInterface::createTextSurface(string text) {
  * Add sprite to the desired int Layer.
  *
  */
-void SDLInterface::pushSprite(Animation * sprite, int layer) {
+void SDLInterface::pushSprite(Sprite * sprite, int layer) {
 	//cout << "pushSprite layer: " << layer << endl;
 	if ((layer >= 0) && (layer < _nbLayer)) {
 		_layer.at(layer).push(sprite);
@@ -217,11 +217,15 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
  * Apply a text "text" onto the Surface[layer]
  * Apply on screen by default
  */
-bool SDLInterface::renderText(int x, int y, string text, int alpha, int size,
+bool SDLInterface::renderText(int x, int y, int layer, string text, int alpha, int size,
 		SDL_Rect* clip) {
 
 	if ((alpha < 0) || (alpha > 255)) {
 		alpha = 255;
+	}
+
+	if ((layer < 0) || (layer >= _nbLayer)){
+		layer = _nbLayer -1;
 	}
 
 	setFontSize(size);
@@ -236,7 +240,7 @@ bool SDLInterface::renderText(int x, int y, string text, int alpha, int size,
 	setFontSize(15);
 	// Apply that text surface on the destination
 	//apply_surface(x, y, textSurface, alpha, clip);
-	pushSprite(new Animation(x, y, textSurface, alpha), _nbLayer-1);
+	pushSprite(new Sprite(x, y, textSurface, alpha), layer);
 
 	return true;
 }
@@ -250,12 +254,12 @@ void SDLInterface::render() {
 	for (int i = 0; i < _nbLayer; i++) {
 		//cout << "_layer at (" << i << ") = " << _layer.at(i).empty() << endl;
 		if (!_layer.at(i).empty()) {
-			queue<Animation*> * tempSpriteQu = &_layer.at(i);
+			queue<Sprite*> * tempSpriteQu = &_layer.at(i);
 
 			// Apply all the sprites
 			while (!tempSpriteQu->empty()) {
 				// Handle the next Sprite
-				Animation * tSprite = tempSpriteQu->front();
+				Sprite * tSprite = tempSpriteQu->front();
 
 				// Apply the temp sprite on the screen
 				apply_surface(tSprite->getX(), tSprite->getY(),

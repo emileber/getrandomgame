@@ -12,6 +12,7 @@
 #include "Singleton.h"
 #include "SDLInterface.h"
 #include "Timer.h"
+#include "Enumeration.h"
 
 class Environment {
 public:
@@ -21,7 +22,7 @@ public:
 	virtual void update(); // generic function, redefine by the subclass
 	virtual void close(); // generic function, redefine by the subclass
 
-	void outputTime(); // output the time on screen on demand
+	std::string formatTime(int); // output the time on screen on demand
 
 protected:
 

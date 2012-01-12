@@ -11,8 +11,8 @@
 
 using namespace std;
 
-Animation * _background, *_hello, *_cat;
-int test = 0, catTimer = 250;
+Sprite * _background, *_hello, *_cat;
+int test = 0;
 
 GetRandomGame::GetRandomGame() {
 	cout << "new GetRandomGame()" << endl;
@@ -31,9 +31,10 @@ void GetRandomGame::init(int w, int h) {
 	 * TEST ZONE
 	 *
 	 */
-	_background = new Animation(0, 0, "background.bmp");
-	_hello = new Animation(250, 190, "hello_world.bmp");
-	_cat = new Animation(500, 190, 95, 120, "cat.bmp", 4);
+	_background = new Sprite(0, 0, "background.bmp");
+	_hello = new Sprite(250, 190, "hello_world.bmp");
+	_cat = new Animation(500, 190, 95, 120, "cat.bmp", 4, 150);
+	//_cat->
 	_sdl->setTextColor(255, 0, 0);
 
 	cout << "GetRandomGame::init()::End" << endl;
@@ -44,29 +45,28 @@ void GetRandomGame::update() {
 
 	Environment::update(); // generic update
 	// then game specific update
-	outputTime(); // Show the total up time
+	//outputTime(); // Show the total up time
 
 	/**
 	 * TEST ZONE
 	 */
-	_sdl->pushSprite(_background, 0);
-	_sdl->pushSprite(new Animation(_background->getWidth(), 0, _background), 0);
+	_sdl->pushSprite(_background, BACKGROUND_LAYER);
+	_sdl->pushSprite(new Sprite(_background->getWidth(), 0, _background),
+			BACKGROUND_LAYER);
 	_sdl->pushSprite(
-			new Animation(_background->getWidth(), _background->getHeight(),
-					_background), 0);
-	_sdl->pushSprite(new Animation(0, _background->getHeight(), _background), 0);
+			new Sprite(_background->getWidth(), _background->getHeight(),
+					_background), BACKGROUND_LAYER);
+	_sdl->pushSprite(new Sprite(0, _background->getHeight(), _background),
+			BACKGROUND_LAYER);
 
 	if (_gameTime.get_ticks() < 5000) {
-		_sdl->pushSprite(_hello, 1);
+		_sdl->pushSprite(_hello, GROUND_LAYER);
 	}
 
-	_sdl->renderText(300, 200, "BOOBS", test++, 40);
+	_sdl->renderText(300, 200, DEBUG_LAYER, "BOOBS", test++, 40);
 
-	_sdl->pushSprite(_cat);
-	if (_gameTime.get_ticks() > (catTimer + 150)) {
-		_cat->nextFrame();
-		catTimer = _gameTime.get_ticks();
-	}
+	_sdl->pushSprite(_cat, PEOPLE_LAYER);
+	_cat->nextFrame(_gameTime.get_ticks());
 
 }
 

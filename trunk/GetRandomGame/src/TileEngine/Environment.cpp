@@ -32,15 +32,14 @@ void Environment::close() {
 	cout << "Environment::close()" << endl;
 }
 
-void Environment::outputTime() {
+string Environment::formatTime(int total) {
 	// Render the FPS on screen
-	int total = _gameTime.get_ticks();
 	int minute = abs(total / 60000);
 	int second = abs((total % 60000) / 1000);
-	int milisec = abs((total % 60000) - (second*1000));
+	int milisec = abs((total % 60000) - (second * 1000));
 
-	string timeString = "Time: " + _sdl->intToString(minute) + ":"
+	return _sdl->intToString(minute) + ":"
 			+ _sdl->intToString(second) + "." + _sdl->intToString(milisec);
 	//string timeString = "Time: " + intToString(total);
-	_sdl->renderText(10, 20, timeString, 200);
+	//_sdl->renderText(10, 20, 3, timeString, 200);
 }

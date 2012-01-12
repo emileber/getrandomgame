@@ -13,6 +13,7 @@
 #include "Environment.h"
 #include "InputHandler.h"
 #include "Timer.h"
+#include "Enumeration.h"
 
 class TileEngine: public Singleton<TileEngine> {
 	friend class Singleton<TileEngine> ;
