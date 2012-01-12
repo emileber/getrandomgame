@@ -55,7 +55,7 @@ bool SDLInterface::init(int w, int h, int bpp, string caption, int nbLayer) {
 
 	// set the number of layer you'll have
 	for (int i = 0; i < _nbLayer; i++) {
-		queue<Sprite*> temp;
+		queue<Animation*> temp;
 		_layer.push_back(temp);
 	}
 
@@ -179,7 +179,7 @@ SDL_Surface * SDLInterface::createTextSurface(string text) {
  * Add sprite to the desired int Layer.
  *
  */
-void SDLInterface::pushSprite(Sprite * sprite, int layer) {
+void SDLInterface::pushSprite(Animation * sprite, int layer) {
 	//cout << "pushSprite layer: " << layer << endl;
 	if ((layer >= 0) && (layer < _nbLayer)) {
 		_layer.at(layer).push(sprite);
@@ -236,7 +236,7 @@ bool SDLInterface::renderText(int x, int y, string text, int alpha, int size,
 	setFontSize(15);
 	// Apply that text surface on the destination
 	//apply_surface(x, y, textSurface, alpha, clip);
-	pushSprite(new Sprite(x, y, textSurface, alpha), _nbLayer-1);
+	pushSprite(new Animation(x, y, textSurface, alpha), _nbLayer-1);
 
 	return true;
 }
@@ -250,12 +250,12 @@ void SDLInterface::render() {
 	for (int i = 0; i < _nbLayer; i++) {
 		//cout << "_layer at (" << i << ") = " << _layer.at(i).empty() << endl;
 		if (!_layer.at(i).empty()) {
-			queue<Sprite*> * tempSpriteQu = &_layer.at(i);
+			queue<Animation*> * tempSpriteQu = &_layer.at(i);
 
 			// Apply all the sprites
 			while (!tempSpriteQu->empty()) {
 				// Handle the next Sprite
-				Sprite * tSprite = tempSpriteQu->front();
+				Animation * tSprite = tempSpriteQu->front();
 
 				// Apply the temp sprite on the screen
 				apply_surface(tSprite->getX(), tSprite->getY(),

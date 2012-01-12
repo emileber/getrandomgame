@@ -8,7 +8,7 @@
 #ifndef SDLINTERFACE_H_
 #define SDLINTERFACE_H_
 
-#include "Sprite.h"
+#include "Animation.h"
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
@@ -26,7 +26,7 @@ private:
 	SDLInterface();
 	//~SDLInterface();
 	SDL_Surface * _screen;
-	std::vector<std::queue<Sprite *> > _layer;
+	std::vector<std::queue<Animation *> > _layer;
 	TTF_Font * _font;
 	std::string _fontFilename;
 	int _fontSize, _nbLayer;
@@ -44,7 +44,7 @@ public:
 	void setTextColor(Uint8, Uint8, Uint8);
 	void setTransparentColor(int, int, int);
 
-	void pushSprite(Sprite *, int = 0);
+	void pushSprite(Animation *, int = 0);
 	void apply_surface(int, int, SDL_Surface*, int = 255, SDL_Rect* = NULL);
 	bool renderText(int, int, std::string, int = 255, int = 15, SDL_Rect * = NULL);
 

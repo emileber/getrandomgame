@@ -12,14 +12,14 @@
 #include "SDL/SDL.h"
 //#include "SDLInterface.h"
 
-class Sprite {
+class Animation {
 public:
-	Sprite();
-	Sprite(int, int, std::string, int = 255);
-	Sprite(int, int, int, int, std::string, int, int = 255);
-	Sprite(int, int, SDL_Surface*, int = 255);
-	Sprite(int, int, Sprite *);
-	virtual ~Sprite();
+	Animation();
+	Animation(int, int, std::string, int = 255);
+	Animation(int, int, int, int, std::string, int, int = 255);
+	Animation(int, int, SDL_Surface*, int = 255);
+	Animation(int, int, Animation *);
+	virtual ~Animation();
 	int getX() const {
 		return _x;
 	}
