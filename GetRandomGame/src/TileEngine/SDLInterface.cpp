@@ -56,7 +56,8 @@ bool SDLInterface::init(int w, int h, int bpp, string caption, int nbLayer) {
 	// set the number of layer you'll have
 	for (int i = 0; i < _nbLayer; i++) {
 		queue<Sprite*> temp;
-		_layer.push_back(temp);
+		_layerQueue.push_back(temp); // init the sprite queue
+		_layer.push_back(createSurface(w, h, _screen)); // init the invisible layer
 	}
 
 	//Initialisation de SDL_ttf
@@ -124,7 +125,7 @@ void SDLInterface::setTransparentColor(int r, int g, int b) {
  */
 SDL_Surface * SDLInterface::createSurface(int width, int height,
 		SDL_Surface* display) {
-	if (display == NULL){
+	if (display == NULL) {
 		display = _screen;
 	}
 	// 'display' is the surface whose format you want to match
@@ -132,10 +133,11 @@ SDL_Surface * SDLInterface::createSurface(int width, int height,
 
 	SDL_Surface * tempSurf = NULL;
 	const SDL_PixelFormat& fmt = *(display->format);
-	tempSurf = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, fmt.BitsPerPixel,
-			fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
-	SDL_FillRect(tempSurf, NULL, SDL_MapRGB(&fmt,0,255,255));
-	SDL_SetColorKey(tempSurf, SDL_RLEACCEL | SDL_SRCCOLORKEY, SDL_MapRGB(tempSurf->format, 0, 255, 255));
+	tempSurf = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height,
+			fmt.BitsPerPixel, fmt.Rmask, fmt.Gmask, fmt.Bmask, fmt.Amask);
+	SDL_FillRect(tempSurf, NULL, SDL_MapRGB(&fmt, 0, 255, 255));
+	SDL_SetColorKey(tempSurf, SDL_RLEACCEL | SDL_SRCCOLORKEY,
+			SDL_MapRGB(tempSurf->format, 0, 255, 255));
 	return tempSurf;
 }
 
@@ -192,8 +194,10 @@ SDL_Surface * SDLInterface::createTextSurface(string text) {
  */
 void SDLInterface::pushSprite(Sprite * sprite, int layer) {
 	//cout << "pushSprite layer: " << layer << endl;
+	// TODO Apply on layer instead of in the queue
+
 	if ((layer >= 0) && (layer < _nbLayer)) {
-		_layer.at(layer).push(sprite);
+		_layerQueue.at(layer).push(sprite);
 	}
 	//cout << "pushSprite::END" << endl;
 }
@@ -206,7 +210,7 @@ void SDLInterface::pushSprite(Sprite * sprite, int layer) {
 void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
 		SDL_Rect* clip, SDL_Surface * destination) {
 
-	if (destination == NULL){
+	if (destination == NULL) {
 		destination = _screen;
 	}
 
@@ -226,6 +230,29 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
 
 	//on blit la surface
 	SDL_BlitSurface(source, clip, destination, &offset);
+}
+
+void SDLInterface::apply_surface(int x, int y, SDL_Surface * source,
+		int layerId, int alpha, SDL_Rect * clip) {
+
+	if (source == NULL) {
+		return;
+	}
+	if ((layerId < 0) || (layerId >= _nbLayer)) {
+		layerId = _nbLayer - 1;
+	}
+	if ((alpha < 0) || (alpha > 255)) {
+		alpha = 255;
+	}
+
+	SDL_SetAlpha(source, SDL_SRCALPHA | SDL_RLEACCEL, alpha);
+
+	SDL_Rect offset;
+	offset.x = x;
+	offset.y = y;
+
+	//on blit la surface
+	SDL_BlitSurface(source, clip, _layer.at(layerId), &offset);
 }
 
 /**
@@ -266,10 +293,14 @@ bool SDLInterface::renderText(int x, int y, int layer, string text, int alpha,
  */
 void SDLInterface::render() {
 	//cout << "SDLInterface::render()" << endl;
+
+	// TODO Render the layers
+	// then remove the vector of queue of Sprite * !
+
 	for (int i = 0; i < _nbLayer; i++) {
 		//cout << "_layer at (" << i << ") = " << _layer.at(i).empty() << endl;
-		if (!_layer.at(i).empty()) {
-			queue<Sprite*> * tempSpriteQu = &_layer.at(i);
+		if (!_layerQueue.at(i).empty()) {
+			queue<Sprite*> * tempSpriteQu = &_layerQueue.at(i);
 
 			// Apply all the sprites
 			while (!tempSpriteQu->empty()) {
