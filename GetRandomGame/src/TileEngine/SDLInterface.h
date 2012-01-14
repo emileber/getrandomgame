@@ -26,9 +26,10 @@ class SDLInterface: public Singleton<SDLInterface> {
 private:
 	SDLInterface();
 	//~SDLInterface();
+
+	int _screenW, _screenH;
 	SDL_Surface * _screen;
 	std::vector<std::queue<Sprite *> > _layerQueue;
-	std::vector<SDL_Surface *> _layer;
 	TTF_Font * _font;
 	std::string _fontFilename;
 	int _fontSize, _nbLayer;
@@ -48,7 +49,6 @@ public:
 
 	void pushSprite(Sprite *, int = 0);
 	void apply_surface(int x, int y, SDL_Surface * source, int alpha = 255, SDL_Rect* clip = NULL, SDL_Surface * destination = NULL);
-	void apply_surface(int x, int y, SDL_Surface * source, int layerId, int alpha = 255, SDL_Rect * clip = NULL);
 	bool renderText(int, int, int, std::string, int = 255, int = 15, SDL_Rect * = NULL);
 
 	void render();

@@ -16,6 +16,9 @@ using namespace std;
  */
 SDLInterface::SDLInterface() {
 	cout << "new SDLInterface" << endl;
+	_screenW = 0;
+	_screenH = 0;
+
 	//font variables init
 	_font = NULL;
 	_fontFilename = "";
@@ -35,6 +38,8 @@ SDLInterface::SDLInterface() {
  *
  */
 bool SDLInterface::init(int w, int h, int bpp, string caption, int nbLayer) {
+	_screenW = w;
+	_screenH = h;
 	if (nbLayer < 1) {
 		nbLayer = 1; // force to have at least ONE layer
 	}
@@ -57,7 +62,6 @@ bool SDLInterface::init(int w, int h, int bpp, string caption, int nbLayer) {
 	for (int i = 0; i < _nbLayer; i++) {
 		queue<Sprite*> temp;
 		_layerQueue.push_back(temp); // init the sprite queue
-		_layer.push_back(createSurface(w, h, _screen)); // init the invisible layer
 	}
 
 	//Initialisation de SDL_ttf
@@ -232,29 +236,6 @@ void SDLInterface::apply_surface(int x, int y, SDL_Surface* source, int alpha,
 	SDL_BlitSurface(source, clip, destination, &offset);
 }
 
-void SDLInterface::apply_surface(int x, int y, SDL_Surface * source,
-		int layerId, int alpha, SDL_Rect * clip) {
-
-	if (source == NULL) {
-		return;
-	}
-	if ((layerId < 0) || (layerId >= _nbLayer)) {
-		layerId = _nbLayer - 1;
-	}
-	if ((alpha < 0) || (alpha > 255)) {
-		alpha = 255;
-	}
-
-	SDL_SetAlpha(source, SDL_SRCALPHA | SDL_RLEACCEL, alpha);
-
-	SDL_Rect offset;
-	offset.x = x;
-	offset.y = y;
-
-	//on blit la surface
-	SDL_BlitSurface(source, clip, _layer.at(layerId), &offset);
-}
-
 /**
  * Apply a text "text" onto the Surface[layer]
  * Apply on screen by default
@@ -294,11 +275,9 @@ bool SDLInterface::renderText(int x, int y, int layer, string text, int alpha,
 void SDLInterface::render() {
 	//cout << "SDLInterface::render()" << endl;
 
-	// TODO Render the layers
-	// then remove the vector of queue of Sprite * !
-
 	for (int i = 0; i < _nbLayer; i++) {
 		//cout << "_layer at (" << i << ") = " << _layer.at(i).empty() << endl;
+
 		if (!_layerQueue.at(i).empty()) {
 			queue<Sprite*> * tempSpriteQu = &_layerQueue.at(i);
 
@@ -316,10 +295,12 @@ void SDLInterface::render() {
 			} // do that until it has been emptied
 
 			//cout << "just emptied: " << i << endl;
+
 		}
 	}
-	//cout << "before flip screen" << endl;
-	// Show the updated screen
+
+//cout << "before flip screen" << endl;
+// Show the updated screen
 	SDL_Flip(_screen);
 }
 
@@ -331,12 +312,12 @@ void SDLInterface::cleanUp() {
 	for (int i = 0; i < _nbLayer; i++) {
 		//SDL_FreeSurface(&_layer[i]);
 	}
-	//On ferme le font qu'on a utilisé
+//On ferme le font qu'on a utilisé
 	TTF_CloseFont(_font);
 
-	//On quitte SDL_ttf
+//On quitte SDL_ttf
 	TTF_Quit();
 
-	//On quitte SDL
+//On quitte SDL
 	SDL_Quit();
 }
