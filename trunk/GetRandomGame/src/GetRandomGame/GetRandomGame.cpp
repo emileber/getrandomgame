@@ -7,7 +7,7 @@
 
 #include "GetRandomGame.h"
 #include "Animation.h"
-#include "SpriteSheet.h"
+#include "Sprite.h"
 #include <ctime>
 #include <iostream>
 
@@ -37,7 +37,7 @@ void GetRandomGame::init(int w, int h) {
 	_background = new Sprite(0, 0, "image/background.bmp");
 	_hello = new Sprite(250, 190, "image/hello_world.bmp");
 	_cat = new Animation(500, 190, 95, 120, "image/cat.bmp", 4, 150);
-	_pave = new SpriteSheet(-10, 300, 40, 40, "image/pave.bmp", 5);
+	_pave = new Sprite(-10, 300, 40, 40, "image/pave.bmp");
 	//_cat->
 	_sdl->setTextColor(255, 0, 0);
 
@@ -45,7 +45,7 @@ void GetRandomGame::init(int w, int h) {
 }
 
 void GetRandomGame::update() {
-	//cout << "GetRandomGame::update()" << endl;
+	cout << "GetRandomGame::update()" << endl;
 
 	Environment::update(); // generic update
 	// then game specific update
@@ -54,12 +54,10 @@ void GetRandomGame::update() {
 	/**
 	 * TEST ZONE
 	 */
-	_semiTransSurf = _sdl->createSurface(50,500);
-	_sdl->apply_surface(-10, 10, _hello->getSurface(), 255, NULL, _semiTransSurf);
-
-	_sdl->pushSprite(new Sprite(400, 0, _semiTransSurf),
-			DEBUG_LAYER);
-
+	_semiTransSurf = _sdl->createSurface(50, 500);
+	_sdl->apply_surface(-10, 10, _hello->getSurface(), 255, NULL,
+			_semiTransSurf);
+	_sdl->pushSprite(new Sprite(400, 0, _semiTransSurf), DEBUG_LAYER);
 	_sdl->pushSprite(_background, BACKGROUND_LAYER);
 	_sdl->pushSprite(new Sprite(_background->getWidth(), 0, _background),
 			BACKGROUND_LAYER);
@@ -71,18 +69,20 @@ void GetRandomGame::update() {
 
 	// Floor Stuff
 
-	_pave->setClipId(0);
+	//_pave->setClipId(0);
 	_sdl->pushSprite(_pave, GROUND_LAYER);
 	for (int i = 0; i < 30; i++) {
-		_sdl->pushSprite(new SpriteSheet(30 + (i * 40), 300, _pave, i % 5),
-				GROUND_LAYER);
+		Sprite * tempSprite = new Sprite(30 + (i * 40), 300, _pave);
+		tempSprite->setClipId(i % tempSprite->getNbImageX(), 0);
+		_sdl->pushSprite(tempSprite, GROUND_LAYER);
+
 	}
 
 	// Cat stuff
 	_sdl->pushSprite(_cat, PEOPLE_LAYER);
 	((Animation*) _cat)->nextFrame(_gameTime.get_ticks());
-
-}
+	cout << "GetRandomGame::update()::End" << endl;
+} // END of update()
 
 void GetRandomGame::close() {
 	cout << "GetRandomGame::close()" << endl;

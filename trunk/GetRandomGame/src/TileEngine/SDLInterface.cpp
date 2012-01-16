@@ -273,10 +273,10 @@ bool SDLInterface::renderText(int x, int y, int layer, string text, int alpha,
  * but apply all the layer on the sreen first
  */
 void SDLInterface::render() {
-	//cout << "SDLInterface::render()" << endl;
+	cout << "SDLInterface::render()" << endl;
 
 	for (int i = 0; i < _nbLayer; i++) {
-		//cout << "_layer at (" << i << ") = " << _layer.at(i).empty() << endl;
+		cout << "_layer at (" << i << ") = " << _layerQueue.at(i).empty() << endl;
 
 		if (!_layerQueue.at(i).empty()) {
 			queue<Sprite*> * tempSpriteQu = &_layerQueue.at(i);
@@ -294,12 +294,12 @@ void SDLInterface::render() {
 				tempSpriteQu->pop(); // remove pointer to the applied sprite
 			} // do that until it has been emptied
 
-			//cout << "just emptied: " << i << endl;
+			cout << "just emptied: " << i << endl;
 
 		}
 	}
 
-//cout << "before flip screen" << endl;
+	cout << "before flip screen" << endl;
 // Show the updated screen
 	SDL_Flip(_screen);
 }
