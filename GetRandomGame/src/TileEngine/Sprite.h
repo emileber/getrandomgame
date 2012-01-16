@@ -18,6 +18,7 @@ public:
 	Sprite(int, int, std::string, int = 255);
 	Sprite(int, int, SDL_Surface*, int = 255);
 	Sprite(int, int, Sprite *);
+	Sprite(int x, int y, int w, int h, std::string filename, int alpha = 255);
 	virtual ~Sprite();
 
 	int getX() const {
@@ -45,13 +46,21 @@ public:
 		return _spriteSheet;
 	}
 
-	virtual int getNbImage() const {
+	virtual int getNbImageX() const {
 		//std::cout << "Sprite nbImage " << _fileName << std::endl;
-		return 1;
+		return _nbImageX;
 	}
 
-	virtual int getClipId() const{
-		return 0;
+	virtual int getNbImageY() const {
+		return _nbImageY;
+	}
+
+	virtual int getClipX() const {
+		return _clipX;
+	}
+
+	virtual int getClipY() const {
+		return _clipY;
 	}
 
 	void setPoint(int x, int y) {
@@ -70,15 +79,14 @@ public:
 		_alpha = alpha;
 	}
 
-	virtual void setClipId(int id) {
+	virtual void setClipId(int, int);
 
+	virtual SDL_Rect * getClip() const {
+		std::cout << "Sprite::getClip " << _fileName << std::endl;
+		return &_clip[_clipX][_clipY];
 	}
-
-	virtual SDL_Rect * getClip() {
-		return NULL;
-	}
-	virtual SDL_Rect * getClipRect() {
-		return NULL;
+	virtual SDL_Rect ** getClipRect() {
+		return _clip;
 	}
 
 	virtual int getFrametTime() {
@@ -93,12 +101,18 @@ public:
 	}
 
 	virtual void reset() {
+		_clipX = 0;
 	}
 
 protected:
 	int _x, _y, _width, _height, _alpha;
+	int _nbImageX, _nbImageY, _clipX, _clipY;
+	SDL_Rect ** _clip;
 	SDL_Surface * _spriteSheet;
 	std::string _fileName;
+
+	void setRect(int w, int h);
+
 };
 
 #endif /* SPRITE_H_ */

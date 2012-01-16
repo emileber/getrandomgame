@@ -17,13 +17,13 @@ public:
 	Animation();
 	Animation(int x, int y, std::string filename, int alpha = 255) :
 			Sprite(x, y, filename, alpha) {
-		_nbImage = 1; // only 1 image in the sprite sheet
+		_nbFrame = 1; // only 1 image in the sprite sheet
 		_clip = NULL;
 	}
 
 	Animation(int x, int y, SDL_Surface * surface, int alpha = 255) :
 			Sprite(x, y, surface, alpha) {
-		_nbImage = 1;
+		_nbFrame = 1;
 		_clip = NULL;
 	}
 	Animation(int, int, Sprite *);
@@ -33,21 +33,19 @@ public:
 	 * GET functions
 	 */
 
-	int getFrametTime(){
+	int getFrametTime() const {
 		return _frameTime;
 	}
 
-	virtual int getNbImage() {
-		return _nbImage;
+	virtual int getNbImage() const {
+		return _nbFrame;
 	}
 
-	virtual SDL_Rect * getClipRect() {
-		return _clip;
+	virtual SDL_Rect * getClip() const {
+		std::cout << "Animation::getClip " << _fileName << std::endl << "_frame: " << _frame << std::endl << "_nbFrame: " << _nbFrame << std::endl;
+		return &_clip[_frame % _nbFrame][_clipY];
 	}
 
-	virtual SDL_Rect * getClip() {
-		return &_clip[_frame % _nbImage];
-	}
 
 
 	/**
@@ -61,11 +59,7 @@ public:
 	}
 
 private:
-	int _nbImage, _frame, _lastUpdate, _frameTime;
-	SDL_Rect * _clip;
-
-	void placeRect(int, int, int);
-	void setRect(int, int, int, int = 0, int = 0);
+	int _nbFrame, _frame, _lastUpdate, _frameTime;
 };
 
 #endif /* ANIMATION_H_ */
