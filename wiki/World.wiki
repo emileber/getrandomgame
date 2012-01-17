@@ -1,11 +1,9 @@
 #summary How it will work and how it is displayed
 #labels Phase-Requirements,Phase-Design,World
 
-= Introduction =
+= How far can we walk? =
 
-Size
-
-Tileset/SpriteSheet config
-
-In The Code
-
+Donc dans cette page sera déterminé les points suivants:
+  * Size Final
+  * Tileset/SpriteSheet configuration
+  * In The Code
