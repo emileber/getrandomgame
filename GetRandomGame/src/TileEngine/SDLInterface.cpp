@@ -6,6 +6,7 @@
  */
 
 #include "SDLInterface.h"
+#include <cstdio>
 #include <iostream>
 
 using namespace std;
@@ -15,7 +16,7 @@ using namespace std;
  *
  */
 SDLInterface::SDLInterface() {
-	cout << "new SDLInterface" << endl;
+	printf("new SDLInterface\n");
 	_screenW = 0;
 	_screenH = 0;
 
@@ -30,7 +31,7 @@ SDLInterface::SDLInterface() {
 	_transColor.b = 255;
 
 	_nbLayer = 1;
-	cout << "new SDLInterface::End" << endl;
+	printf("new SDLInterface::End\n");
 }
 
 /**

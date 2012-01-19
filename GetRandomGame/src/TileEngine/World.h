@@ -11,7 +11,10 @@
 class World {
 public:
 	World();
-	~World();
+	virtual ~World();
+	virtual void update(){
+
+	}
 };
 
 #endif /* WORLD_H_ */
