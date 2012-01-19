@@ -7,10 +7,8 @@
 
 #include "Sprite.h"
 #include "SDLInterface.h"
-#include <iostream>
 #include <cstdio>
 
-using namespace std;
 /**
  * new sprite w/o image
  *
@@ -100,7 +98,7 @@ Sprite::Sprite(int x, int y, int w, int h, std::string filename, int alpha) {
 }
 
 Sprite::~Sprite() {
-	cout << "delete " << _fileName << endl;
+	printf("delete %s", _fileName.c_str());
 	SDL_FreeSurface(_spriteSheet);
 }
 
@@ -108,16 +106,16 @@ void Sprite::setClipId(int xId, int yId) {
 	if ((xId >= 0) && (xId < _nbImageX)) {
 		_clipX = xId;
 	} else {
-		cout << "setClipId X OOB, mis a 0 par default pour l'image: "
-				<< _fileName << endl;
+		printf("setClipId X:%d OOB, mis a 0 par default pour l'image: %s\n",
+				xId, _fileName.c_str());
 		_clipX = 0;
 	}
 
 	if ((yId >= 0) && (yId < _nbImageY)) {
 		_clipY = yId;
 	} else {
-		cout << "setClipId Y OOB, mis a 0 par default pour l'image: "
-				<< _fileName << endl;
+		printf("setClipId Y:%d OOB, mis a 0 par default pour l'image: %s\n",
+				yId, _fileName.c_str());
 		_clipY = 0;
 	}
 
@@ -136,9 +134,9 @@ void Sprite::setClipId(int xId, int yId) {
  *
  */
 void Sprite::setRect(int w, int h) {
-	cout << "Sprite::placeRect " << _fileName << endl;
+	printf("Sprite::placeRect %s\n", _fileName.c_str());
 	if ((w == 0) || (h == 0)) {
-		cout << "W et H NULL, returning" << endl;
+		printf("Error W:%d et H:%d, returning\n", w, h);
 		_nbImageX = 1;
 		_nbImageY = 1;
 		_clipX = 0;
@@ -150,7 +148,7 @@ void Sprite::setRect(int w, int h) {
 	_nbImageX = abs(_spriteSheet->w / w);
 	_nbImageY = abs(_spriteSheet->h / h);
 
-	cout << "nbX: " << _nbImageX << endl << "nbY: " << _nbImageY << endl;
+	printf("nbX, nbY: %2d, %2d\n", _nbImageX, _nbImageY);
 
 	_clip = new SDL_Rect*[_nbImageX];
 	for (int x = 0; x < _nbImageX; x++) {
@@ -160,8 +158,8 @@ void Sprite::setRect(int w, int h) {
 			_clip[x][y].y = y * h;
 			_clip[x][y].w = w;
 			_clip[x][y].h = h;
-			printf("x, y: %2d, %2d | clip x,y,w,h: %4d %4d %4d %4d \n", x, y, _clip[x][y].x, _clip[x][y].y, _clip[x][y].w, _clip[x][y].h);
+			printf("x, y: %2d, %2d | clip x,y,w,h: %4d %4d %4d %4d \n", x, y,
+					_clip[x][y].x, _clip[x][y].y, _clip[x][y].w, _clip[x][y].h);
 		}
 	}
-	cout << "Sprite::placeRect() END" << endl;
 }

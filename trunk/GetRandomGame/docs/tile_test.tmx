@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="81" height="81" tilewidth="40" tileheight="40">
+ <tileset firstgid="1" name="PAVE1" tilewidth="40" tileheight="40" spacing="40" margin="40">
+  <image source="../../../Downloads/2D Circle Graphic Archive/2D Circle Graphic/PAVE1.bmp" width="640" height="480"/>
+ </tileset>
+ <tileset firstgid="49" name="GRS2ROC1" tilewidth="40" tileheight="40" spacing="40" margin="40">
+  <image source="../../../Downloads/2D Circle Graphic Archive/2D Circle Graphic/GRS2ROC1.bmp" trans="4b637f" width="640" height="480"/>
+ </tileset>
+ <tileset firstgid="97" name="BENCH" tilewidth="40" tileheight="80" spacing="40" margin="40">
+  <image source="../../../Downloads/2D Circle Graphic Archive/2D Circle Graphic/BENCH.GIF" trans="4b637f" width="640" height="480"/>
+ </tileset>
+ <layer name="Calque de Tile 1" width="81" height="81">
+  <data encoding="base64" compression="zlib">
+   eJzt1j1uwkAQQOEBu0kiikCahFMQaCBQkJ/7XykzYkcebdYClMIr7Ss+YVHZT+Md70Rkh8ls1LvaVnAvNfAeJWON9uqgPiq4/xp4j5LYKM7eWX2qrwruvwbe8EE9Jk+Fhsze9YbPaq6WapE6xl7XZq/lM9IbvqoX1amZWqnTHU1antN4HnrHXoZZtI5xx2ykvHNaPiP92c23DO+0NYxno8/YXso7BxfWx2fRzkV7p7vQ8STjexsXPpPW8S207FPHfHeXGtq73uJeGWt5SB19X/fpOu6c/Lv8KH/P0KmfZ+qWcSa9ZZeu89nM+U5qvWP+7bOUYSbj7yz9zlNj+38lnJs+i76zfSbzuXTeztvSsNyy1HPMmoY39Yys7U/h/xa/u//Tll4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMD9AqaUKZY=
+  </data>
+ </layer>
+ <objectgroup name="Calque d'objets 1" width="81" height="81">
+  <object gid="97" x="760" y="439"/>
+  <object gid="98" x="802" y="439"/>
+  <object gid="100" x="843" y="441"/>
+  <object gid="103" x="771" y="454"/>
+  <object gid="99" x="961" y="561"/>
+  <object gid="99" x="442" y="283"/>
+  <object gid="117" x="816" y="439"/>
+ </objectgroup>
+</map>

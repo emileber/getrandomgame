@@ -7,10 +7,8 @@
 
 #include "Animation.h"
 #include "SDLInterface.h"
+#include <cstdio>
 
-#include <iostream>
-
-using namespace std;
 
 /**
  * new sprite w/o image
