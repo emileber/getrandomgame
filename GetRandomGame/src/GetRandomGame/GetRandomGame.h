@@ -9,6 +9,7 @@
 #define GETRANDOMGAME_H_
 
 #include "Environment.h"
+#include "Enumeration.h"
 
 class GetRandomGame: public Environment {
 
@@ -18,6 +19,7 @@ public:
 	virtual void update();
 	virtual void close();
 	virtual void init(int, int);
+	void testFunction(int,int);
 
 };
 

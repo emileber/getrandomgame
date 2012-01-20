@@ -81,7 +81,6 @@ public:
 	virtual void setClipId(int, int);
 
 	virtual SDL_Rect * getClip() const {
-		std::cout << "Sprite::getClip " << _fileName << std::endl;
 		return &_clip[_clipX][_clipY];
 	}
 
