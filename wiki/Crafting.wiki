@@ -1,7 +1,14 @@
-#summary Crafting
+#summary Crafting informations
 #labels Phase-Design
 
-== Crafting ==
+= Crafting =
+<g:plusone/>
+
+Table Of Content:
+<wiki:toc max_depth="3" />
+----
+
+= Info general =
 
 Système de ressources qu'on acquert selon le biome et le climat
 Région minière, foret dense, différentes essences de bois, minérais variés
@@ -10,7 +17,9 @@ Grandes catégories : Ressource naturelles, produit
 
 Profession de gathering et de transformation
 
-== MÉTIER DE GATHERING ==
+= MÉTIER =
+
+== GATHERING ==
 
 === Mining : ===
 
@@ -43,7 +52,7 @@ couleur normale mais fucking resistante)
 === Herboristerie ===
 (Mining mais avec des plantes, fonctionne sur le même principe)
 
-== MÉTIER DE PRODUCTION ==
+== PRODUCTION ==
 
 === Cultivateur ===
 
@@ -57,7 +66,7 @@ Permet de pêcher divers types de poisson, des items randoms (des bottes .. ) de
 
 
 
-== MÉTIER DE TRANSFORMATION ==
+== TRANSFORMATION ==
 
 === Tailoring : === 
 Permet de faire des armures en cuir, en os, des vetements, transformer les fibres obtenus en cultivant en tissus etc
@@ -79,7 +88,7 @@ Self-explanatory
 
 ----
 
-== Notes ==
+= Notes =
 
 Chaque skill permet des spécialisations, niveau de détails a discuter
 
