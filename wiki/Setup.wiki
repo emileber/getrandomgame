@@ -2,7 +2,11 @@
 #labels Phase-Requirements,Phase-Implementation
 
 = Configure Eclipse CDT with SDL on Windows =
-<g:plusone size="medium"></g:plusone>
+<g:plusone/>
+
+Table Of Content:
+<wiki:toc max_depth="3" />
+----
 
 Get started!
 
@@ -14,6 +18,8 @@ You need:
   # SDL (SDL-devel-1.2.14-mingw32.tar.gz)
     * SDL_image (SDL_image-devel-1.2.10-VC.zip)
     * SDL_ttf (SDL_ttf-devel-2.0.10-VC.zip)
+
+Voir la [http://code.google.com/p/getrandomgame/downloads/list Download List] pour trouver certains fichier facilement.
 
 == MinGW ==
 F*ck, all you need is to click next!
@@ -73,4 +79,3 @@ Chaque bibliothèque SDL possède trois parties essentielles :
 #include "SDL/SDL_image.h"
 
 [http://loka.developpez.com/tutoriel/sdl/bibliotheques/bib_codeblocks/images/SDL_image_CodeBlocks.png]
-
