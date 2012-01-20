@@ -62,7 +62,7 @@ Animation::Animation(int x, int y, Sprite * anim) {
 	_nbImageX = anim->getNbImageX();
 	_nbImageY = anim->getNbImageY();
 	_lastUpdate = 0;
-	_frameTime = anim->getFrametTime();
+	_frameTime = ((Animation*)anim)->getFrametTime();
 	_nbFrame = ((Animation*)anim)->getNbImage();
 
 	setSize(anim->getWidth(), anim->getHeight());

@@ -47,7 +47,6 @@ public:
 	}
 
 	virtual int getNbImageX() const {
-		//std::cout << "Sprite nbImage " << _fileName << std::endl;
 		return _nbImageX;
 	}
 
@@ -85,19 +84,9 @@ public:
 		std::cout << "Sprite::getClip " << _fileName << std::endl;
 		return &_clip[_clipX][_clipY];
 	}
+
 	virtual SDL_Rect ** getClipRect() {
 		return _clip;
-	}
-
-	virtual int getFrametTime() {
-		return 1;
-	}
-
-//	virtual void setSprite(std::string) {
-//		// Do nothing, for futur uses
-//	}
-	virtual void nextFrame(int time) {
-
 	}
 
 	virtual void reset() {
