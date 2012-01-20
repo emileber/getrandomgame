@@ -1,27 +1,38 @@
 #summary This is the Game document
 #labels Phase-Design
-
+= Le game doc = 
+<g:plusone/>
 Documentation de DUPA sur ce que DUPA connait :
 
+Table Of Content:
+<wiki:toc max_depth="2" />
+----
 = le WAT? (pas de h) =
 
 	Getarandomgame est une idée qu'on a 888888888888888888888888888888888, l'idée est de faire un monde ou vous n'êtes PAS le héro, ou vou n'ête PAS l'élu et ou vous n'êtes PAS le meilleur dans quoi que ce soit. 
 
-	À la base Getarandomgame est un jue ou le monde est généré aléatoirement et ou l'évolution est dynamique. Qu'entend-je par là? En gros l'univers de Getarandomgame n'evolue pas uniquement autour du joueur mais autour d'interaction pertinentes entre NPCs; Le joueur pourrait patienter jusqu'a mourir de faim et le monde évoluerait pareil. Le monde n'ayant donc pas besoin du joueur pour avancé celui-ci est laissé libre d'agir come il lui plait dans l'univers qui lui est présenté.
+	À la base Getarandomgame est un jue ou le monde est généré aléatoirement et ou l'évolution est dynamique. Qu'entend-je par là? En gros l'univers de Getarandomgame n'evolue pas uniquement autour du joueur mais autour d'interaction pertinentes entre NPCs; Le joueur pourrait patienter jusqu'a mourir de faim et le monde évoluerait pareil. Le monde n'ayant donc pas besoin du joueur pour avancé celui-ci est laissé libre d'agir comme il lui plait dans l'univers qui lui est présenté.
 
 Donc plusieurs mot clés :
   * méchanique du jeu, (captain obvious to the rescue)
   * monde généré aléatoirement
   * intelligence artificielle qui permet une évolution dynamique, sans pour autant nécéssité un ordi de la mafia.
 
+[GetRandomGame Plus d'info]
+
 Je vais m'attarder sur les deux derniers points, le reste serait a voir en équipe, autour d'une bière...
 donc:
 
-= généré un monde aléatoirement san que ca soit dla marde =
+= Générer un monde aléatoirement =
+...sans que ca soit dla marde.
 
 Ca semble beacoup plus complexe que ce ne l'est vraiment
 
+== La taille ==
+
 premierement il faut décider de la taille du monde, le monde doit être un carré avec un coté égal a 2^x +1(5,9,257,4097...) reste a voir quelle taille on veux le monde...
+
+== Génération de la carte ==
 
 ensuite commence la vrai génération, qui va débuter par la création d'une carte vierge qui va comme suit:
 
@@ -35,6 +46,8 @@ on génère une carte de densité végétale
 on arrondi les coins
 
 	maintenant le point interessant, comment on fait?
+
+== Comment? Diamond Square! ==
 
 	Toutes les cartes sont générées de manière similaire aavec l'algorythme de diamond square qui est une application 2d de l'algorythme de midpoint displacement. Cet algorytme s'applique a une ligne et consiste a diviser la ligne en deux, ajouter une valeur aléatoire au point millieu, ce qui divise la ligne en deux ligne, et ainsi de suite pour les autres lignes
 
