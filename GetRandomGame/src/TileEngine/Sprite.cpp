@@ -8,7 +8,7 @@
 #include "Sprite.h"
 #include "SDLInterface.h"
 #include <cstdio>
-
+#include <assert.h>
 /**
  * new sprite w/o image
  *
@@ -28,17 +28,23 @@ Sprite::Sprite() {
  *
  */
 Sprite::Sprite(int x, int y, std::string filename, int alpha) {
+	printf("new Sprite(x: %d, y: %d, file: %s, alpha: %d)\n", x, y, filename.c_str(),
+			alpha);
 	// coordinate
 	_x = x;
 	_y = y;
 	setAlpha(alpha);
 	_fileName = filename;
-
 	// Set the surface et clip rect
 	_spriteSheet = SDLInterface::getInstance()->load_image(_fileName.c_str());
+	if (!_spriteSheet){
+		printf("in Sprite constructor for %s, load_image has returned NULL\n", _fileName.c_str());
+		return;
+	}
+	//assert(_spriteSheet);
 	setSize(_spriteSheet->w, _spriteSheet->h);
 	setRect(_width, _height);
-
+	printf("new Sprite::END\n");
 }
 
 /**

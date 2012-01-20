@@ -152,6 +152,7 @@ SDL_Surface * SDLInterface::createSurface(int width, int height,
  *
  */
 SDL_Surface * SDLInterface::load_image(string filename) {
+	printf("SDLInterface::load_image(%s)\n", filename.c_str());
 	//L'image qui est chargée
 	SDL_Surface* loadedImage = NULL;
 
@@ -160,9 +161,10 @@ SDL_Surface * SDLInterface::load_image(string filename) {
 
 	//Chargement de l'image
 	loadedImage = IMG_Load(filename.c_str());
-
+	printf("IMG_Load OK\n");
 	//Si l'image est chargée correctement
 	if (loadedImage != NULL) {
+		printf("%s != NULL\n", filename.c_str());
 		//creation de l'image optimisée
 		optimizedImage = SDL_DisplayFormat(loadedImage);
 
@@ -179,7 +181,7 @@ SDL_Surface * SDLInterface::load_image(string filename) {
 							_transColor.g, _transColor.b));
 		}
 	}
-
+	printf("SDLInterface::load_image::END\n");
 	//on retourne l'image optimisé
 	return optimizedImage;
 }
