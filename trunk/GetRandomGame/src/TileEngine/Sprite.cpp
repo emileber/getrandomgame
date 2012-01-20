@@ -134,7 +134,7 @@ void Sprite::setClipId(int xId, int yId) {
  *
  */
 void Sprite::setRect(int w, int h) {
-	printf("Sprite::placeRect %s\n", _fileName.c_str());
+	//printf("Sprite::placeRect %s\n", _fileName.c_str());
 	if ((w == 0) || (h == 0)) {
 		printf("Error W:%d et H:%d, returning\n", w, h);
 		_nbImageX = 1;
@@ -148,7 +148,7 @@ void Sprite::setRect(int w, int h) {
 	_nbImageX = abs(_spriteSheet->w / w);
 	_nbImageY = abs(_spriteSheet->h / h);
 
-	printf("nbX, nbY: %2d, %2d\n", _nbImageX, _nbImageY);
+	//printf("nbX, nbY: %2d, %2d\n", _nbImageX, _nbImageY);
 
 	_clip = new SDL_Rect*[_nbImageX];
 	for (int x = 0; x < _nbImageX; x++) {
@@ -158,8 +158,8 @@ void Sprite::setRect(int w, int h) {
 			_clip[x][y].y = y * h;
 			_clip[x][y].w = w;
 			_clip[x][y].h = h;
-			printf("x, y: %2d, %2d | clip x,y,w,h: %4d %4d %4d %4d \n", x, y,
-					_clip[x][y].x, _clip[x][y].y, _clip[x][y].w, _clip[x][y].h);
+			//printf("x, y: %2d, %2d | clip x,y,w,h: %4d %4d %4d %4d \n", x, y,
+			//		_clip[x][y].x, _clip[x][y].y, _clip[x][y].w, _clip[x][y].h);
 		}
 	}
 }

@@ -42,7 +42,6 @@ public:
 	}
 
 	virtual SDL_Rect * getClip() const {
-		std::cout << "Animation::getClip " << _fileName << std::endl << "_frame: " << _frame << std::endl << "_nbFrame: " << _nbFrame << std::endl;
 		return &_clip[_frame % _nbFrame][_clipY];
 	}
 

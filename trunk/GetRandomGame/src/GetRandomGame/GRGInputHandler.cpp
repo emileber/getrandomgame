@@ -6,9 +6,8 @@
  */
 
 #include "GRGInputHandler.h"
-#include <iostream>
-
-using namespace std;
+#include "GetRandomGame.h"
+#include <cstdio>
 
 GRGInputHandler::GRGInputHandler() {
 	// TODO Auto-generated constructor stub
@@ -35,8 +34,7 @@ bool GRGInputHandler::handleInput(Environment* environment) {
 			uint32_t eventKey = event.key.keysym.sym;
 			//If a key was pressed
 			if (event.type == SDL_KEYDOWN) {
-				cout << "key pressed = " << event.key.keysym.sym << endl;
-				//Set the proper message surface
+				//cout << "key pressed = " << event.key.keysym.sym << endl;
 				switch (eventKey) {
 				case SDLK_c:
 					break;
@@ -44,6 +42,7 @@ bool GRGInputHandler::handleInput(Environment* environment) {
 				}
 
 			}
+
 			if (event.type == SDL_KEYUP) {
 				//Set the proper message surface
 				switch (eventKey) {
@@ -56,9 +55,17 @@ bool GRGInputHandler::handleInput(Environment* environment) {
 	} // end here if no keys is pressed
 
 	if (keystates[SDLK_LEFT]) {
-		cout << "left key is held down" << endl;
+		printf("left key is held down\n");
+		((GetRandomGame*) environment)->testFunction(-1, 0);
 	} else if (keystates[SDLK_RIGHT]) {
-		cout << "right key is held down" << endl;
+		printf("right key is held down\n");
+		((GetRandomGame*) environment)->testFunction(1, 0);
+	} else if (keystates[SDLK_UP]){
+		printf("up key is held down\n");
+		((GetRandomGame*) environment)->testFunction(0, -1);
+	}else if (keystates[SDLK_DOWN]){
+		printf("down key is held down\n");
+		((GetRandomGame*) environment)->testFunction(0, 1);
 	}
 
 	// End of the key handler

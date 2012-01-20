@@ -11,14 +11,7 @@
 
 using namespace std;
 
-/**
- * CONSTANTS
- */
-const bool DEBUG = true;
-//Les attributs de l'ecran (640 * 480)
-const int SCREEN_BPP = 32;
-//Le nombre de frames par seconde
-const int FRAMES_PER_SECOND = 24;
+
 
 /**
  * CONSTRUTOR
