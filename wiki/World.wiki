@@ -1,5 +1,11 @@
 #summary How it will work and how it is displayed
 #labels Phase-Requirements,Phase-Design,World
+= The Kingdom of Get Random Game =
+<g:plusone/>
+
+Table Of Content:
+<wiki:toc max_depth="1" />
+----
 
 = How far can we walk? =
 
