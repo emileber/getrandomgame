@@ -33,8 +33,9 @@ void GetRandomGame::init(int w, int h) {
 	cout << "GetRandomGame::init()" << endl;
 	Environment::init(w, h); // parent class init
 	//srand((unsigned) time(0)); // seed the random gen
-	srand(5);
+	//srand(5);
 	_gameTime.start();
+	printf("timer start OK\n");
 
 	/**
 	 *
@@ -45,6 +46,7 @@ void GetRandomGame::init(int w, int h) {
 	_hello = new Sprite(250, 190, "image/hello_world.bmp");
 	_cat = new Animation(500, 190, 95, 120, "image/cat.bmp", 4, 150);
 	_pave = new Sprite(-10, 300, 40, 40, "image/pave.bmp");
+	printf("new Sprite OK\n");
 	//_cat->
 	_sdl->setTextColor(255, 0, 0);
 
@@ -74,15 +76,15 @@ void GetRandomGame::update() {
 //					_background), BACKGROUND_LAYER);
 //	_sdl->pushSprite(new Sprite(0, _background->getHeight(), _background),
 //			BACKGROUND_LAYER);
-
 	// Floor Stuff
 	_sdl->pushSprite(_pave, GROUND_LAYER);
+	int cpt = 0;
 	for (int y = 0; y < 15; y++) {
 		for (int i = 0; i < 25; i++) {
 			Sprite * tempSprite = new Sprite((i * 40), (y * 40), _pave);
-			tempSprite->setClipId((i * y) % tempSprite->getNbImageX(), 0);
+			tempSprite->setClipId((i * (y + cpt++)) % tempSprite->getNbImageX(),
+					0);
 			_sdl->pushSprite(tempSprite, GROUND_LAYER);
-
 		}
 	}
 

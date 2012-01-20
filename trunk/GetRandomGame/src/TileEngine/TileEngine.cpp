@@ -100,26 +100,34 @@ void TileEngine::run() {
 		 * each iteration, do this:
 		 */
 
+		printf("\n");
+		printf("new Iteration\n");
+
 		_frameTimer.start(); //Calcul le temps d'execution de l'iteration
 
 		// Collect and handle inputs informations (return false on exit)
 		_quit = _inputHandler->handleInput(_environment);
-
+		printf("handle input OK\n");
 		// UPDATE the environment
 		_environment->update();
-
+		printf("environment update OK\n");
 		// show FPS information
 		if (DEBUG) {
 			fpsRegulator();
 		}
-		//cout << "after FPS reg" << endl;
+
+		printf("FPS regulator OK\n");
+
 		// finally, flip the screen
 		_sdl->render();
-		//cout << "after render()" << endl;
+
+		printf("SDL render OK\n");
+
 		// wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
 		while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
 			;
 
+		printf("Iteration::END\n");
 	} // End of the GAME LOOP
 
 	// Stop the program correctly
