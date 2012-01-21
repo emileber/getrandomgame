@@ -12,4 +12,21 @@ Table Of Content:
 Donc dans cette page sera déterminé les points suivants:
   * Size Final
   * Tileset/SpriteSheet configuration
-  * In The Code
+  * In Tha Code
+
+= Dimension du monde =
+
+La dimension du monde sera déterminé en tuile (Tile). Trois dimensions de base détermineront la taille du monde, soit:
+  * Petit (33x33)
+  * Moyen (65x65)
+  * [Très] Grand (129x129)
+
+Chaque case de la carte du monde sera une région:
+  * 129x129
+
+et chaque case d'une région sera une aire (Area Map):
+  * 9x9
+
+== Complexity of the map ==
+
+Chaque Area 9x9 doit être généré en fonction des autres Area autour de lui sans quoi il y aurait des changements linéaires visibles entre chaque Area.
