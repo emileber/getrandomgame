@@ -11,10 +11,10 @@
 class Timer {
 private:
 	//Le temps quand le timer est lancé
-	int startTicks;
+	Uint32 startTicks;
 
 	//Le temps enregistré quand le Timer a été mis en pause
-	int pausedTicks;
+	Uint32 pausedTicks;
 
 	//Le status du Timer
 	bool paused;
@@ -33,7 +33,7 @@ public:
 
 	//recupére le nombre de millisecondes depuis que le timer a été lancé
 	//ou récupére le nombre de millisecondes depuis que le timer a été mis en pause
-	int get_ticks();
+	Uint32 get_ticks();
 
 	//Fonctions de vérification du status du timer
 	bool is_started();

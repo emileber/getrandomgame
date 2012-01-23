@@ -54,7 +54,8 @@ public:
 	void render();
 	void cleanUp();
 
-	std::string intToString(int);
+	std::string intToString(Uint32);
+	std::string formatTime(Uint32); // format milisec in a readable time format
 };
 
 #endif /* SDLINTERFACE_H_ */

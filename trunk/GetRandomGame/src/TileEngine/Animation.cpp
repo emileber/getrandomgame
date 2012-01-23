@@ -73,9 +73,12 @@ Animation::Animation(int x, int y, Sprite * anim) {
 	_clip = anim->getClipRect();
 }
 
-void Animation::nextFrame(int time) {
+void Animation::nextFrame(Uint32 time) {
 	if (time > _lastUpdate + _frameTime) {
 		_frame++;
 		_lastUpdate = time;
+		if (_frame >= _nbFrame){
+			_frame -= _nbFrame;
+		}
 	}
 }
