@@ -104,7 +104,7 @@ Sprite::Sprite(int x, int y, int w, int h, std::string filename, int alpha) {
 }
 
 Sprite::~Sprite() {
-	printf("delete %s", _fileName.c_str());
+	printf("delete %s\n", _fileName.c_str());
 	SDL_FreeSurface(_spriteSheet);
 }
 

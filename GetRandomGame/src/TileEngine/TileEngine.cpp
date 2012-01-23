@@ -11,9 +11,9 @@
 
 using namespace std;
 
+int frameCount = 0; // test global frame counter
 
-
-/**
+/****************************************
  * CONSTRUTOR
  */
 TileEngine::TileEngine() {
@@ -27,10 +27,11 @@ TileEngine::TileEngine() {
 
 	_init = false;
 	_quit = false;
+	printf("sizeof int: %d\n", sizeof(int));
 	cout << "new TileEngine::End" << endl;
 }
 
-/**
+/****************************************
  * init(...)
  *  Call that first, then call start();
  *
@@ -53,8 +54,8 @@ void TileEngine::init(int screenW, int screenH, string caption, string fontFile,
 	_sdl = SDLInterface::getInstance();
 
 	// then init the interface with default values
-	if (_sdl->init(_screenWidth, _screenHeight, SCREEN_BPP, caption, TOTAL_LAYER)
-			== false) {
+	if (_sdl->init(_screenWidth, _screenHeight, SCREEN_BPP, caption,
+			TOTAL_LAYER) == false) {
 		cout << "TileEngine::init sdl init = ERROR" << endl;
 	}
 	if (_sdl->setFont(fontFile, 15) == false) {
@@ -68,7 +69,7 @@ void TileEngine::init(int screenW, int screenH, string caption, string fontFile,
 	cout << "TileEngine init::End" << endl;
 }
 
-/**
+/****************************************
  * start()
  *  It literally starts the engine
  *
@@ -81,7 +82,7 @@ void TileEngine::start() {
 	cout << "TileEngine start::End" << endl;
 }
 
-/**
+/****************************************
  * run()
  *  its the actual game loop
  *
@@ -100,34 +101,32 @@ void TileEngine::run() {
 		 * each iteration, do this:
 		 */
 
-		printf("\n");
-		printf("new Iteration\n");
-
+		//printf("new Iteration\n");
 		_frameTimer.start(); //Calcul le temps d'execution de l'iteration
 
 		// Collect and handle inputs informations (return false on exit)
 		_quit = _inputHandler->handleInput(_environment);
-		printf("handle input OK\n");
-		// UPDATE the environment
-		_environment->update();
-		printf("environment update OK\n");
-		// show FPS information
+		//printf("handle input OK\n");
+
+		_environment->update(); // UPDATE the environment
+		//printf("environment update OK\n");
+
 		if (DEBUG) {
-			fpsRegulator();
+			fpsRegulator(); // show FPS information
 		}
 
-		printf("FPS regulator OK\n");
+		//printf("FPS regulator OK\n");
 
-		// finally, flip the screen
-		_sdl->render();
+		_sdl->render(); // finally, flip the screen
 
-		printf("SDL render OK\n");
+		//printf("SDL render OK\n");
 
 		// wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
 		while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
 			;
+		frameCount++; // test frame count
 
-		printf("Iteration::END\n");
+		//printf("Iteration::END\n");
 	} // End of the GAME LOOP
 
 	// Stop the program correctly
@@ -136,13 +135,19 @@ void TileEngine::run() {
 	cout << "TileEngine run::End" << endl;
 }
 
+/****************************************
+ * fpsRegulator
+ * 	show the fps
+ *
+ */
 void TileEngine::fpsRegulator() {
-
+	//printf("SDL_getTicks: %10d\n", SDL_GetTicks());
+	//printf("fpsRegulator(_frame: %d, _fps: %d)\n", _frame, _fps);
 	_frame++; // incremente à chaque frame
 
 	// Render the FPS on screen
-	_sdl->renderText(10, 5, DEBUG_LAYER, "FPS: " + _sdl->intToString(_fps), 200);
-
+	_sdl->renderText(10, 5, DEBUG_LAYER, "FPS: " + _sdl->intToString(_fps));
+	//printf("FPS render OK\n");
 	//Si une seconde est passee depuis la derniere mise à jour de la barre caption
 	if (_fpsTimer.get_ticks() > 1000) {
 		_fps = _frame; // get the current fps
@@ -150,9 +155,16 @@ void TileEngine::fpsRegulator() {
 		_frame = -1; // reset the frame counter
 
 		_fpsTimer.start(); // restart the timer for each second
+		//printf("avant ");
+		printf("frame/Time: %4d%10d\n", frameCount, _environment->getTime());
 	}
+	//printf("fpsRegulator END\n");
 }
 
+/****************************************
+ *
+ *
+ */
 void TileEngine::stop() {
 	_environment->close();
 	_sdl->cleanUp();

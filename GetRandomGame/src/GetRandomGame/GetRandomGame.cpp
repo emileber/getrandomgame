@@ -18,7 +18,8 @@ using namespace std;
  */
 Sprite * _background, *_hello, *_cat, *_pave;
 SDL_Surface * _semiTransSurf;
-int testx = 0, testy = 0, last = 0;
+int testx = 0, testy = 0;
+Uint32 last = 0;
 /**
  * END OF TEST DECLARATIONS
  ***************************/
@@ -34,12 +35,10 @@ void GetRandomGame::init(int w, int h) {
 	Environment::init(w, h); // parent class init
 	//srand((unsigned) time(0)); // seed the random gen
 	//srand(5);
-	_gameTime.start();
-	printf("timer start OK\n");
 
-	/**
+	/****************************************
 	 *
-	 * TEST ZONE
+	 * TEST INIT
 	 *
 	 */
 	_background = new Sprite(0, 0, "image/background.bmp");
@@ -49,16 +48,19 @@ void GetRandomGame::init(int w, int h) {
 	printf("new Sprite OK\n");
 	//_cat->
 	_sdl->setTextColor(255, 0, 0);
+	/*
+	 * END OF TEST INIT
+	 ****************************************/
 
 	cout << "GetRandomGame::init()::End" << endl;
 }
 
 void GetRandomGame::update() {
-	//cout << "GetRandomGame::update()" << endl;
+	//cout << "GetRandomGame::update() | ";
 
 	Environment::update(); // generic update
 	// then game specific update
-	//outputTime(); // Show the total up time
+	_sdl->renderText(10, 20, DEBUG_LAYER, _sdl->formatTime(_gameTime.get_ticks())); // Show the total up time
 
 	/**
 	 * TEST ZONE
@@ -88,7 +90,7 @@ void GetRandomGame::update() {
 		}
 	}
 
-	// Cat stuff
+	//Cat stuff
 	if (_gameTime.get_ticks() > (last + MOVE_TIME)) {
 		//printf("move the cat, last: %10d, time: %10d\n", last,
 		//		_gameTime.get_ticks());

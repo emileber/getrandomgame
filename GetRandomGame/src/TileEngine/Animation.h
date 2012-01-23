@@ -51,14 +51,15 @@ public:
 	 * SET functions
 	 */
 	//virtual void setSprite(std::string); // Do nothing, for futur uses
-	virtual void nextFrame(int time);
+	virtual void nextFrame(Uint32 time);
 
 	virtual void reset() {
 		_frame = 0;
 	}
 
 private:
-	int _nbFrame, _frame, _lastUpdate, _frameTime;
+	int _nbFrame, _frame, _frameTime;
+	Uint32 _lastUpdate;
 };
 
 #endif /* ANIMATION_H_ */

@@ -6,6 +6,7 @@
  */
 
 #include "SDLInterface.h"
+#include "Enumeration.h"
 #include <cstdio>
 #include <iostream>
 
@@ -77,10 +78,30 @@ bool SDLInterface::init(int w, int h, int bpp, string caption, int nbLayer) {
 	return true;
 }
 
-string SDLInterface::intToString(int number) {
+/**
+ * intToString
+ *  cast int to string...
+ */
+string SDLInterface::intToString(Uint32 number) {
 	stringstream ss; //create a stringstream
 	ss << number; //add number to the stream
 	return ss.str(); //return a string with the contents of the stream
+}
+
+/**
+ * formatTime
+ *  return a readable time format string from a milisec value
+ */
+string SDLInterface::formatTime(Uint32 total) {
+	// Render the FPS on screen
+	Uint32 minute = abs(total / 60000);
+	Uint32 second = abs((total % 60000) / 1000);
+	Uint32 milisec = abs((total % 60000) - (second * 1000));
+
+	return intToString(minute) + ":" + intToString(second) + "."
+			+ intToString(milisec);
+	//string timeString = "Time: " + intToString(total);
+	//_sdl->renderText(10, 20, 3, timeString, 200);
 }
 
 /**
@@ -88,6 +109,7 @@ string SDLInterface::intToString(int number) {
  *
  */
 bool SDLInterface::setFont(string filename, int size) {
+	//printf("SDLInterface::setFont(%s, %d)\n", filename.c_str(), size);
 	if (_font != NULL) {
 		//quitte le font utilisé
 		TTF_CloseFont(_font);
@@ -96,6 +118,7 @@ bool SDLInterface::setFont(string filename, int size) {
 	_font = TTF_OpenFont(filename.c_str(), size);
 
 	if (_font == NULL) {
+		printf("setFont retourne NULL\n");
 		return false;
 	}
 
@@ -105,7 +128,7 @@ bool SDLInterface::setFont(string filename, int size) {
 }
 
 void SDLInterface::setFontSize(int size) {
-	_font = TTF_OpenFont(_fontFilename.c_str(), size);
+	setFont(_fontFilename.c_str(), size);
 }
 
 /**
@@ -113,15 +136,27 @@ void SDLInterface::setFontSize(int size) {
  *
  */
 void SDLInterface::setTextColor(Uint8 r, Uint8 g, Uint8 b) {
-	_fontColor.r = r;
-	_fontColor.g = g;
-	_fontColor.b = b;
+	if (abs(r) <= 255) {
+		_fontColor.r = abs(r);
+	}
+	if (abs(g) <= 255) {
+		_fontColor.g = abs(g);
+	}
+	if (abs(b) <= 255) {
+		_fontColor.b = abs(b);
+	}
 }
 
 void SDLInterface::setTransparentColor(int r, int g, int b) {
-	_transColor.r = r;
-	_transColor.g = g;
-	_transColor.b = b;
+	if (abs(r) <= 255) {
+		_transColor.r = abs(r);
+	}
+	if (abs(g) <= 255) {
+		_transColor.g = abs(g);
+	}
+	if (abs(b) <= 255) {
+		_transColor.b = abs(b);
+	}
 }
 
 /**
@@ -152,7 +187,7 @@ SDL_Surface * SDLInterface::createSurface(int width, int height,
  *
  */
 SDL_Surface * SDLInterface::load_image(string filename) {
-	printf("SDLInterface::load_image(%s)\n", filename.c_str());
+	//printf("SDLInterface::load_image(%s)\n", filename.c_str());
 	//L'image qui est chargée
 	SDL_Surface* loadedImage = NULL;
 
@@ -161,10 +196,10 @@ SDL_Surface * SDLInterface::load_image(string filename) {
 
 	//Chargement de l'image
 	loadedImage = IMG_Load(filename.c_str());
-	printf("IMG_Load OK\n");
+	//printf("IMG_Load OK\n");
 	//Si l'image est chargée correctement
 	if (loadedImage != NULL) {
-		printf("%s != NULL\n", filename.c_str());
+		//printf("%s != NULL\n", filename.c_str());
 		//creation de l'image optimisée
 		optimizedImage = SDL_DisplayFormat(loadedImage);
 
@@ -181,7 +216,7 @@ SDL_Surface * SDLInterface::load_image(string filename) {
 							_transColor.g, _transColor.b));
 		}
 	}
-	printf("SDLInterface::load_image::END\n");
+	//printf("SDLInterface::load_image::END\n");
 	//on retourne l'image optimisé
 	return optimizedImage;
 }
@@ -201,7 +236,6 @@ SDL_Surface * SDLInterface::createTextSurface(string text) {
  */
 void SDLInterface::pushSprite(Sprite * sprite, int layer) {
 	//cout << "pushSprite layer: " << layer << endl;
-	// TODO Apply on layer instead of in the queue
 
 	if ((layer >= 0) && (layer < _nbLayer)) {
 		_layerQueue.at(layer).push(sprite);
