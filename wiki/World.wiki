@@ -77,6 +77,63 @@ Les points noirs sont les cases déjà visitées, les points verts sont les case
 
 Donc une fois que cet algorithme a généré la première carte (élévation) on peux se servir de cette carte pour influencer(skewer) les résultats qu'on aura pour la deuxième carte(température).
 
+== Pseudo code ==
+
+{{{
+// pseudo code
+espace = Largeur;
+tant que espace > 1 faire
+{
+  espace = espace / 2;
+
+  pour chaque carre de largeur espace faire
+  {
+    etape du carre;
+  }
+
+  pour chaque diamant de largeur espace faire
+  {
+    etape du diamant;
+  }
+}
+
+// code
+// Indice de bout de matrice
+unsigned int unSpacing = m_unSize - 1;
+
+while (unSpacing > 1) 
+{ 
+  int unHalfSpacing = unSpacing / 2;
+
+  // Etape du carré
+  for (unsigned int unI = unHalfSpacing; unI < m_unSize; unI += unSpacing) 
+  { 
+    for (unsigned int unJ = unHalfSpacing; unJ < m_unSize ; unJ += unSpacing ) 
+    { 
+      m_vectPoints[unI][unJ] = SquareStep(unI, unJ, unHalfSpacing ) + Randomize() * unSpacing * m_fVariability; 
+    } 
+  } 
+
+  // Etape du diamant
+  for (unsigned int unI = 0; unI < m_unSize; unI += unHalfSpacing) 
+  { 
+    unsigned int unJStart = ((unI/unHalfSpacing) % 2 == 0 ) ? unHalfSpacing : 0; 
+
+    for (unsigned int unJ = unJStart; unJ < m_unSize ; unJ += unSpacing ) 
+    { 
+      m_vectPoints[unI][unJ] = DiamondStep(unI, unJ, unHalfSpacing ) + Randomize() * unSpacing *  m_fVariability;
+    } 
+  } 
+
+  // Adaptation de l'écart 
+  unSpacing = unHalfSpacing;
+} 
+}}}
+
+
+
+
+
 == Exemple rapide ==
 voici donc la carte de tantôt avec des valeurs (généré par moi) dedans
 {{{
@@ -109,8 +166,19 @@ Je n'ai utilisé aucun algorithme formel pour avoir ça, mais ça donne une idé
 Reste qu'a repasser l'algorithme diamond square(plus haut) pour avoir une map complete
 	On fait ca pour les quatres map (altitude, température,  précipitation, végétation)  et chaque case a assez d'information pour savoir quelle genre de case elle est(désert foret taiga tundra...), on a donc un monde vierge
 
+== Reference == 
+[http://gameprogrammer.com/fractal.html Generating Random Fractal Terrain]
+
+[http://hiko-seijuro.developpez.com/articles/diamond-square/ DiamondSquare pour la génération de terrain]
+
 ----
 = Biomes =
 
+[http://www.marietta.edu/~biol/biomes/whittaker.jpg]
+
 ----
 = Tileset et Sprite sheet =
+
+[http://www.codeproject.com/Articles/106884/Implementing-Auto-tiling-Functionality-in-a-Tile-M Auto-tiling]
+
+[http://wilbefast.com/2011/02/06/tricky-auto-tiling/ Auto-tiling again]
