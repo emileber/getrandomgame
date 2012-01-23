@@ -4,29 +4,113 @@
 <g:plusone/>
 
 Table Of Content:
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="2" />
 ----
 
 = How far can we walk? =
 
-Donc dans cette page sera déterminé les points suivants:
-  * Size Final
-  * Tileset/SpriteSheet configuration
-  * In Tha Code
-
-= Dimension du monde =
-
-La dimension du monde sera déterminé en tuile (Tile). Trois dimensions de base détermineront la taille du monde, soit:
+La dimension de la carte du monde sera déterminé en Région. Trois dimensions de base détermineront la taille du monde, soit:
   * Petit (33x33)
   * Moyen (65x65)
   * [Très] Grand (129x129)
 
-Chaque case de la carte du monde sera une région:
-  * 129x129
+Chaque case de la carte du monde sera une région composé d'aire de tuile (Area):
+  * 129x129 Area
 
-et chaque case d'une région sera une aire (Area Map):
-  * 9x9
+et chaque case d'une région sera une aire (Area Map) composé de tuile (Tile):
+  * 17x17 Tile
 
 == Complexity of the map ==
 
-Chaque Area 9x9 doit être généré en fonction des autres Area autour de lui sans quoi il y aurait des changements linéaires visibles entre chaque Area.
+Chaque Area doit être généré en fonction des autres Area autour de lui sans quoi il y aurait des changements linéaires visibles entre chaque Area.
+----
+= Générer un monde aléatoirement =
+
+...sans que ca soit dla marde.
+
+Ça semble beaucoup plus complexe que ce ne l'est vraiment
+
+== La taille ==
+
+Premièrement, il faut décider de la taille du monde, le monde doit être un carré avec un coté égal a 2^x +1(5, 9, 17, 33, 65, 129, 257,4097...) reste a voir quelle taille on veux le monde...
+
+== Génération de la carte ==
+
+	Ensuite commence la vrai génération, qui va débuter par la création d'une carte vierge qui va comme suit:
+
+  # on génère une carte d'élévation
+  # on skew la carte de température par rapport a la carte d'élévation et a la latitude
+  # on génère une carte de température 
+  # on skew la carte des précipitations par rapport aux deux précédentes cartes
+  # on génère une carte de précipitations
+  # on skew la carte de densité végétale par rapport aux cartes précédentes
+  # on génère une carte de densité végétale
+  # on arrondi les coins
+
+	maintenant le point intéressant, comment on fait?
+
+== Comment? Diamond Square! ==
+
+[http://getrandomgame.googlecode.com/files/map_gen2.xls Fichier Excel] avec des exemples
+
+	Toutes les cartes sont générées de manière similaire avec l’algorithme de Diamond Square qui est une application 2d de l’algorithme de midpoint displacement. Cet algorithme s'applique a une ligne et consiste a diviser la ligne en deux, ajouter une valeur aléatoire au point milieu, ce qui divise la ligne en deux ligne, et ainsi de suite pour les autres lignes
+
+ex: 
+
+[http://gameprogrammer.com/fractal/mpd1.gif]
+
+[http://gameprogrammer.com/fractal/mpd2.gif]
+
+[http://gameprogrammer.com/fractal/mpd3.gif]
+
+	Le range permis de "random" reste a voir, mais cet algorithme permet de générer de très bons terrains.
+
+	Donc l'algorithme que nous utiliserons pour la génération des maps doit ressembler à celui-ci, mais pour générer de l'élévation sur une map en 2d. Le principe est simple, toutes les case commencent avec une valeur par défaut(entrée dans les étapes de skew, plus haut). Ensuite on fait un carré avec les case qui ont été visités(par défaut les coins) et on ajoute la moyenne des coins+random a cette valeur. C'est l'Étape square de diamond square. La deuxieme étape(diamond) consiste a faire des losanges avec les cases visités et d’ajouter  la moyenne des coins+random à leurs point milieu. On répète les deux étapes jusqu’à-ce que toutes les cases aient été visitées.
+
+Voici comment l’algorithme marche :
+
+[http://danielbeard.files.wordpress.com/2010/08/diamond-square-algorithm.png]
+
+Les points noirs sont les cases déjà visitées, les points verts sont les cases qui seront visitées dans l'étape courante.
+
+	Comme on peut le voir c'est un algorithme simple a programmer qui va nous permettre d'avoir des cartes complexes.
+
+Donc une fois que cet algorithme a généré la première carte (élévation) on peux se servir de cette carte pour influencer(skewer) les résultats qu'on aura pour la deuxième carte(température).
+
+== Exemple rapide ==
+voici donc la carte de tantôt avec des valeurs (généré par moi) dedans
+{{{
+-10	-10	-8	-5	-8	-7	-6	-8	-10
+-10	-5	-8	-4	-10	-5	-4	-6	-8
+-3	-4	-1	0	-4	-6	-2	3	-8
+-5	-3	0	1	-3	0	0	10	6
+3	0	1	2	0	0	12	20	15
+3	3	2	4	5	6	9	15	12
+4	4	6	4	6	8	9	15	10
+3	2	7	3	4	9	10	12	10
+4	1	8	2	2	5	6	7	8
+}}}
+
+On considère ce qui es en bas de 0 comme de l'eau.
+On a donc une carte de 9x9 de température a faire, généralement la température est plus froide aux pôles et en altitude, et plus chaude en mer.
+Donc la carte de température, avant modification ressemblerait a ceci
+{{{
+0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	-1	0
+0	0	0	1	0	0	0	-2	0
+2	0	1	1	0	1	0	-2	-1
+3	3	4	3	2	1	-1	-3	-2
+3	2	3	2	0	0	0	-2	-2
+1	1	1	1	0	-1	-1	-3	-2
+2	0	0	1	0	-2	-1	-2	-3
+0	0	0	0	0	-2	-1	-1	-2
+}}}
+Je n'ai utilisé aucun algorithme formel pour avoir ça, mais ça donne une idée.
+Reste qu'a repasser l'algorithme diamond square(plus haut) pour avoir une map complete
+	On fait ca pour les quatres map (altitude, température,  précipitation, végétation)  et chaque case a assez d'information pour savoir quelle genre de case elle est(désert foret taiga tundra...), on a donc un monde vierge
+
+----
+= Biomes =
+
+----
+= Tileset et Sprite sheet =
