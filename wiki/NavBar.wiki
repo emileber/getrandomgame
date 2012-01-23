@@ -1,6 +1,6 @@
   * [GetRandomGame General Info]
   * [Features All the Features]
   * [Setup How to run it]
-  * [GameDocument How it works]
+  * [GettingStarted How it works]
   * [World How far can I walk?]
   * [Crafting Can I make potions?]
