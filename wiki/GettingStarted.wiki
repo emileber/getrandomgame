@@ -117,22 +117,34 @@ Présentement petit, l’environnement de notre jeu crée un monde et s'occupe d
 
 Bon alors j'ai encapsuler le boute chiant donc vous n'aurai pas a jouer avec des trucs d'affichage.
 
-== L'entête donc son contenu ==
+Présentement, l'interface permet les choses suivantes:
+  * afficher des images (même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire (bien que l'on ne le voit pas)
+  * afficher du text
+  * Sur 12 Layer différente (et c'est ajustable à volonter)
+  * Et gère la transparence avec un int alpha de 0 à 255
+
+== Son contenu ==
 
 La majorité des fonctions suivantes vous seront inutiles et ne devrait pas être utilisé puisque notre jeu passe par la classe Sprite pour la gestion de tout ça.
 
 Vous devez retenir seulement:
   * createTextSurface(std::string)
-  * pushSprite(Sprite *, int = 0)
+  * pushSprite(Sprite, int Layer)
+  * renderText
 
 === createTextSurface ===
 
-Pour créer un Sprite à l'aide d'une surface de texte. C'est pas mal pour ça que c'est utile.
+Elle vous retourne une SDL_Surface à partir d'une String qu'elle reçoit pour  que tu puisse créer un Sprite à l'aide d'une surface de texte. C'est pas mal pour ça que c'est utile. (pour le text qui change jamais ou presque genre le nom des personnage)
 
 === pushSprite ===
 
 Reçoit un Sprite et tout tourne autour de cela. Il est important de spécifier la bonne layer sur lequel vous voulez voir votre Sprite s'afficher, voir le fichier Enumeration.h
 
+=== renderText ===
+
+Moins Important, mais vous permet d'afficher du text directos sur l'écran (genre les FPS et le temps en milisec qui change tout le temps). Mais c'est pas tellement beau comme façon de procéder, ultérieurement, il faudra utiliser la classe Label pour ce genre de text.
+
+== le header ==
 {{{
 class SDLInterface: public Singleton<SDLInterface> {
 	friend class Singleton<SDLInterface> ;
