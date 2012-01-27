@@ -225,6 +225,9 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
     * Pour les NPC
   * L’intelligence Artificiel
     * Passive/agressive directe ou indirect etc
+  * Game State
+    * Menu principal
+    * Login au serveur et loading screen
 
 == IMPORTANT ==
 Consulter les membres de l'équipe et surtout la documentation sur le wiki et dans le dossier docs du projet AVANT de commencer à travailler. Merci!
