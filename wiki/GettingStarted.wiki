@@ -22,13 +22,13 @@ En gros, le Tile Engine comprend la base dans le Dossier TileEngine et le Jeu co
 
 Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r75:
   * dir->GetRandomGame
-    * GetRandomGame (l'environement de notre jeu)
+    * GetRandomGame (Sous-classe Environement, big mama du jeu)
     * GRGInputHandler
     * Launcher
   * TileEngine
     * Animation (sous-classe de Sprite)
     * Enumeration (constante)
-    * Environment (big mama du jeu)
+    * Environment (Environment générique, redéfini par GetRandomGame)
     * InputHandler (générique, contient pratiquement rien)
     * SDLInterface (pour tout afficher)
     * Singleton (Template pour créer des singleton sans avoir a implémenter le code dans chaque classe)
