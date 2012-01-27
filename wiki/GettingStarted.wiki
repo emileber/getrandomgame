@@ -37,6 +37,10 @@ Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r7
     * Timer (donne du temps en milisec avec le tick SDL)
     * World (monde de jeu générique, presque vide aussi, c'est a redéfinir dans le jeu)
 
+== Enumeration.h WTF? ==
+
+Je vais faire référence souvent à ce fichier, c'est le fichier de constante de jeu et des Enumerations (comme les Layer présentement). Il est peut-être mauvais de passer les constantes comme ça, ça reste à revérifier et c'est pas définitif.
+
 ----
 = The Tile Engine =
 
@@ -121,6 +125,14 @@ Vous devez retenir seulement:
   * createTextSurface(std::string)
   * pushSprite(Sprite *, int = 0)
 
+=== createTextSurface ===
+
+Pour créer un Sprite à l'aide d'une surface de texte. C'est pas mal pour ça que c'est utile.
+
+=== pushSprite ===
+
+Reçoit un Sprite et tout tourne autour de cela. Il est important de spécifier la bonne layer sur lequel vous voulez voir votre Sprite s'afficher, voir le fichier Enumeration.h
+
 {{{
 class SDLInterface: public Singleton<SDLInterface> {
 	friend class Singleton<SDLInterface> ;
@@ -176,3 +188,33 @@ _cat = new Animation(x, y, w, h, "image/cat.bmp", nbFrame, int animationDelay /*
 // ensuite, à chaque itération, il s'agit d'ajouter le sprite à la liste d'affichage
 _sdl->pushSprite(tonSprite, TA_LAYER /* voir enumeration.h */);
 }}}
+
+----
+= Les modules à développer =
+
+Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à prendre le module suivant qui vous intéresse:
+  * Paufiner le Tile Engine (je risque de faire ça)
+    * Ajout d'openGL (resize et autre plus facile et plus vite)
+    * Gestion de l'affichage
+    * Gestion des contrôles
+    * Peut-être ajouter un aspect réseau
+  * Créer le Monde (WorldMap, Area, Tile) (J'ai une idée la dessus, si vous le faite, parlez moi en avant)
+    * une fois une tile map affichée, il faut le coté RANDOM de la map
+  * Les menu/interface (inventaire, stats, hotbar, healt/xp/mana bar, etc)... je sais, c'est pas le plus le fun
+    * ça implique faire des classes générique genre Button et Labels et Menu, voir documentation
+  * Le système de génération d'item
+    * Donc faire les classes Item et Inventaire
+    * puis importer le système de génération aléatoire avec préfixe et suffixe
+  * Le système d'interaction
+    * Mouvement dans les tuiles
+    * interaction de combat autant qu'avec des objets (classe générique Interaction)
+  * Le pathfinding
+    * Pour notre personnage lors de mouvement avec clique
+    * Pour les NPC
+  * L’intelligence Artificiel
+    * Passive/agressive directe ou indirect etc
+
+== IMPORTANT ==
+Consulter les membres de l'équipe et surtout la documentation sur le wiki et dans le dossier docs du projet AVANT de commencer à travailler. Merci!
+
+Voilà, s'il manque quelque chose, n'hésitez pas à modifier les pages.
