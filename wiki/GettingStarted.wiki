@@ -5,11 +5,174 @@
 <g:plusone/>
 
 Table Of Content:
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="2" />
 ----
 
 if you don't have your development environment ready, [Setup see this].
 
-= The modules =
+= OMG there's a lot of files =
 
+Ne vous perdez pas, je suis la!
+
+Donc, jusqu'à maintenant, le projet est divisé en 2 parties distinctes, soit le Tile Engine et le Jeu (notre but).
+
+Le jeu utilise le Tile Engine qui lui est générique et ne devrait pas contenir de code spécifique au jeu évidement.
+
+En gros, le Tile Engine comprend la base dans le Dossier TileEngine et le Jeu contient ses fichiers, qui héritent du Tile Engine, dans le dossier GetRandomGame.
+
+Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r75:
+  * dir->GetRandomGame
+    * GetRandomGame (l'environement de notre jeu)
+    * GRGInputHandler
+    * Launcher
+  * TileEngine
+    * Animation (sous-classe de Sprite)
+    * Enumeration (constante)
+    * Environment (big mama du jeu)
+    * InputHandler (générique, contient pratiquement rien)
+    * SDLInterface (pour tout afficher)
+    * Singleton (Template pour créer des singleton sans avoir a implémenter le code dans chaque classe)
+    * Sprite (Contient les info des images)
+    * TileEngine (la boucle de jeu)
+    * Timer (donne du temps en milisec avec le tick SDL)
+    * World (monde de jeu générique, presque vide aussi, c'est a redéfinir dans le jeu)
+
+----
 = The Tile Engine =
+
+Petite explication rapide de l'engine. Prendre note que la classe TileEngine est Singleton.
+
+== Pour le starter ==
+
+{{{
+// voir le Launcher dans le dir GetRandomGame pour le code exact
+
+TileEngine::getInstance()->init(SCREEN_WIDTH, SCREEN_HEIGHT, "window caption", 
+                   "font.ttf", Environment, InputHandler);
+
+TileEngine::getInstance()->start();
+}}}
+
+Il est important de faire Init en premier, mais ça on s'en fou, je l'ai fait, on risque de plus y toucher.
+
+== Création ==
+
+À sa création, le TileEngine initialise la SDLInterface ainsi que l'environment.
+
+NOTE: SDLInterface est singleton aussi.
+
+Ensuite, il appelle run() qui start le gameLoop.
+
+== Le Game Loop ==
+
+{{{
+         /**
+	 *  GAME LOOP
+	 */
+	while (!_quit) {
+		/**
+		 * each iteration, do this:
+		 */
+
+		_frameTimer.start(); //Calcul le temps d'execution de l'iteration
+
+		// Collect and handle inputs informations (return false on exit)
+		_quit = _inputHandler->handleInput(_environment);
+
+		_environment->update(); // UPDATE the environment
+
+		if (DEBUG) {
+			fpsRegulator(); // show FPS information
+		}
+		_sdl->render(); // finally, flip the screen
+
+		// wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
+		while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
+			;
+		frameCount++; // test frame count
+	} // End of the GAME LOOP
+}}}
+
+== Regulation des Frame par seconde ==
+
+On voit dans la ligne:
+{{{
+while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
+			;
+}}}
+que la boucle est géré par FPS. Elle attend seulement le temps restant pour garder sont taux de FPS. (Par contre, présentement le cap est a 200 je crois, c'est a confirmer dans le fichier Enumeration.h mais évidement, elle attend pas vraiment)
+
+== La classe Environment ==
+
+Celle du TileEngine est vraiment générique et ne contient que des fonctions à redéfinir ou presque. Voir GetRandomGame qui est la sous-classe Environment de notre jeu.
+
+Présentement petit, l’environnement de notre jeu crée un monde et s'occupe d'updater les objets actifs dont notre personnage Héro évidement.
+
+----
+= L'interface SDL (le diable!!) =
+
+Bon alors j'ai encapsuler le boute chiant donc vous n'aurai pas a jouer avec des trucs d'affichage.
+
+== L'entête donc son contenu ==
+
+La majorité des fonctions suivantes vous seront inutiles et ne devrait pas être utilisé puisque notre jeu passe par la classe Sprite pour la gestion de tout ça.
+
+Vous devez retenir seulement:
+  * createTextSurface(std::string)
+  * pushSprite(Sprite *, int = 0)
+
+{{{
+class SDLInterface: public Singleton<SDLInterface> {
+	friend class Singleton<SDLInterface> ;
+private:
+	SDLInterface();
+	//~SDLInterface();
+
+	int _screenW, _screenH;
+	SDL_Surface * _screen;
+	std::vector<std::queue<Sprite *> > _layerQueue;
+	TTF_Font * _font;
+	std::string _fontFilename;
+	int _fontSize, _nbLayer;
+	SDL_Color _fontColor;
+	SDL_Color _transColor;
+
+public:
+	bool init(int, int, int, std::string, int = 1);
+	SDL_Surface * load_image(std::string);
+	SDL_Surface * createTextSurface(std::string);
+	SDL_Surface* createSurface(int, int, SDL_Surface* = NULL);
+
+	bool setFont(std::string, int);
+	void setFontSize(int);
+	void setTextColor(Uint8, Uint8, Uint8);
+	void setTransparentColor(int, int, int);
+
+	void pushSprite(Sprite *, int = 0);
+	void apply_surface(int x, int y, SDL_Surface * source, int alpha = 255, SDL_Rect* clip = NULL, SDL_Surface * destination = NULL);
+	bool renderText(int, int, int, std::string, int = 255, int = 15, SDL_Rect * = NULL);
+
+	void render();
+	void cleanUp();
+
+	std::string intToString(Uint32);
+	std::string formatTime(Uint32); // format milisec in a readable time format
+};
+}}}
+
+== Comment afficher une image? ==
+
+  # Crée une Sprite ou une Animation
+  # À chaque iteration, ajoute ta sprite avec pushSprite de l'interface SDL
+
+
+{{{
+// Création de Sprite ou d'animation
+_hello = new Sprite(x, y, "image/hello_world.bmp");
+_cat = new Animation(x, y, w, h, "image/cat.bmp", nbFrame, int animationDelay /* en milisec */);
+
+/* [...] */
+
+// ensuite, à chaque itération, il s'agit d'ajouter le sprite à la liste d'affichage
+_sdl->pushSprite(tonSprite, TA_LAYER /* voir enumeration.h */);
+}}}
