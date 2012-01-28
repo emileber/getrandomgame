@@ -214,10 +214,16 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
     * une fois une tile map affichée, il faut le coté RANDOM de la map
   * Les menu/interface (inventaire, stats, hotbar, healt/xp/mana bar, etc)... je sais, c'est pas le plus le fun
     * ça implique faire des classes générique genre Button et Labels et Menu, voir documentation
+  * Les Tokens
+    * Ainsi que des états comme (en feu, gelé, électrifiant, etc, voir [Features features])
   * Le système de génération d'item
     * Donc faire les classes Item et Inventaire
     * puis importer le système de génération aléatoire avec préfixe et suffixe
     * Le système de crafting
+  * Les Characters
+    * Player
+    * NPC
+    * Monsters
   * Le système d'interaction
     * Mouvement dans les tuiles
     * interaction de combat autant qu'avec des objets (classe générique Interaction)
@@ -233,6 +239,8 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
 
 Finalement
   * Définir les règles de jeu précises
+  * Un éditeur pour ajouter du contenu facilement
+  * des animations
 
 == IMPORTANT ==
 Consulter les membres de l'équipe et surtout la documentation sur le wiki et dans le dossier docs du projet AVANT de commencer à travailler, puis inscrivez votre nom devant l'élément de la liste que vous allez travailler. Merci!
