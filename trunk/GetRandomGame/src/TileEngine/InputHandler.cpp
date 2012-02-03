@@ -10,6 +10,8 @@
 
 using namespace std;
 
+namespace TileEngine {
+
 InputHandler::InputHandler() {
 	// TODO Auto-generated constructor stub
 
@@ -69,5 +71,7 @@ bool InputHandler::handleInput(Environment * environment) {
 		return true;
 	}
 	return false;
+
+}
 
 }

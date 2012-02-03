@@ -9,10 +9,14 @@
 
 using namespace std;
 
+namespace TileEngine {
+
 Environment::Environment() {
 	cout << "new Environment" << endl;
 	_world = new World();
 	_sdl = SDLInterface::getInstance();
+	_graphic = Graphic::getInstance();
+	_textureManager = TextureManager::getInstance();
 	_frameCount = 0;
 	_screenWidth = 0;
 	_screenHeight = 0;
@@ -26,10 +30,16 @@ void Environment::init(int w, int h) {
 }
 
 void Environment::update() {
+	_world->update();
 	//cout << "Environment::update()" << endl;
+}
+
+void Environment::draw(){
+	_world->draw();
 }
 
 void Environment::close() {
 	cout << "Environment::close()" << endl;
 }
 
+}

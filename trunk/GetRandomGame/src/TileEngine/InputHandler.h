@@ -11,6 +11,8 @@
 #include "Environment.h"
 #include "SDL/SDL.h"
 
+namespace TileEngine {
+
 class InputHandler {
 public:
 	InputHandler();
@@ -19,5 +21,5 @@ public:
 protected:
 	SDL_Event event;
 };
-
+}
 #endif /* INPUTHANDLER_H_ */

@@ -62,10 +62,10 @@ bool GRGInputHandler::handleInput(Environment* environment) {
 		((GetRandomGame*) environment)->testFunction(1, 0);
 	} else if (keystates[SDLK_UP]){
 		printf("up key is held down\n");
-		((GetRandomGame*) environment)->testFunction(0, -1);
+		((GetRandomGame*) environment)->testFunction(0, 1);
 	}else if (keystates[SDLK_DOWN]){
 		printf("down key is held down\n");
-		((GetRandomGame*) environment)->testFunction(0, 1);
+		((GetRandomGame*) environment)->testFunction(0, -1);
 	}
 
 	// End of the key handler

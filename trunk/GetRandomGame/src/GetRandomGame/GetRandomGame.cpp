@@ -6,8 +6,7 @@
  */
 
 #include "GetRandomGame.h"
-#include "Animation.h"
-#include "Sprite.h"
+#include "TextureManager.h"
 #include <ctime>
 #include <iostream>
 
@@ -16,7 +15,7 @@ using namespace std;
 /***************************
  * TEST DECLARATIONS
  */
-Sprite * _background, *_hello, *_cat, *_pave;
+Texture * _background, *_hello, *_cat, *_pave;
 SDL_Surface * _semiTransSurf;
 int testx = 0, testy = 0;
 Uint32 last = 0;
@@ -41,13 +40,8 @@ void GetRandomGame::init(int w, int h) {
 	 * TEST INIT
 	 *
 	 */
-	_background = new Sprite(0, 0, "image/background.bmp");
-	_hello = new Sprite(250, 190, "image/hello_world.bmp");
-	_cat = new Animation(500, 190, 95, 120, "image/cat.bmp", 4, 150);
-	_pave = new Sprite(-10, 300, 40, 40, "image/pave.bmp");
-	printf("new Sprite OK\n");
-	//_cat->
-	_sdl->setTextColor(255, 0, 0);
+	_hello = _textureManager->loadTextureFromFile("image/hello_world.bmp");
+
 	/*
 	 * END OF TEST INIT
 	 ****************************************/
@@ -59,53 +53,19 @@ void GetRandomGame::update() {
 	//cout << "GetRandomGame::update() | ";
 
 	Environment::update(); // generic update
+
 	// then game specific update
-	_sdl->renderText(10, 20, DEBUG_LAYER, _sdl->formatTime(_gameTime.get_ticks())); // Show the total up time
+	//_sdl->renderText(10, 20, DEBUG_LAYER, _sdl->formatTime(_gameTime.get_ticks())); // Show the total up time
 
 	/**
 	 * TEST ZONE
 	 */
-//	_semiTransSurf = _sdl->createSurface(50, 500);
-//	_sdl->apply_surface(-10, 10, _hello->getSurface(), 255, NULL,
-//			_semiTransSurf);
-//	_sdl->pushSprite(new Sprite(400, 0, _semiTransSurf), DEBUG_LAYER);
-	// Background
-//	_sdl->pushSprite(_background, BACKGROUND_LAYER);
-//	_sdl->pushSprite(new Sprite(_background->getWidth(), 0, _background),
-//			BACKGROUND_LAYER);
-//	_sdl->pushSprite(
-//			new Sprite(_background->getWidth(), _background->getHeight(),
-//					_background), BACKGROUND_LAYER);
-//	_sdl->pushSprite(new Sprite(0, _background->getHeight(), _background),
-//			BACKGROUND_LAYER);
-	// Floor Stuff
-	_sdl->pushSprite(_pave, GROUND_LAYER);
-	int cpt = 0;
-	for (int y = 0; y < 15; y++) {
-		for (int i = 0; i < 25; i++) {
-			Sprite * tempSprite = new Sprite((i * 40), (y * 40), _pave);
-			tempSprite->setClipId((i * (y + cpt++)) % tempSprite->getNbImageX(),
-					0);
-			_sdl->pushSprite(tempSprite, GROUND_LAYER);
-		}
-	}
 
-	//Cat stuff
-	if (_gameTime.get_ticks() > (last + MOVE_TIME)) {
-		//printf("move the cat, last: %10d, time: %10d\n", last,
-		//		_gameTime.get_ticks());
-		last = _gameTime.get_ticks();
-		_cat->setPoint(_cat->getX() + testx, _cat->getY() + testy);
-	}
-	_sdl->pushSprite(_cat, PEOPLE_LAYER);
-	((Animation*) _cat)->nextFrame(_gameTime.get_ticks());
-
-	// render the directions pixel mod
-	_sdl->renderText(500, 20, DEBUG_LAYER,
-			_sdl->intToString(testx) + ", " + _sdl->intToString(testy));
-
-	//cout << "GetRandomGame::update()::End" << endl;
 } // END of update()
+
+void GetRandomGame::draw() {
+	_hello->draw(testx, testy, 1, 0, 1, 1, 1, 1);
+}
 
 void GetRandomGame::testFunction(int xMod, int yMod) {
 	testx = xMod * MOVE_DISTANCE;
@@ -116,8 +76,8 @@ void GetRandomGame::close() {
 	cout << "GetRandomGame::close()" << endl;
 	Environment::close(); // call the generic close function to close general stuff
 
-	delete _background;
-	delete _cat;
-	delete _hello;
-	delete _pave;
+//	delete _background;
+//	delete _cat;
+//	delete _hello;
+//	delete _pave;
 }

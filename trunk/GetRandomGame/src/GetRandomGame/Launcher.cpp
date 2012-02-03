@@ -4,7 +4,7 @@
  *  Created on: 2011-12-18
  *      Author: Emile
  */
-#include "TileEngine.h"
+#include "Engine.h"
 #include "GetRandomGame.h"
 #include "GRGInputHandler.h"
 #include <iostream>
@@ -19,10 +19,10 @@ int main(int argc, char* args[]) {
 	cout << "Main START" << endl;
 
 	//"CaslonBold.ttf"
-	TileEngine::getInstance()->init(SCREEN_WIDTH, SCREEN_HEIGHT,
+	TileEngine::Engine::getInstance()->init(SCREEN_WIDTH, SCREEN_HEIGHT,
 			"Tile Game test", "CaslonBold.ttf", new GetRandomGame(),
 			new GRGInputHandler());
-	TileEngine::getInstance()->start();
+	TileEngine::Engine::getInstance()->start();
 
 
 
