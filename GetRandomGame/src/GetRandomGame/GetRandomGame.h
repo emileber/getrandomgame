@@ -9,7 +9,11 @@
 #define GETRANDOMGAME_H_
 
 #include "Environment.h"
-#include "Enumeration.h"
+#include "Global.h"
+
+using namespace TileEngine;
+
+
 
 class GetRandomGame: public Environment {
 
@@ -17,6 +21,7 @@ public:
 	GetRandomGame();
 	virtual ~GetRandomGame(){}
 	virtual void update();
+	virtual void draw();
 	virtual void close();
 	virtual void init(int, int);
 	void testFunction(int,int);

@@ -8,6 +8,8 @@
 #ifndef WORLD_H_
 #define WORLD_H_
 
+namespace TileEngine{
+
 class World {
 public:
 	World();
@@ -15,6 +17,10 @@ public:
 	virtual void update(){
 
 	}
+	virtual void draw(){
+
+	}
 };
 
+}
 #endif /* WORLD_H_ */

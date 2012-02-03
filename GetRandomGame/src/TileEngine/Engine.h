@@ -13,14 +13,18 @@
 #include "Environment.h"
 #include "InputHandler.h"
 #include "Timer.h"
-#include "Enumeration.h"
+#include "Global.h"
+#include "Graphic.h"
 
-class TileEngine: public Singleton<TileEngine> {
-	friend class Singleton<TileEngine> ;
+namespace TileEngine {
+
+class Engine: public Singleton<Engine> {
+	friend class Singleton<Engine> ;
 private:
-	TileEngine();
+	Engine();
 
 	SDLInterface * _sdl;
+	Graphic * _graphic;
 	Environment * _environment;
 	InputHandler * _inputHandler;
 	Timer _frameTimer; // used to calculate the time taken each game loop
@@ -32,10 +36,11 @@ private:
 	void fpsRegulator();
 
 public:
-	void init(int, int, std::string, std::string, Environment *, InputHandler *);
+	void init(int, int, std::string, std::string, Environment *,
+			InputHandler *);
 	void start();
 	void stop();
 
 };
-
+}
 #endif /* TILEENGINE_H_ */

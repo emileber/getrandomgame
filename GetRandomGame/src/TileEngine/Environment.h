@@ -12,16 +12,22 @@
 #include "Singleton.h"
 #include "SDLInterface.h"
 #include "Timer.h"
-#include "Enumeration.h"
+#include "Graphic.h"
+#include "TextureManager.h"
+#include "Global.h"
+
+namespace TileEngine {
 
 class Environment {
 public:
 	Environment(); // generic constructor
-	virtual ~Environment(){}
+	virtual ~Environment() {
+	}
 	virtual void init(int, int); // generic initialization
 	virtual void update(); // generic function, redefine by the subclass
+	virtual void draw(); // generic function, redefine by the subclass
 	virtual void close(); // generic function, redefine by the subclass
-	virtual Uint32 getTime(){
+	virtual Uint32 getTime() {
 		return _gameTime.get_ticks();
 	}
 
@@ -29,10 +35,12 @@ protected:
 
 	World * _world;
 	SDLInterface * _sdl;
+	Graphic * _graphic;
+	TextureManager * _textureManager;
 	Timer _gameTime;
 	int _screenWidth, _screenHeight;
 	Uint32 _frameCount;
 
 };
-
+}
 #endif /* ENVIRONMENT_H_ */

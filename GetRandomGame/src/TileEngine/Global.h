@@ -6,8 +6,31 @@
  */
  
 
-#ifndef ENUMERATION_H_
-#define ENUMERATION_H_
+#ifndef GLOBAL
+#define GLOBAL
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+#include <iostream>
+#include <fstream>
+#include <sstream>
+
+#include <vector>
+#include <list>
+#include <map>
+#include <stack>
+
+#include "Singleton.h"
+
+#include "SDL/SDL.h"
+#include "SDL/SDL_image.h"
+//#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_ttf.h"
+#include "SDL/SDL_video.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 /**
  * Layer enum
@@ -24,7 +47,9 @@
 	 TOTAL_LAYER = 12
  };
 
-//#define
+
+#define uint unsigned int
+
  /**
   * CONSTANTS
   */

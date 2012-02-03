@@ -11,6 +11,8 @@
 #include "InputHandler.h"
 #include "SDL/SDL.h"
 
+using namespace TileEngine;
+
 class GRGInputHandler: public InputHandler {
 public:
 	GRGInputHandler();
