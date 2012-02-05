@@ -13,6 +13,7 @@
 #include "Graphic.h"
 #include "Camera.h"
 #include "GraphicType.h"
+#include "SDLInterface.h"
 //#include "SDL_rwops_zzip.h"
 #include "Singleton.h"
 
@@ -89,91 +90,157 @@ GLfloat Texture::getHeight() {
 ///
 void Texture::load(std::string filename, bool LoadCollision) {
 	//load the image from a file via sdl_img
-	SDL_Surface* Surface = IMG_Load(filename.c_str());
+	//SDL_Surface* surface = SDLInterface::getInstance()->load_image(
+	//		filename.c_str());
+	SDL_Surface* surface = IMG_Load(filename.c_str());
 
-	if (Surface == NULL) {
+	if (surface == NULL) {
 		cout << "Failed to load the image: " << filename << ", Error: "
 				<< SDL_GetError() << endl;
 		return;
 	}
 
+	//int w = pow(2, ceil(log(surface->w) / log(2)));
+	//int h = pow(2, ceil(log(surface->h) / log(2)));
+
+	SDL_Surface* newSurface = SDL_CreateRGBSurface(0, surface->w, surface->h,
+			24, 0x0000ff00, 0x00ff0000, 0xff000000, 0);
+	SDL_BlitSurface(surface, 0, newSurface, 0); // Blit onto a purely RGB Surface
+
 	m_Filename = filename;
-	makeTexture(Surface, LoadCollision);
+	makeTexture(newSurface, LoadCollision);
+
+	//free the image
+	SDL_FreeSurface(newSurface);
+	SDL_FreeSurface(surface);
 }
 
 //
 // Internal function for loading a texture from a surface
 /// @param Surface a SDL_Surface pointer
 ///
-void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
+//void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
+//	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+//
+//	glGenTextures(1, &m_Texture);
+//	glBindTexture(GL_TEXTURE_2D, m_Texture);
+//
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+//
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//
+//	SDL_PixelFormat *fmt = Surface->format;
+//
+//	//setup all the information
+//	m_Width = (GLfloat) (Surface->w);
+//	m_Height = (GLfloat) (Surface->h);
+//	//setup the pixel data (used for collisions)
+//	if (LoadCollision) {
+//		SDL_LockSurface(Surface);
+//		Uint32 *sur_pixels = (Uint32*) (Surface->pixels);
+//		Uint32 pixel;
+//		SDL_UnlockSurface(Surface);
+//		SDL_PixelFormat *format = Surface->format;
+//		Uint32 temp;
+//		Uint8 alpha;
+//		std::vector<bool> pixTemp;
+//		for (int x = 0; x < (int) (m_Width); x++) {
+//			pixTemp.push_back(false);
+//		}
+//		for (int y = 0; y < (int) (m_Height); y++) {
+//			m_PixelOn.push_back(pixTemp);
+//		}
+//		pixel = *(sur_pixels++);
+//		for (int y = 0; y < (int) (m_Height); y++) {
+//			for (int x = 0; x < (int) (m_Width); x++) {
+//				temp = pixel & format->Amask;
+//				temp = temp >> fmt->Ashift;
+//				temp = temp << fmt->Aloss;
+//				alpha = (Uint8) (temp);
+//				if (alpha >= 200) {
+//					m_PixelOn[y][x] = true;
+//				}
+//				pixel = *(sur_pixels++);
+//			}
+//
+//		}
+//
+//		//flip rows so it's represented right in memory
+//		vector<vector<bool> > colTmp;
+//		for (int y = m_Height - 1; y >= 0; y--) {
+//			colTmp.push_back(m_PixelOn[y]);
+//		}
+//		m_PixelOn.clear();
+//		m_PixelOn = colTmp;
+//	}
+//
+//	//if there is alpha
+//	if (fmt->Amask) {
+//		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, m_Width, m_Height, GL_RGBA,
+//				GL_UNSIGNED_BYTE, Surface->pixels);
+//	} else // no alpha
+//	{
+//		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, m_Width, m_Height, GL_RGB,
+//				GL_UNSIGNED_BYTE, Surface->pixels);
+//	}
+//	TextureManager::getInstance()->RegisterTexture(this);
+//}
+
+void Texture::makeTexture(SDL_Surface* surface, bool LoadCollision) {
+	cleanup();
+
+	if (surface == NULL) {
+		return;
+	}
+
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 	glGenTextures(1, &m_Texture);
+
 	glBindTexture(GL_TEXTURE_2D, m_Texture);
 
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	SDL_LockSurface(surface);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	printf("%s BPP: %d\n", m_Filename.c_str(), surface->format->BytesPerPixel);
 
-	SDL_PixelFormat *fmt = Surface->format;
+//	int Mode = GL_RGB;
+//
+//	if (surface->format->BytesPerPixel == 4) {
+//		Mode = GL_RGBA;
+//	} else if (surface->format->BytesPerPixel == 1) {
+//		//Mode = GL_BGR;
+//	}
 
-	//setup all the information
-	m_Width = (GLfloat) (Surface->w);
-	m_Height = (GLfloat) (Surface->h);
-	//setup the pixel data (used for collisions)
-	if (LoadCollision) {
-		SDL_LockSurface(Surface);
-		Uint32 *sur_pixels = (Uint32*) (Surface->pixels);
-		Uint32 pixel;
-		SDL_UnlockSurface(Surface);
-		SDL_PixelFormat *format = Surface->format;
-		Uint32 temp;
-		Uint8 alpha;
-		std::vector<bool> pixTemp;
-		for (int x = 0; x < (int) (m_Width); x++) {
-			pixTemp.push_back(false);
-		}
-		for (int y = 0; y < (int) (m_Height); y++) {
-			m_PixelOn.push_back(pixTemp);
-		}
-		pixel = *(sur_pixels++);
-		for (int y = 0; y < (int) (m_Height); y++) {
-			for (int x = 0; x < (int) (m_Width); x++) {
-				temp = pixel & format->Amask;
-				temp = temp >> fmt->Ashift;
-				temp = temp << fmt->Aloss;
-				alpha = (Uint8) (temp);
-				if (alpha >= 200) {
-					m_PixelOn[y][x] = true;
-				}
-				pixel = *(sur_pixels++);
-			}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-		}
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+//			GL_LINEAR_MIPMAP_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+//			GL_LINEAR_MIPMAP_LINEAR);
 
-		//flip rows so it's represented right in memory
-		vector<vector<bool> > colTmp;
-		for (int y = m_Height - 1; y >= 0; y--) {
-			colTmp.push_back(m_PixelOn[y]);
-		}
-		m_PixelOn.clear();
-		m_PixelOn = colTmp;
-	}
+//	glTexImage2D(GL_TEXTURE_2D, 0, 3, surface->w, surface->h, 0, GL_RGB,
+//			GL_UNSIGNED_BYTE, surface->pixels);
 
-	//if there is alpha
-	if (fmt->Amask) {
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, m_Width, m_Height, GL_RGBA,
-				GL_UNSIGNED_BYTE, Surface->pixels);
-	} else // no alpha
-	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, m_Width, m_Height, GL_RGB,
-				GL_UNSIGNED_BYTE, Surface->pixels);
-	}
-	//free the image
-	SDL_FreeSurface(Surface);
+	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB,
+			GL_UNSIGNED_BYTE, surface->pixels);
+
+	m_Width = surface->w;
+	m_Height = surface->h;
+
 	TextureManager::getInstance()->RegisterTexture(this);
+
+	SDL_UnlockSurface(surface);
+}
+
+//-----------------------------------------------------------------------------
+void Texture::cleanup() {
+	if (m_Texture > 0) {
+		glDeleteTextures(1, &m_Texture);
+		m_Texture = 0;
+	}
 }
 
 //
@@ -182,7 +249,6 @@ void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
 void Texture::deleteTexture() {
 	// this line has a BUG fix it!
 	TextureManager::getInstance()->UnRegisterTexture(this);
-	delete this;
 }
 
 //
@@ -256,10 +322,13 @@ void Texture::draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 	rect.Right = 1.0f;
 	rect.Left = 0.0f;
 	initializeDraw(scale, rotation, x, y, &rect);
+
+	glColor4f(red, green, blue, alpha);
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
 	//draw the quad
 	glBegin(GL_QUADS);
 	//bottom-left vertex (corner)
-	glColor4f(red, green, blue, alpha);
 	glTexCoord2f(0, 0);
 	glVertex2f(0, m_Height);
 	//bottom-right vertex (corner)

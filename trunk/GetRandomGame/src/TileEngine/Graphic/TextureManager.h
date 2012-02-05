@@ -58,7 +58,8 @@ protected:
 			sRect* rect);
 
 	/// Internal function for loading a texture from a surface
-	void makeTexture(SDL_Surface* surface, bool loadCollision = true);
+	void makeTexture(SDL_Surface* surface, bool LoadCollision);
+	void cleanup(); // delete the texture before loading it.
 
 	GLuint m_Texture; /**< Holds the texture data */
 	std::vector<std::vector<bool> > m_PixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */

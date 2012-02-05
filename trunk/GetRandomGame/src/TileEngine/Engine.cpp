@@ -13,12 +13,18 @@ using namespace std;
 namespace TileEngine {
 
 int frameCount = 0; // test global frame counter
+Timer initTimer;
 
 /****************************************
  * CONSTRUTOR
  */
 Engine::Engine() {
 	cout << "new TileEngine" << endl;
+
+	if (DEBUG) {
+		initTimer.start();
+	}
+
 	_frame = 0; // start the frame counter
 	_fps = 0;
 
@@ -96,6 +102,8 @@ void Engine::run() {
 	cout << "Engine run" << endl;
 	if (DEBUG) {
 		_fpsTimer.start();
+		printf("Time taken for init: %d ms\n", initTimer.get_ticks());
+		initTimer.stop();
 	}
 
 	/**
@@ -116,7 +124,6 @@ void Engine::run() {
 		if (DEBUG) {
 			fpsRegulator(); // show FPS information
 		}
-
 
 		_graphic->clearScreen(); // clear the screen
 
