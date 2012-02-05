@@ -90,6 +90,24 @@ bool Graphic::makeWindow() {
 		m_SdlFlags |= SDL_HWACCEL;
 	}
 
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
+	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
+
+	// Anti-aliasing
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	// A-Alias x2 ou x4 ou etc
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2);
+
 	// Sets up OpenGL double buffering
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
@@ -164,7 +182,7 @@ void Graphic::setCaption(string caption) {
 //
 void Graphic::initGl() {
 	glShadeModel(GL_SMOOTH);
-	glClearColor((128.0f / 255.0f), 1.0f, 1.0f, 1.0f); // cyan in the background by default
+	glClearColor(0.0f, 1.0f, 1.0f, 1.0f); // cyan in the background by default
 	glClearDepth(0.0f);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);

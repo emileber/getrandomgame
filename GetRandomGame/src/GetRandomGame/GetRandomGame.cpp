@@ -40,7 +40,7 @@ void GetRandomGame::init(int w, int h) {
 	 * TEST INIT
 	 *
 	 */
-	_hello = _textureManager->loadTextureFromFile("image/hello_world.bmp");
+	_hello = _textureManager->loadTextureFromFile("image/pave.bmp");
 
 	/*
 	 * END OF TEST INIT
@@ -64,7 +64,7 @@ void GetRandomGame::update() {
 } // END of update()
 
 void GetRandomGame::draw() {
-	_hello->draw(testx, testy, 1, 0, 1, 1, 1, 1);
+	_hello->draw(testx+50, testy+50);
 }
 
 void GetRandomGame::testFunction(int xMod, int yMod) {
