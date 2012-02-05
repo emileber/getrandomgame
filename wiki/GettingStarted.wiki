@@ -27,7 +27,7 @@ Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r7
     * Launcher
   * TileEngine
     * Animation (sous-classe de Sprite)
-    * Enumeration (constante)
+    * Global (constante et include)
     * Environment (Environment générique, redéfini par GetRandomGame)
     * InputHandler (générique, contient pratiquement rien)
     * SDLInterface (pour tout afficher)
@@ -37,33 +37,33 @@ Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r7
     * Timer (donne du temps en milisec avec le tick SDL)
     * World (monde de jeu générique, presque vide aussi, c'est a redéfinir dans le jeu)
 
-== Enumeration.h WTF? ==
+== Global.h WTF? ==
 
 Je vais faire référence souvent à ce fichier, c'est le fichier de constante de jeu et des Enumerations (comme les Layer présentement). Il est peut-être mauvais de passer les constantes comme ça, ça reste à revérifier et c'est pas définitif.
 
 ----
 = The Tile Engine =
 
-Petite explication rapide de l'engine. Prendre note que la classe TileEngine est Singleton.
+Petite explication rapide de l’engin. Prendre note que la classe Engine est Singleton.
 
 == Pour le starter ==
 
 {{{
 // voir le Launcher dans le dir GetRandomGame pour le code exact
 
-TileEngine::getInstance()->init(SCREEN_WIDTH, SCREEN_HEIGHT, "window caption", 
+Engine::getInstance()->init(SCREEN_WIDTH, SCREEN_HEIGHT, "window caption", 
                    "font.ttf", Environment, InputHandler);
 
-TileEngine::getInstance()->start();
+Engine::getInstance()->start();
 }}}
 
 Il est important de faire Init en premier, mais ça on s'en fou, je l'ai fait, on risque de plus y toucher.
 
 == Création ==
 
-À sa création, le TileEngine initialise la SDLInterface ainsi que l'environment.
+À sa création, l'Engine initialise l'interface Graphic ainsi que l'environment.
 
-NOTE: SDLInterface est singleton aussi.
+NOTE: Graphic est singleton aussi ainsi que tous les XyzManager.
 
 Ensuite, il appelle run() qui start le gameLoop.
 
@@ -71,30 +71,38 @@ Ensuite, il appelle run() qui start le gameLoop.
 
 {{{
          /**
-	 *  GAME LOOP
-	 */
-	while (!_quit) {
-		/**
-		 * each iteration, do this:
-		 */
+         *  GAME LOOP
+         */
+        while (!_quit) {
+                /**
+                 * each iteration, do this:
+                 */
 
-		_frameTimer.start(); //Calcul le temps d'execution de l'iteration
+                _frameTimer.start(); //Calcul le temps d'execution de l'iteration
 
-		// Collect and handle inputs informations (return false on exit)
-		_quit = _inputHandler->handleInput(_environment);
+                // Collect and handle inputs informations (return false on exit)
+                _quit = _inputHandler->handleInput(_environment);
 
-		_environment->update(); // UPDATE the environment
+                _environment->update(); // UPDATE the environment
 
-		if (DEBUG) {
-			fpsRegulator(); // show FPS information
-		}
-		_sdl->render(); // finally, flip the screen
+                if (DEBUG) {
+                        fpsRegulator(); // show FPS information
+                }
 
-		// wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
-		while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
-			;
-		frameCount++; // test frame count
-	} // End of the GAME LOOP
+
+                _graphic->clearScreen(); // (OpenGL)clear the screen
+
+                // all the draw OPs
+                _environment->draw(); // call le draw de toute
+
+                _graphic->flipBuffers(); // (OpenGL)flip the screen
+
+                // wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
+                while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
+                        ;
+                frameCount++; // test frame count
+        } // End of the GAME LOOP
+
 }}}
 
 == Regulation des Frame par seconde ==
@@ -104,16 +112,18 @@ On voit dans la ligne:
 while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
 			;
 }}}
-que la boucle est géré par FPS. Elle attend seulement le temps restant pour garder sont taux de FPS. (Par contre, présentement le cap est a 200 je crois, c'est a confirmer dans le fichier Enumeration.h mais évidement, elle attend pas vraiment)
+que la boucle est géré par FPS. Elle attend seulement le temps restant pour garder sont taux de FPS. (Par contre, présentement le cap est a 200 je crois, c'est a confirmer dans le fichier Global.h mais évidement, elle attend pas vraiment)
+
+Le cap de FPS présentement tourne autour de 60 fps.
 
 == La classe Environment ==
 
-Celle du TileEngine est vraiment générique et ne contient que des fonctions à redéfinir ou presque. Voir GetRandomGame qui est la sous-classe Environment de notre jeu.
+Celle du namespace TileEngine est vraiment générique et ne contient que des fonctions à redéfinir ou presque. Voir GetRandomGame qui est la sous-classe Environment de notre jeu.
 
-Présentement petit, l’environnement de notre jeu crée un monde et s'occupe d'updater les objets actifs dont notre personnage Héro évidement.
+Présentement petit, l’environnement de notre jeu crée un monde et s'occupe d'updater les objets actifs dont notre personnage Héro évidement et ensuite de l'afficher (Draw).
 
 ----
-= L'interface SDL (le diable!!) =
+= L'interface graphique avec SDL (un démon) et OpenGL (le diable en personne) =
 
 Bon alors j'ai encapsuler le boute chiant donc vous n'aurai pas a jouer avec des trucs d'affichage.
 
@@ -138,7 +148,7 @@ Elle vous retourne une SDL_Surface à partir d'une String qu'elle reçoit pour  
 
 === pushSprite ===
 
-Reçoit un Sprite et tout tourne autour de cela. Il est important de spécifier la bonne layer sur lequel vous voulez voir votre Sprite s'afficher, voir le fichier Enumeration.h
+Reçoit un Sprite et tout tourne autour de cela. Il est important de spécifier la bonne layer sur lequel vous voulez voir votre Sprite s'afficher, voir le fichier Global.h
 
 === renderText ===
 
@@ -198,7 +208,7 @@ _cat = new Animation(x, y, w, h, "image/cat.bmp", nbFrame, int animationDelay /*
 /* [...] */
 
 // ensuite, à chaque itération, il s'agit d'ajouter le sprite à la liste d'affichage
-_sdl->pushSprite(tonSprite, TA_LAYER /* voir enumeration.h */);
+_sdl->pushSprite(tonSprite, TA_LAYER /* voir Global.h */);
 }}}
 
 ----
