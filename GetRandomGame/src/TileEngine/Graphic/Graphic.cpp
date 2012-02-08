@@ -24,7 +24,7 @@ namespace TileEngine {
 //
 Graphic::Graphic() {
 	glScissor(0, 0, m_Width, m_Height);
-	m_Loaded = false;
+	_isLoaded = false;
 }
 
 //
@@ -47,15 +47,15 @@ bool Graphic::initialize(int Width, int Height, int Bpp,
 	m_Height = Height;
 	m_Bpp = Bpp;
 	m_WindowTitle = WindowTitle;
-	m_FullScreen = false;
+	_isFullscreen = false;
 	m_Surface = NULL;
 
 	//if we reinitalize then reload the textures
-	if (m_Loaded) {
+	if (_isLoaded) {
 		TextureManager::getInstance()->ReloadTextures();
 	}
 
-	m_Loaded = true;
+	_isLoaded = true;
 
 	return 1;
 }
@@ -75,7 +75,7 @@ bool Graphic::makeWindow() {
 
 	m_SdlFlags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE
 			| SDL_RESIZABLE;
-	m_FullScreen = false;
+	_isFullscreen = false;
 
 	const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
 
@@ -206,11 +206,11 @@ void Graphic::initGl() {
 // Turns fullscreen on or off
 //
 void Graphic::toggleFullScreen() {
-	m_FullScreen = !m_FullScreen;
+	_isFullscreen = !_isFullscreen;
 	if (m_Surface != NULL) {
 		SDL_WM_ToggleFullScreen(m_Surface);
 
-		if (!m_FullScreen) {
+		if (!_isFullscreen) {
 			SDL_ShowCursor(SDL_ENABLE);
 		} else {
 			SDL_ShowCursor(SDL_DISABLE);
