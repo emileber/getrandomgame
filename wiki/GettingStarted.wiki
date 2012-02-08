@@ -7,9 +7,10 @@
 Table Of Content:
 <wiki:toc max_depth="2" />
 ----
-
+= IMPORTANT =
 if you don't have your development environment ready, [Setup see this].
 
+----
 = OMG there's a lot of files =
 
 Ne vous perdez pas, je suis la!
@@ -18,31 +19,37 @@ Donc, jusqu'à maintenant, le projet est divisé en 2 parties distinctes, soit l
 
 Le jeu utilise le Tile Engine qui lui est générique et ne devrait pas contenir de code spécifique au jeu évidement.
 
-En gros, le Tile Engine comprend la base dans le Dossier TileEngine et le Jeu contient ses fichiers, qui héritent du Tile Engine, dans le dossier GetRandomGame.
+En gros, le Tile Engine comprend la base dans le Dossier TileEngine et le Jeu contient ses fichiers, qui héritent du Tile Engine, dans le dossier GetRandomGame. Chaque classe de l'Engine est dans le namespace TileEngine.
 
 Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r75:
   * dir->GetRandomGame
     * GetRandomGame (Sous-classe Environement, big mama du jeu)
     * GRGInputHandler
     * Launcher
-  * TileEngine
-    * Animation (sous-classe de Sprite)
+  * dir->TileEngine
+    * dir->Graphic
+      * (1)FontManager (Font est déclaré dedans)  - pas encore implémenté
+      * (1)TextureManager (Texture est déclaré dedans)
+      * (1)Camera (the view point)
+      * (1)Graphic (Interface Singleton
+      * (1)AnimationManager (Animation déclaré dedans) - pas encore implémenté
     * Global (constante et include)
     * Environment (Environment générique, redéfini par GetRandomGame)
     * InputHandler (générique, contient pratiquement rien)
-    * SDLInterface (pour tout afficher)
+    * (1)SDLInterface (Encapsulation de fonction relié à SDL)
     * Singleton (Template pour créer des singleton sans avoir a implémenter le code dans chaque classe)
-    * Sprite (Contient les info des images)
-    * TileEngine (la boucle de jeu)
+    * (1)Engine (la boucle de jeu)
     * Timer (donne du temps en milisec avec le tick SDL)
     * World (monde de jeu générique, presque vide aussi, c'est a redéfinir dans le jeu)
+
+(1) = Singleton
 
 == Global.h WTF? ==
 
 Je vais faire référence souvent à ce fichier, c'est le fichier de constante de jeu et des Enumerations (comme les Layer présentement). Il est peut-être mauvais de passer les constantes comme ça, ça reste à revérifier et c'est pas définitif.
 
 ----
-= The Tile Engine =
+= Le Tile Engine =
 
 Petite explication rapide de l’engin. Prendre note que la classe Engine est Singleton.
 
@@ -63,7 +70,7 @@ Il est important de faire Init en premier, mais ça on s'en fou, je l'ai fait, o
 
 À sa création, l'Engine initialise l'interface Graphic ainsi que l'environment.
 
-NOTE: Graphic est singleton aussi ainsi que tous les XyzManager.
+NOTE: Graphic est singleton aussi ainsi que tous les Manager graphique.
 
 Ensuite, il appelle run() qui start le gameLoop.
 
@@ -120,95 +127,55 @@ Le cap de FPS présentement tourne autour de 60 fps.
 
 Celle du namespace TileEngine est vraiment générique et ne contient que des fonctions à redéfinir ou presque. Voir GetRandomGame qui est la sous-classe Environment de notre jeu.
 
-Présentement petit, l’environnement de notre jeu crée un monde et s'occupe d'updater les objets actifs dont notre personnage Héro évidement et ensuite de l'afficher (Draw).
+L’environnement crée un monde et s'occupe d'updater les objets actifs dont notre personnage Héro évidement et ensuite de l'afficher (Draw) en succession. C'est-à-dire, L'Engine appel le Draw d'environment qui appel le Draw du World, lui qui appel le Draw de chaque partie (Area, tuiles, etc.) et ensuite l'environment appel le Draw des éléments actifs, soit les personnages et monstres.
 
 ----
 = L'interface graphique avec SDL (un démon) et OpenGL (le diable en personne) =
 
-Bon alors j'ai encapsuler le boute chiant donc vous n'aurai pas a jouer avec des trucs d'affichage.
+Bon alors j'ai encapsulé le boute chiant donc vous n'aurai pas a jouer avec des trucs d'affichage.
 
-Présentement, l'interface permet les choses suivantes:
+Lorsque terminé, l'interface permettra les choses suivantes:
   * afficher des images (même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire (bien que l'on ne le voit pas)
-  * afficher du text
-  * Sur 12 Layer différente (et c'est ajustable à volonter)
-  * Et gère la transparence avec un int alpha de 0 à 255
+  * afficher du texte
+  * Sur x Layer différentes (et c'est ajustable à volonter)
+  * transparence
+  * Rotation
+  * Resize
+  * Teinte (couleur ajusté)
+  * Éventuellement, un éclairage dynamique.
 
 == Son contenu ==
 
-La majorité des fonctions suivantes vous seront inutiles et ne devrait pas être utilisé puisque notre jeu passe par la classe Sprite pour la gestion de tout ça.
-
 Vous devez retenir seulement:
-  * createTextSurface(std::string)
-  * pushSprite(Sprite, int Layer)
-  * renderText
+  * TextureManager::getInstance()->loadTextureFromFile(filename);
+  * Les fonctions de dessins: Graphic::getInstance()->
+    * drawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+    * drawFilledRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+    * drawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+  * sur une texture déjà chargé, draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1)
 
-=== createTextSurface ===
+La plupart des fonctions sont auto-explicatives.
 
-Elle vous retourne une SDL_Surface à partir d'une String qu'elle reçoit pour  que tu puisse créer un Sprite à l'aide d'une surface de texte. C'est pas mal pour ça que c'est utile. (pour le text qui change jamais ou presque genre le nom des personnage)
+=== loadTextureFromFile ===
 
-=== pushSprite ===
-
-Reçoit un Sprite et tout tourne autour de cela. Il est important de spécifier la bonne layer sur lequel vous voulez voir votre Sprite s'afficher, voir le fichier Global.h
-
-=== renderText ===
-
-Moins Important, mais vous permet d'afficher du text directos sur l'écran (genre les FPS et le temps en milisec qui change tout le temps). Mais c'est pas tellement beau comme façon de procéder, ultérieurement, il faudra utiliser la classe Label pour ce genre de text.
-
-== le header ==
-{{{
-class SDLInterface: public Singleton<SDLInterface> {
-	friend class Singleton<SDLInterface> ;
-private:
-	SDLInterface();
-	//~SDLInterface();
-
-	int _screenW, _screenH;
-	SDL_Surface * _screen;
-	std::vector<std::queue<Sprite *> > _layerQueue;
-	TTF_Font * _font;
-	std::string _fontFilename;
-	int _fontSize, _nbLayer;
-	SDL_Color _fontColor;
-	SDL_Color _transColor;
-
-public:
-	bool init(int, int, int, std::string, int = 1);
-	SDL_Surface * load_image(std::string);
-	SDL_Surface * createTextSurface(std::string);
-	SDL_Surface* createSurface(int, int, SDL_Surface* = NULL);
-
-	bool setFont(std::string, int);
-	void setFontSize(int);
-	void setTextColor(Uint8, Uint8, Uint8);
-	void setTransparentColor(int, int, int);
-
-	void pushSprite(Sprite *, int = 0);
-	void apply_surface(int x, int y, SDL_Surface * source, int alpha = 255, SDL_Rect* clip = NULL, SDL_Surface * destination = NULL);
-	bool renderText(int, int, int, std::string, int = 255, int = 15, SDL_Rect * = NULL);
-
-	void render();
-	void cleanUp();
-
-	std::string intToString(Uint32);
-	std::string formatTime(Uint32); // format milisec in a readable time format
-};
-}}}
+Elle vous retourne une Texture à partir d'une String et permet de la dessiner facilement.
 
 == Comment afficher une image? ==
 
-  # Crée une Sprite ou une Animation
-  # À chaque iteration, ajoute ta sprite avec pushSprite de l'interface SDL
+  # Crée une Texture ou une Animation
+  # À chaque iteration, appeler la fonction "draw" de cet objet.
 
 
 {{{
-// Création de Sprite ou d'animation
-_hello = new Sprite(x, y, "image/hello_world.bmp");
-_cat = new Animation(x, y, w, h, "image/cat.bmp", nbFrame, int animationDelay /* en milisec */);
+// Création de Texture ou d'animation
+_hello = _textureManager->loadTextureFromFile("image/pave.bmp");
 
 /* [...] */
 
-// ensuite, à chaque itération, il s'agit d'ajouter le sprite à la liste d'affichage
-_sdl->pushSprite(tonSprite, TA_LAYER /* voir Global.h */);
+// ensuite, à chaque itération, il s'agit d'appeler draw
+_hello->draw(x,y); // à placer dans la zone draw de l'objet qui le contient
+// ou 
+_hello->draw(x,y, scale, rotation, red, green, blue, alpha);
 }}}
 
 ----
@@ -216,14 +183,14 @@ _sdl->pushSprite(tonSprite, TA_LAYER /* voir Global.h */);
 
 Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à prendre le module suivant qui vous intéresse:
   * Paufiner le Tile Engine (je risque de faire ça)
-    * Ajout d'openGL (voir aussi pour dynamic lighting)
+    * Ajout d'openGL (voir aussi pour dynamic lighting) EN COURS
     * Gestion de l'affichage
     * Gestion des contrôles
     * Peut-être ajouter un aspect réseau
   * Créer le Monde [World (voir la page)]
     * une fois une tile map affichée, il faut le coté RANDOM de la map
   * Les menu/interface (inventaire, stats, hotbar, healt/xp/mana bar, etc)... je sais, c'est pas le plus le fun
-    * ça implique faire des classes générique genre Button et Labels et Menu, voir documentation
+    * ça implique faire des classes générique genre Button et Labels et Menu, voir Class Diagram et Maquette
   * Les Tokens
     * Ainsi que des états comme (en feu, gelé, électrifiant, etc, voir [Features features])
   * Le système de génération d'item
@@ -238,19 +205,21 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
     * Mouvement dans les tuiles
     * interaction de combat autant qu'avec des objets (classe générique Interaction)
     * Les interactions Magiques (spells)
+    * Interactions sociales
   * Le pathfinding
     * Pour notre personnage lors de mouvement avec clique
-    * Pour les NPC
+    * Pour les NPC (A`*` probablement)
   * L’intelligence Artificiel
     * Passive/agressive directe ou indirect etc
   * Game State
     * Menu principal
-    * Login au serveur et loading screen
+    * Login au serveur et loading screen (si réseau)
 
 Finalement
   * Définir les règles de jeu précises
   * Un éditeur pour ajouter du contenu facilement
   * des animations
+  * autre contenu
 
 == IMPORTANT ==
 Consulter les membres de l'équipe et surtout la documentation sur le wiki et dans le dossier docs du projet AVANT de commencer à travailler, puis inscrivez votre nom devant l'élément de la liste que vous allez travailler. Merci!
