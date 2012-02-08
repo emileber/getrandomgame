@@ -328,19 +328,25 @@ void Texture::draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 
 	//draw the quad
 	glBegin(GL_QUADS);
+
 	//bottom-left vertex (corner)
 	glTexCoord2f(0, 0);
 	glVertex2f(0, m_Height);
+
 	//bottom-right vertex (corner)
 	glTexCoord2f(1, 0);
 	glVertex2f(m_Width, m_Height);
+
 	//top-right vertex (corner)
 	glTexCoord2f(1, 1);
 	glVertex2f(m_Width, 0);
+
 	//top-left vertex (corner)
 	glTexCoord2f(0, 1);
 	glVertex2f(0, 0);
+
 	glEnd();
+
 	//reset the color
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glPopMatrix();

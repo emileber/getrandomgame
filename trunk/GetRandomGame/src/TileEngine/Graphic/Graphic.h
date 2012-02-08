@@ -83,12 +83,12 @@ namespace TileEngine
 			/// intializes opengl for 2d drawing
 			void initGl();
 
-			bool m_Loaded;			/**< Tells if the graphics core was successfully loaded	*/
+			bool _isLoaded;			/**< Tells if the graphics core was successfully loaded	*/
 			int m_Width;			/**< Stores the width of the drawing area		*/
 			int m_Height;			/**< Stores the height of the drawing area		*/
 			int m_Bpp;			/**< Stores the bits per pixel of the screen		*/
 			std::string m_WindowTitle;	/**< Stores the title of the window			*/
-			bool m_FullScreen;		/**< Tells if the window id fullscreen or not		*/
+			bool _isFullscreen;		/**< Tells if the window id fullscreen or not		*/
 
 			SDL_Surface* m_Surface;		/**< Stores the drawing surface				*/
 			Uint32 m_SdlFlags;		/**< Stores the drawing surface's capabilities		*/
