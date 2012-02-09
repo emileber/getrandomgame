@@ -61,8 +61,6 @@ add the folowing libraries (Libraries -l)
   * mingw32
     * SDL_ttf
     * SDL_image
-    * opengl32
-    * glu32
     * (même chose pour les autres extensions SDL)
   * SDLmain
   * SDL
@@ -83,3 +81,13 @@ Chaque bibliothèque SDL possède trois parties essentielles :
 #include "SDL/SDL_image.h"
 
 [http://loka.developpez.com/tutoriel/sdl/bibliotheques/bib_codeblocks/images/SDL_image_CodeBlocks.png]
+
+== OpenGL ==
+ça c'est déjà inclu dans Global, mais au cas ou, les voici:
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+
+MinGW C++ Linker > Libraries
+  * opengl32
+  * glu32
