@@ -328,67 +328,67 @@ void Graphic::setCurrentTexture(GLuint texture) {
 // Pushes a clipping area on the stack for drawing
 /// @param area a sRect
 ///
-void Graphic::pushClippingArea(sRect area) {
-	sRect newArea;
-	sRect currentArea;
+void Graphic::pushClippingArea(RectStruct area) {
+	RectStruct newArea;
+	RectStruct currentArea;
 	//get the current clipping area
 	if (!m_ClippingArea.empty()) {
 		currentArea = m_ClippingArea.top();
 	} else {
-		sRect fullArea;
-		fullArea.Bottom = (GLfloat) (0);
-		fullArea.Top = (GLfloat) (m_Height);
-		fullArea.Left = (GLfloat) (0);
-		fullArea.Right = (GLfloat) (m_Width);
+		RectStruct fullArea;
+		fullArea.bottom = (GLfloat) (0);
+		fullArea.top = (GLfloat) (m_Height);
+		fullArea.left = (GLfloat) (0);
+		fullArea.right = (GLfloat) (m_Width);
 		currentArea = fullArea;
 	}
 	//make the new clipping area
 	//bottom
-	if (currentArea.Bottom > area.Bottom) {
-		newArea.Bottom = currentArea.Bottom;
+	if (currentArea.bottom > area.bottom) {
+		newArea.bottom = currentArea.bottom;
 	} else {
-		newArea.Bottom = area.Bottom;
+		newArea.bottom = area.bottom;
 	}
 	//top
-	if (currentArea.Top < area.Top) {
-		newArea.Top = currentArea.Top;
+	if (currentArea.top < area.top) {
+		newArea.top = currentArea.top;
 	} else {
-		newArea.Top = area.Top;
+		newArea.top = area.top;
 	}
 	//left
-	if (currentArea.Left > area.Left) {
-		newArea.Left = currentArea.Left;
+	if (currentArea.left > area.left) {
+		newArea.left = currentArea.left;
 	} else {
-		newArea.Left = area.Left;
+		newArea.left = area.left;
 	}
 	//right
-	if (currentArea.Right < area.Right) {
-		newArea.Right = currentArea.Right;
+	if (currentArea.right < area.right) {
+		newArea.right = currentArea.right;
 	} else {
-		newArea.Right = area.Right;
+		newArea.right = area.right;
 	}
 	m_ClippingArea.push(newArea);
-	glScissor((GLsizei) (newArea.Left), (GLsizei) (newArea.Bottom),
-			(GLint) ((newArea.Right - newArea.Left)),
-			(GLint) ((newArea.Top - newArea.Bottom)));
+	glScissor((GLsizei) (newArea.left), (GLsizei) (newArea.bottom),
+			(GLint) ((newArea.right - newArea.left)),
+			(GLint) ((newArea.top - newArea.bottom)));
 }
 
 /// Pops a clipping area off the stack
 void Graphic::popClippingArea() {
-	sRect newArea;
+	RectStruct newArea;
 	m_ClippingArea.pop();
 	if (m_ClippingArea.empty()) {
-		sRect fullArea;
-		fullArea.Bottom = (GLfloat) (0);
-		fullArea.Top = (GLfloat) (m_Height);
-		fullArea.Left = (GLfloat) (0);
-		fullArea.Right = (GLfloat) (m_Width);
+		RectStruct fullArea;
+		fullArea.bottom = (GLfloat) (0);
+		fullArea.top = (GLfloat) (m_Height);
+		fullArea.left = (GLfloat) (0);
+		fullArea.right = (GLfloat) (m_Width);
 		newArea = fullArea;
 	} else {
 		newArea = m_ClippingArea.top();
 	}
-	glScissor((GLsizei) (newArea.Left), (GLsizei) (newArea.Bottom),
-			(GLint) ((newArea.Right - newArea.Left)),
-			(GLint) ((newArea.Top - newArea.Bottom)));
+	glScissor((GLsizei) (newArea.left), (GLsizei) (newArea.bottom),
+			(GLint) ((newArea.right - newArea.left)),
+			(GLint) ((newArea.top - newArea.bottom)));
 }
 }

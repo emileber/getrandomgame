@@ -19,6 +19,7 @@ Texture * _background, *_hello, *_cat, *_pave;
 SDL_Surface * _semiTransSurf;
 int testx = 0, testy = 0;
 Uint32 last = 0;
+SectionStruct * tileTestRect;
 /**
  * END OF TEST DECLARATIONS
  ***************************/
@@ -40,7 +41,13 @@ void GetRandomGame::init(int w, int h) {
 	 * TEST INIT
 	 *
 	 */
-	_hello = _textureManager->loadTextureFromFile("image/pave.bmp");
+	_hello = _textureManager->loadTextureFromFile("image/pave.png");
+
+	tileTestRect = new SectionStruct;
+	tileTestRect->x = 0;
+	tileTestRect->y = 24;
+	tileTestRect->w = 40;
+	tileTestRect->h = 40;
 
 	/*
 	 * END OF TEST INIT
@@ -64,12 +71,21 @@ void GetRandomGame::update() {
 } // END of update()
 
 void GetRandomGame::draw() {
-	_hello->draw(testx+50, testy+50);
+
+	for (int x=0; x<30; x++){
+		for (int y=0; y<15; y++){
+			tileTestRect->x = ((x * y + (x + y)) % 5) * 40;
+			_hello->drawSection(x*40, y*40, tileTestRect);
+		}
+	}
+	//_hello->drawSection(50, 50, tileTestRect);
+	//_hello->drawSection(90 + testx, 50 + testy, tileTestRect);
+	//_hello->draw(testx+50, testy+50);
 }
 
 void GetRandomGame::testFunction(int xMod, int yMod) {
-	testx = xMod * MOVE_DISTANCE;
-	testy = yMod * MOVE_DISTANCE;
+	testx += xMod;
+	testy += yMod;
 }
 
 void GetRandomGame::close() {

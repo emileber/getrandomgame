@@ -21,7 +21,8 @@ GRGInputHandler::~GRGInputHandler() {
 bool GRGInputHandler::handleInput(Environment* environment) {
 	//cout << "GRGInputHandler::handleInput" << endl;
 	//Get the keystates, used to know if a key is currently pressed
-	Uint8 *keystates = SDL_GetKeyState(NULL);
+
+	//Uint8 *keystates = SDL_GetKeyState(NULL);
 
 	// Key event : This "if" returns true only if a key have been pressed
 	while (SDL_PollEvent(&event)) {
@@ -36,7 +37,17 @@ bool GRGInputHandler::handleInput(Environment* environment) {
 			if (event.type == SDL_KEYDOWN) {
 				//cout << "key pressed = " << event.key.keysym.sym << endl;
 				switch (eventKey) {
-				case SDLK_c:
+				case SDLK_LEFT:
+					((GetRandomGame*) environment)->testFunction(-1, 0);
+					break;
+				case SDLK_RIGHT:
+					((GetRandomGame*) environment)->testFunction(1, 0);
+					break;
+				case SDLK_UP:
+					((GetRandomGame*) environment)->testFunction(0, 1);
+					break;
+				case SDLK_DOWN:
+					((GetRandomGame*) environment)->testFunction(0, -1);
 					break;
 
 				}
@@ -54,27 +65,27 @@ bool GRGInputHandler::handleInput(Environment* environment) {
 		} // end here if event.key.keysym.sym == SDLK_LAST that is not handle in switch
 	} // end here if no keys is pressed
 
-	if (keystates[SDLK_LEFT]) {
-		printf("left key is held down\n");
-		((GetRandomGame*) environment)->testFunction(-1, 0);
-	} else if (keystates[SDLK_RIGHT]) {
-		printf("right key is held down\n");
-		((GetRandomGame*) environment)->testFunction(1, 0);
-	} else if (keystates[SDLK_UP]){
-		printf("up key is held down\n");
-		((GetRandomGame*) environment)->testFunction(0, 1);
-	}else if (keystates[SDLK_DOWN]){
-		printf("down key is held down\n");
-		((GetRandomGame*) environment)->testFunction(0, -1);
-	}
+//	if (keystates[SDLK_LEFT]) {
+//		printf("left key is held down\n");
+//		((GetRandomGame*) environment)->testFunction(-1, 0);
+//	} else if (keystates[SDLK_RIGHT]) {
+//		printf("right key is held down\n");
+//		((GetRandomGame*) environment)->testFunction(1, 0);
+//	} else if (keystates[SDLK_UP]){
+//		printf("up key is held down\n");
+//		((GetRandomGame*) environment)->testFunction(0, 1);
+//	}else if (keystates[SDLK_DOWN]){
+//		printf("down key is held down\n");
+//		((GetRandomGame*) environment)->testFunction(0, -1);
+//	}
 
 	// End of the key handler
 
 	//If the user has Xed out the window
-	else if (event.type == SDL_QUIT) {
-		//Quit the program
-		return true;
-	}
+//	else if (event.type == SDL_QUIT) {
+//		//Quit the program
+//		return true;
+//	}
 	return false;
 
 }

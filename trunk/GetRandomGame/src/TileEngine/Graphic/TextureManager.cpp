@@ -90,8 +90,6 @@ GLfloat Texture::getHeight() {
 ///
 void Texture::load(std::string filename, bool LoadCollision) {
 	//load the image from a file via sdl_img
-	//SDL_Surface* surface = SDLInterface::getInstance()->load_image(
-	//		filename.c_str());
 	SDL_Surface* surface = IMG_Load(filename.c_str());
 
 	if (surface == NULL) {
@@ -100,18 +98,10 @@ void Texture::load(std::string filename, bool LoadCollision) {
 		return;
 	}
 
-	//int w = pow(2, ceil(log(surface->w) / log(2)));
-	//int h = pow(2, ceil(log(surface->h) / log(2)));
-
-	SDL_Surface* newSurface = SDL_CreateRGBSurface(0, surface->w, surface->h,
-			24, 0x0000ff00, 0x00ff0000, 0xff000000, 0);
-	SDL_BlitSurface(surface, 0, newSurface, 0); // Blit onto a purely RGB Surface
-
 	m_Filename = filename;
-	makeTexture(newSurface, LoadCollision);
+	makeTexture(surface, LoadCollision);
 
 	//free the image
-	SDL_FreeSurface(newSurface);
 	SDL_FreeSurface(surface);
 }
 
@@ -119,129 +109,130 @@ void Texture::load(std::string filename, bool LoadCollision) {
 // Internal function for loading a texture from a surface
 /// @param Surface a SDL_Surface pointer
 ///
-//void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
+void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+
+	glGenTextures(1, &m_Texture);
+	glBindTexture(GL_TEXTURE_2D, m_Texture);
+
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	SDL_PixelFormat *fmt = Surface->format;
+
+	//setup all the information
+	m_Width = (GLfloat) (Surface->w);
+	m_Height = (GLfloat) (Surface->h);
+	//setup the pixel data (used for collisions)
+	if (LoadCollision) {
+		SDL_LockSurface(Surface);
+		Uint32 *sur_pixels = (Uint32*) (Surface->pixels);
+		Uint32 pixel;
+		SDL_UnlockSurface(Surface);
+		SDL_PixelFormat *format = Surface->format;
+		Uint32 temp;
+		Uint8 alpha;
+		std::vector<bool> pixTemp;
+		for (int x = 0; x < (int) (m_Width); x++) {
+			pixTemp.push_back(false);
+		}
+		for (int y = 0; y < (int) (m_Height); y++) {
+			m_PixelOn.push_back(pixTemp);
+		}
+		pixel = *(sur_pixels++);
+		for (int y = 0; y < (int) (m_Height); y++) {
+			for (int x = 0; x < (int) (m_Width); x++) {
+				temp = pixel & format->Amask;
+				temp = temp >> fmt->Ashift;
+				temp = temp << fmt->Aloss;
+				alpha = (Uint8) (temp);
+				if (alpha >= 200) {
+					m_PixelOn[y][x] = true;
+				}
+				pixel = *(sur_pixels++);
+			}
+
+		}
+
+		//flip rows so it's represented right in memory
+		vector<vector<bool> > colTmp;
+		for (int y = m_Height - 1; y >= 0; y--) {
+			colTmp.push_back(m_PixelOn[y]);
+		}
+		m_PixelOn.clear();
+		m_PixelOn = colTmp;
+	}
+
+	//if there is alpha
+	if (fmt->Amask) {
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, m_Width, m_Height, GL_RGBA,
+				GL_UNSIGNED_BYTE, Surface->pixels);
+	} else // no alpha
+	{
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, m_Width, m_Height, GL_RGB,
+				GL_UNSIGNED_BYTE, Surface->pixels);
+	}
+	TextureManager::getInstance()->RegisterTexture(this);
+}
+
+//void Texture::makeTexture(SDL_Surface* surface, bool LoadCollision) {
+//	cleanup();
+//
+//	if (surface == NULL) {
+//		return;
+//	}
+//
 //	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 //
 //	glGenTextures(1, &m_Texture);
+//
 //	glBindTexture(GL_TEXTURE_2D, m_Texture);
 //
-//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-//	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+//	SDL_LockSurface(surface);
+//
+//	printf("%s BPP: %d\n", m_Filename.c_str(), surface->format->BytesPerPixel);
+//
+////	int Mode = GL_RGB;
+////
+////	if (surface->format->BytesPerPixel == 4) {
+////		Mode = GL_RGBA;
+////	} else if (surface->format->BytesPerPixel == 1) {
+////		//Mode = GL_BGR;
+////	}
+//
+//	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 //
 //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 //	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 //
-//	SDL_PixelFormat *fmt = Surface->format;
-//
-//	//setup all the information
-//	m_Width = (GLfloat) (Surface->w);
-//	m_Height = (GLfloat) (Surface->h);
-//	//setup the pixel data (used for collisions)
-//	if (LoadCollision) {
-//		SDL_LockSurface(Surface);
-//		Uint32 *sur_pixels = (Uint32*) (Surface->pixels);
-//		Uint32 pixel;
-//		SDL_UnlockSurface(Surface);
-//		SDL_PixelFormat *format = Surface->format;
-//		Uint32 temp;
-//		Uint8 alpha;
-//		std::vector<bool> pixTemp;
-//		for (int x = 0; x < (int) (m_Width); x++) {
-//			pixTemp.push_back(false);
-//		}
-//		for (int y = 0; y < (int) (m_Height); y++) {
-//			m_PixelOn.push_back(pixTemp);
-//		}
-//		pixel = *(sur_pixels++);
-//		for (int y = 0; y < (int) (m_Height); y++) {
-//			for (int x = 0; x < (int) (m_Width); x++) {
-//				temp = pixel & format->Amask;
-//				temp = temp >> fmt->Ashift;
-//				temp = temp << fmt->Aloss;
-//				alpha = (Uint8) (temp);
-//				if (alpha >= 200) {
-//					m_PixelOn[y][x] = true;
-//				}
-//				pixel = *(sur_pixels++);
-//			}
-//
-//		}
-//
-//		//flip rows so it's represented right in memory
-//		vector<vector<bool> > colTmp;
-//		for (int y = m_Height - 1; y >= 0; y--) {
-//			colTmp.push_back(m_PixelOn[y]);
-//		}
-//		m_PixelOn.clear();
-//		m_PixelOn = colTmp;
-//	}
-//
-//	//if there is alpha
-//	if (fmt->Amask) {
-//		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, m_Width, m_Height, GL_RGBA,
-//				GL_UNSIGNED_BYTE, Surface->pixels);
-//	} else // no alpha
-//	{
-//		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, m_Width, m_Height, GL_RGB,
-//				GL_UNSIGNED_BYTE, Surface->pixels);
-//	}
-//	TextureManager::getInstance()->RegisterTexture(this);
-//}
-
-void Texture::makeTexture(SDL_Surface* surface, bool LoadCollision) {
-	cleanup();
-
-	if (surface == NULL) {
-		return;
-	}
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-
-	glGenTextures(1, &m_Texture);
-
-	glBindTexture(GL_TEXTURE_2D, m_Texture);
-
-	SDL_LockSurface(surface);
-
-	printf("%s BPP: %d\n", m_Filename.c_str(), surface->format->BytesPerPixel);
-
-//	int Mode = GL_RGB;
-//
-//	if (surface->format->BytesPerPixel == 4) {
-//		Mode = GL_RGBA;
-//	} else if (surface->format->BytesPerPixel == 1) {
-//		//Mode = GL_BGR;
-//	}
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-//			GL_LINEAR_MIPMAP_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-//			GL_LINEAR_MIPMAP_LINEAR);
-
-//	glTexImage2D(GL_TEXTURE_2D, 0, 3, surface->w, surface->h, 0, GL_RGB,
+//	glTexImage2D(GL_TEXTURE_2D, 0, 3, surface->w, surface->h, 0, GL_BGR_EXT,
 //			GL_UNSIGNED_BYTE, surface->pixels);
-
-	gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB,
-			GL_UNSIGNED_BYTE, surface->pixels);
-
-	m_Width = surface->w;
-	m_Height = surface->h;
-
-	TextureManager::getInstance()->RegisterTexture(this);
-
-	SDL_UnlockSurface(surface);
-}
-
-//-----------------------------------------------------------------------------
-void Texture::cleanup() {
-	if (m_Texture > 0) {
-		glDeleteTextures(1, &m_Texture);
-		m_Texture = 0;
-	}
-}
+//
+//	//gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB,
+//	//GL_UNSIGNED_BYTE, surface->pixels);
+//
+//	m_Width = surface->w;
+//	m_Height = surface->h;
+//
+//	TextureManager::getInstance()->RegisterTexture(this);
+//
+//	SDL_UnlockSurface(surface);
+//}
+//
+////-----------------------------------------------------------------------------
+//void Texture::cleanup() {
+//	if (m_Texture > 0) {
+//		glDeleteTextures(1, &m_Texture);
+//		m_Texture = 0;
+//	}
+//}
 
 //
 // Deletes the texture
@@ -269,7 +260,7 @@ void Texture::reload() {
 /// @param Y a GLfloat
 ///
 void Texture::initializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
-		GLfloat y, sRect *rect) {
+		GLfloat y, SectionStruct *rect) {
 	Graphic *graphics = Graphic::getInstance();
 	//check if the right texture is bound
 	if (graphics->getCurrentTexture() != m_Texture) {
@@ -283,14 +274,14 @@ void Texture::initializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
 	glLoadIdentity();
 	glTranslatef(Camera::getInstance()->getXposition() + x,
 			Camera::getInstance()->getYposition() + y, 0.0f);
-	if (rotation != 0) {
-		GLfloat x, y;
-		x = ((rect->Right - rect->Left) / 2) * m_Width;
-		y = ((rect->Top - rect->Bottom) / 2) * m_Height;
-		glTranslatef(x, y, 0.0f);
-		glRotatef(rotation, 0.0f, 0.0f, 1.0f);
-		glTranslatef(-x, -y, 0.0f);
-	}
+//	if (rotation != 0) {
+//		GLfloat x, y;
+//		x = ((rect->right - rect->left) / 2) * m_Width;
+//		y = ((rect->top - rect->bottom) / 2) * m_Height;
+//		glTranslatef(x, y, 0.0f);
+//		glRotatef(rotation, 0.0f, 0.0f, 1.0f);
+//		glTranslatef(-x, -y, 0.0f);
+//	}
 	glScaled(scale, scale, 0);
 }
 
@@ -316,31 +307,25 @@ std::vector<std::vector<bool> > *Texture::getPixels() {
 void Texture::draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
 	glPushMatrix();
-	sRect rect;
-	rect.Bottom = 0.0f;
-	rect.Top = 1.0f;
-	rect.Right = 1.0f;
-	rect.Left = 0.0f;
-	initializeDraw(scale, rotation, x, y, &rect);
-
-	glColor4f(red, green, blue, alpha);
-	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+//	RectStruct rect;
+//	rect.bottom = 0.0f;
+//	rect.top = 1.0f;
+//	rect.right = 1.0f;
+//	rect.left = 0.0f;
+	initializeDraw(scale, rotation, x, y, NULL);
 
 	//draw the quad
 	glBegin(GL_QUADS);
-
+	glColor4f(red, green, blue, alpha);
 	//bottom-left vertex (corner)
 	glTexCoord2f(0, 0);
 	glVertex2f(0, m_Height);
-
 	//bottom-right vertex (corner)
 	glTexCoord2f(1, 0);
 	glVertex2f(m_Width, m_Height);
-
 	//top-right vertex (corner)
 	glTexCoord2f(1, 1);
 	glVertex2f(m_Width, 0);
-
 	//top-left vertex (corner)
 	glTexCoord2f(0, 1);
 	glVertex2f(0, 0);
@@ -364,31 +349,62 @@ void Texture::draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Texture::drawSection(GLfloat X, GLfloat Y, sRect *Box, GLfloat Scale,
-		GLfloat Rotation, GLfloat red, GLfloat green, GLfloat blue,
-		GLfloat alpha) {
+//void Texture::drawSection(GLfloat x, GLfloat y, RectStruct * box, GLfloat scale,
+//		GLfloat rotation, GLfloat red, GLfloat green, GLfloat blue,
+//		GLfloat alpha) {
+//	glPushMatrix();
+//	initializeDraw(scale, rotation, x, y, box);
+//	//width for drawing
+//	GLfloat box_width = m_Width * (box->right - box->left);
+//	GLfloat box_height = m_Height * (box->top - box->bottom);
+//	GLfloat box_top = 1.0f - box->top;
+//	GLfloat box_bottom = 1.0f - box->bottom;
+//	//draw the quad
+//	glBegin(GL_QUADS);
+//	//bottom-left vertex (corner)
+//	glColor4f(red, green, blue, alpha);
+//	glTexCoord2f(box->left, box_bottom);
+//	glVertex2f(0, 0);
+//	//bottom-right vertex (corner)
+//	glTexCoord2f(box->right, box_bottom);
+//	glVertex2f(box_width, 0);
+//	//top-right vertex (corner)
+//	glTexCoord2f(box->right, box_top);
+//	glVertex2f(box_width, box_height);
+//	//top-left vertex (corner)
+//	glTexCoord2f(box->left, box_top);
+//	glVertex2f(0, box_height);
+//	glEnd();
+//	//reset the color
+//	glColor3f(1.0f, 1.0f, 1.0f);
+//	glPopMatrix();
+//}
+
+void Texture::drawSection(GLfloat x, GLfloat y, SectionStruct * box,
+		GLfloat scale, GLfloat rotation, GLfloat red, GLfloat green,
+		GLfloat blue, GLfloat alpha) {
 	glPushMatrix();
-	initializeDraw(Scale, Rotation, X, Y, Box);
+	initializeDraw(scale, rotation, x, y, box);
 	//width for drawing
-	GLfloat box_width = m_Width * (Box->Right - Box->Left);
-	GLfloat box_height = m_Height * (Box->Top - Box->Bottom);
-	GLfloat box_top = 1.0f - Box->Top;
-	GLfloat box_bottom = 1.0f - Box->Bottom;
+	GLfloat box_left = 1.0f * (box->x / m_Width);
+	GLfloat box_right = 1.0f * ((box->x + box->w) / m_Width);
+	GLfloat box_top = 1.0f - (1.0f * ((box->y + box->h) / m_Height));
+	GLfloat box_bottom = 1.0f - (1.0f * (box->y / m_Height));
 	//draw the quad
 	glBegin(GL_QUADS);
 	//bottom-left vertex (corner)
 	glColor4f(red, green, blue, alpha);
-	glTexCoord2f(Box->Left, box_bottom);
+	glTexCoord2f(box_left, box_bottom);
 	glVertex2f(0, 0);
 	//bottom-right vertex (corner)
-	glTexCoord2f(Box->Right, box_bottom);
-	glVertex2f(box_width, 0);
+	glTexCoord2f(box_right, box_bottom);
+	glVertex2f(box->w, 0);
 	//top-right vertex (corner)
-	glTexCoord2f(Box->Right, box_top);
-	glVertex2f(box_width, box_height);
+	glTexCoord2f(box_right, box_top);
+	glVertex2f(box->w, box->h);
 	//top-left vertex (corner)
-	glTexCoord2f(Box->Left, box_top);
-	glVertex2f(0, box_height);
+	glTexCoord2f(box_left, box_top);
+	glVertex2f(0, box->h);
 	glEnd();
 	//reset the color
 	glColor3f(1.0f, 1.0f, 1.0f);
