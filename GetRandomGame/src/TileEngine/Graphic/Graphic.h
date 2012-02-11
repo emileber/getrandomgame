@@ -74,7 +74,7 @@ namespace TileEngine
 			void setCaption(std::string caption);
 
 			/// Pushes a clipping area on the stack for drawing
-			void pushClippingArea(sRect);
+			void pushClippingArea(RectStruct);
 
 			/// Pops a clipping area off the stack
 			void popClippingArea();
@@ -95,7 +95,7 @@ namespace TileEngine
 
 			GLuint m_CurrentTexture; 	/**< contains the current texture that is in graphics memory	*/
 
-			std::stack< sRect > m_ClippingArea;
+			std::stack< RectStruct > m_ClippingArea;
 	};
 }
 

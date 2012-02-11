@@ -48,14 +48,14 @@ public:
 			GLfloat alpha = 1);
 
 	/// Draws a section of the texture
-	void drawSection(GLfloat x, GLfloat y, sRect* box, GLfloat scale = 1,
+	void drawSection(GLfloat x, GLfloat y, SectionStruct* box, GLfloat scale = 1,
 			GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1,
 			GLfloat blue = 1, GLfloat alpha = 1);
 
 protected:
 	/// Internal function to setup drawing
 	void initializeDraw(GLfloat scale, GLfloat rotation, GLfloat x, GLfloat y,
-			sRect* rect);
+			SectionStruct* rect);
 
 	/// Internal function for loading a texture from a surface
 	void makeTexture(SDL_Surface* surface, bool LoadCollision);
