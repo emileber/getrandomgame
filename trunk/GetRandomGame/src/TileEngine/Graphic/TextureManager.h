@@ -24,9 +24,22 @@ public:
 	~Texture();
 
 	/// Returns the texture width
-	GLfloat getWidth();
+	GLfloat getWidth() const {
+		return _Width;
+	}
 	/// Returns the texture height
-	GLfloat getHeight();
+	GLfloat getHeight() const {
+		return _Height;
+	}
+
+	// return the OpenGL id for that texture
+	GLfloat getId() const {
+		return _Texture;
+	}
+
+	bool isLoaded() const{
+		return _isLoaded;
+	}
 
 	/// Loads a texture
 	void load(std::string filename, bool LoadCollision = false);
@@ -48,9 +61,9 @@ public:
 			GLfloat alpha = 1);
 
 	/// Draws a section of the texture
-	void drawSection(GLfloat x, GLfloat y, SectionStruct* box, GLfloat scale = 1,
-			GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1,
-			GLfloat blue = 1, GLfloat alpha = 1);
+	void drawSection(GLfloat x, GLfloat y, SectionStruct* box,
+			GLfloat scale = 1, GLfloat rotation = 0, GLfloat red = 1,
+			GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1);
 
 protected:
 	/// Internal function to setup drawing
@@ -61,11 +74,13 @@ protected:
 	void makeTexture(SDL_Surface* surface, bool LoadCollision);
 	void cleanup(); // delete the texture before loading it.
 
-	GLuint m_Texture; /**< Holds the texture data */
-	std::vector<std::vector<bool> > m_PixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */
-	std::string m_Filename; /**< Holds the filename of the texture */
-	GLfloat m_Width; /**< Stores the width of the texture */
-	GLfloat m_Height; /**< Stores the height of the texture	*/
+	GLuint _Texture; /**< Holds the texture data */
+	SDL_Surface * _Surface;
+	std::vector<std::vector<bool> > _PixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */
+	std::string _Filename; /**< Holds the filename of the texture */
+	GLfloat _Width; /**< Stores the width of the texture */
+	GLfloat _Height; /**< Stores the height of the texture	*/
+	bool _isLoaded;
 };
 
 /*
@@ -77,27 +92,27 @@ public:
 	TextureManager();
 	virtual ~TextureManager();
 
-	Texture * loadTextureFromFile(std::string filename);
+	bool loadTextureFromFile(std::string filename);
 
 	//void removeTexture(uint textureId);
 
-	//void drawTexture(uint textureId, GLfloat x, GLfloat y, GLfloat scale = 1,
-	//            GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1);
+	void drawTexture(std::string textureId, GLfloat x, GLfloat y, SectionStruct * rect = NULL, GLfloat scale = 1,
+	            GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1);
 
 	/// Reloads all textures
-	void ReloadTextures();
+	void reloadTextures();
 	/// Deletes all textures
-	void DeleteTextures();
+	void deleteTextures();
 
 	/// Registers a texture for management
-	void RegisterTexture(Texture* Texture);
+	void registerTexture(Texture* Texture);
 	/// Removes a texture from management
-	void UnRegisterTexture(Texture* Texture);
+	void unRegisterTexture(Texture* Texture);
 
 protected:
 
-	std::vector< Texture* > m_Textures; /**< Holds all textures that are managed	*/
-	//std::map< uint, TextureSection* > m_TextureSections;
+	std::vector<Texture*> m_Textures; /**< Holds all textures that are managed	*/
+	//std::map< std::string, TextureSection* > m_TextureSections;
 };
 
 } /* namespace TileEngine */

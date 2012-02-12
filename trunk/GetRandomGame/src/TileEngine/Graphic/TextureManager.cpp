@@ -24,10 +24,11 @@ namespace TileEngine {
 // Default contructor
 //
 Texture::Texture() {
-	m_Width = 0;
-	m_Height = 0;
-	m_Texture = 0;
-	m_Filename = "";
+	_Width = 0;
+	_Height = 0;
+	_Texture = 0;
+	_Filename = "";
+	_isLoaded = false;
 }
 
 //
@@ -44,21 +45,21 @@ Texture::~Texture() {
 	deleteTexture();
 }
 
+////
+//// Returns the width of the texture
+///// @return The width of the texture
+/////
+//GLfloat Texture::getWidth() {
+//	return m_Width;
+//}
 //
-// Returns the width of the texture
-/// @return The width of the texture
-///
-GLfloat Texture::getWidth() {
-	return m_Width;
-}
-
-//
-// Returns the height of the texture
-/// @return the height of the texture
-///
-GLfloat Texture::getHeight() {
-	return m_Height;
-}
+////
+//// Returns the height of the texture
+///// @return the height of the texture
+/////
+//GLfloat Texture::getHeight() {
+//	return m_Height;
+//}
 
 //
 // Loads file from a zip file
@@ -95,14 +96,15 @@ void Texture::load(std::string filename, bool LoadCollision) {
 	if (surface == NULL) {
 		cout << "Failed to load the image: " << filename << ", Error: "
 				<< SDL_GetError() << endl;
+		_isLoaded = false;
 		return;
 	}
 
-	m_Filename = filename;
-	makeTexture(surface, LoadCollision);
+	_Filename = filename;
 
-	//free the image
-	SDL_FreeSurface(surface);
+	makeTexture(surface, LoadCollision);
+	_isLoaded = true;
+	TextureManager::getInstance()->registerTexture(this);
 }
 
 //
@@ -112,8 +114,8 @@ void Texture::load(std::string filename, bool LoadCollision) {
 void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-	glGenTextures(1, &m_Texture);
-	glBindTexture(GL_TEXTURE_2D, m_Texture);
+	glGenTextures(1, &_Texture);
+	glBindTexture(GL_TEXTURE_2D, _Texture);
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -127,8 +129,8 @@ void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
 	SDL_PixelFormat *fmt = Surface->format;
 
 	//setup all the information
-	m_Width = (GLfloat) (Surface->w);
-	m_Height = (GLfloat) (Surface->h);
+	_Width = (GLfloat) (Surface->w);
+	_Height = (GLfloat) (Surface->h);
 	//setup the pixel data (used for collisions)
 	if (LoadCollision) {
 		SDL_LockSurface(Surface);
@@ -139,21 +141,21 @@ void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
 		Uint32 temp;
 		Uint8 alpha;
 		std::vector<bool> pixTemp;
-		for (int x = 0; x < (int) (m_Width); x++) {
+		for (int x = 0; x < (int) (_Width); x++) {
 			pixTemp.push_back(false);
 		}
-		for (int y = 0; y < (int) (m_Height); y++) {
-			m_PixelOn.push_back(pixTemp);
+		for (int y = 0; y < (int) (_Height); y++) {
+			_PixelOn.push_back(pixTemp);
 		}
 		pixel = *(sur_pixels++);
-		for (int y = 0; y < (int) (m_Height); y++) {
-			for (int x = 0; x < (int) (m_Width); x++) {
+		for (int y = 0; y < (int) (_Height); y++) {
+			for (int x = 0; x < (int) (_Width); x++) {
 				temp = pixel & format->Amask;
 				temp = temp >> fmt->Ashift;
 				temp = temp << fmt->Aloss;
 				alpha = (Uint8) (temp);
 				if (alpha >= 200) {
-					m_PixelOn[y][x] = true;
+					_PixelOn[y][x] = true;
 				}
 				pixel = *(sur_pixels++);
 			}
@@ -162,23 +164,26 @@ void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
 
 		//flip rows so it's represented right in memory
 		vector<vector<bool> > colTmp;
-		for (int y = m_Height - 1; y >= 0; y--) {
-			colTmp.push_back(m_PixelOn[y]);
+		for (int y = _Height - 1; y >= 0; y--) {
+			colTmp.push_back(_PixelOn[y]);
 		}
-		m_PixelOn.clear();
-		m_PixelOn = colTmp;
+		_PixelOn.clear();
+		_PixelOn = colTmp;
 	}
 
 	//if there is alpha
 	if (fmt->Amask) {
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, m_Width, m_Height, GL_RGBA,
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, _Width, _Height, GL_RGBA,
 				GL_UNSIGNED_BYTE, Surface->pixels);
 	} else // no alpha
 	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, m_Width, m_Height, GL_RGB,
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, _Width, _Height, GL_RGB,
 				GL_UNSIGNED_BYTE, Surface->pixels);
 	}
-	TextureManager::getInstance()->RegisterTexture(this);
+	TextureManager::getInstance()->registerTexture(this);
+
+	_isLoaded = true;
+
 }
 
 //void Texture::makeTexture(SDL_Surface* surface, bool LoadCollision) {
@@ -238,8 +243,13 @@ void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
 // Deletes the texture
 //
 void Texture::deleteTexture() {
+
+	if (_isLoaded) {
+		glDeleteTextures(1, &_Texture);
+		SDL_FreeSurface(_Surface);
+	}
 	// this line has a BUG fix it!
-	TextureManager::getInstance()->UnRegisterTexture(this);
+	TextureManager::getInstance()->unRegisterTexture(this);
 }
 
 //
@@ -247,8 +257,8 @@ void Texture::deleteTexture() {
 //
 void Texture::reload() {
 	//only reload if it's a real file
-	if (m_Filename != "") {
-		load(m_Filename);
+	if (_Filename != "") {
+		load(_Filename);
 	}
 }
 
@@ -263,12 +273,12 @@ void Texture::initializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
 		GLfloat y, SectionStruct *rect) {
 	Graphic *graphics = Graphic::getInstance();
 	//check if the right texture is bound
-	if (graphics->getCurrentTexture() != m_Texture) {
+	if (graphics->getCurrentTexture() != _Texture) {
 		//bind texture
-		glBindTexture(GL_TEXTURE_2D, m_Texture);
+		glBindTexture(GL_TEXTURE_2D, _Texture);
 
 		//set graphics varible
-		graphics->setCurrentTexture(m_Texture);
+		graphics->setCurrentTexture(_Texture);
 	}
 	//scale the points if needed
 	glLoadIdentity();
@@ -290,7 +300,7 @@ void Texture::initializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
 /// @return
 ///
 std::vector<std::vector<bool> > *Texture::getPixels() {
-	return &m_PixelOn;
+	return &_PixelOn;
 }
 
 //
@@ -319,13 +329,13 @@ void Texture::draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 	glColor4f(red, green, blue, alpha);
 	//bottom-left vertex (corner)
 	glTexCoord2f(0, 0);
-	glVertex2f(0, m_Height);
+	glVertex2f(0, _Height);
 	//bottom-right vertex (corner)
 	glTexCoord2f(1, 0);
-	glVertex2f(m_Width, m_Height);
+	glVertex2f(_Width, _Height);
 	//top-right vertex (corner)
 	glTexCoord2f(1, 1);
-	glVertex2f(m_Width, 0);
+	glVertex2f(_Width, 0);
 	//top-left vertex (corner)
 	glTexCoord2f(0, 1);
 	glVertex2f(0, 0);
@@ -386,10 +396,10 @@ void Texture::drawSection(GLfloat x, GLfloat y, SectionStruct * box,
 	glPushMatrix();
 	initializeDraw(scale, rotation, x, y, box);
 	//width for drawing
-	GLfloat box_left = 1.0f * (box->x / m_Width);
-	GLfloat box_right = 1.0f * ((box->x + box->w) / m_Width);
-	GLfloat box_top = 1.0f - (1.0f * ((box->y + box->h) / m_Height));
-	GLfloat box_bottom = 1.0f - (1.0f * (box->y / m_Height));
+	GLfloat box_left = 1.0f * (box->x / _Width);
+	GLfloat box_right = 1.0f * ((box->x + box->w) / _Width);
+	GLfloat box_top = 1.0f - (1.0f * ((box->y + box->h) / _Height));
+	GLfloat box_bottom = 1.0f - (1.0f * (box->y / _Height));
 	//draw the quad
 	glBegin(GL_QUADS);
 	//bottom-left vertex (corner)
@@ -425,56 +435,59 @@ TextureManager::TextureManager() {
 // Default Destructor
 //
 TextureManager::~TextureManager() {
-	DeleteTextures();
+	deleteTextures();
 }
 
 //
 // Reloads all textures
 //
-void TextureManager::ReloadTextures() {
+void TextureManager::reloadTextures() {
 	//reload all textures
-	for (uint i = 0; i < m_Textures.size(); i++) {
-		m_Textures[i]->reload();
-	}
+//	for (uint i = 0; i < m_Textures.size(); i++) {
+//		m_Textures[i]->reload();
+//	}
 }
 
 //
 // Deletes all textures
 //
-void TextureManager::DeleteTextures() {
+void TextureManager::deleteTextures() {
 	//delete all textures
-	for (uint i = 0; i < m_Textures.size(); i++) {
-		m_Textures[i]->deleteTexture();
-	}
+//	for (uint i = 0; i < m_Textures.size(); i++) {
+//		m_Textures[i]->deleteTexture();
+//	}
 }
 
 //
 // Registers a texture for management
 //
-void TextureManager::RegisterTexture(Texture *Texture) {
+void TextureManager::registerTexture(Texture *Texture) {
 	//check to see if the texture isn't actually just been reloaded
-	for (uint i = 0; i < m_Textures.size(); i++) {
-		if (m_Textures[i]->m_Texture == Texture->m_Texture) {
-			return;
-		}
-	}
-	//add the texture to the vector
-	m_Textures.push_back(Texture);
+//	for (uint i = 0; i < m_Textures.size(); i++) {
+//		if (m_Textures[i]->_Texture == Texture->_Texture) {
+//			return;
+//		}
+//	}
+//	//add the texture to the vector
+//	m_Textures.push_back(Texture);
+
+
 }
 
-Texture *TextureManager::loadTextureFromFile(std::string filename) {
+bool TextureManager::loadTextureFromFile(std::string filename) {
+	Texture * newTexture = new Texture(filename);
 
-	return new Texture(filename);
+	return newTexture->isLoaded();
 }
 
 //
 // Removes a texture from the texture manager
 //
-void TextureManager::UnRegisterTexture(Texture *Texture) {
+void TextureManager::unRegisterTexture(Texture *Texture) {
 	int place = -1;
 	//lets find where the texture is in the vector
 	for (uint i = 0; i < m_Textures.size(); i++) {
-		if (m_Textures[i]->m_Texture == Texture->m_Texture) {
+		if (m_Textures[i]->_Texture == Texture->_Texture) {
 			place = i;
 		}
 	}

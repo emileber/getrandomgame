@@ -52,7 +52,7 @@ bool Graphic::initialize(int Width, int Height, int Bpp,
 
 	//if we reinitalize then reload the textures
 	if (_isLoaded) {
-		TextureManager::getInstance()->ReloadTextures();
+		TextureManager::getInstance()->reloadTextures();
 	}
 
 	_isLoaded = true;
@@ -154,7 +154,7 @@ void Graphic::resizeWindow(int width, int height) {
 	initGl();
 
 	//reload textures
-	TextureManager::getInstance()->ReloadTextures();
+	TextureManager::getInstance()->reloadTextures();
 }
 
 //
