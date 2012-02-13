@@ -7,7 +7,7 @@ namespace TileEngine {
 ///
 ///Defines a Point with coordinates x and y
 ///
-struct PointStruct {
+struct FPoint {
 	GLfloat x; /**< The X coordinate */
 	GLfloat y; /**< The Y coordinate */
 };
@@ -22,12 +22,20 @@ struct RectStruct {
 	GLfloat left; /**< The left most point on the rectangle 	*/
 };
 
-struct SectionStruct {
+struct SectionRect {
 	GLfloat x; /**< The X coordinate */
 	GLfloat y; /**< The Y coordinate */
 	GLfloat w;
 	GLfloat h;
 };
+
+struct Color3f {
+	GLfloat r;
+	GLfloat g;
+	GLfloat b;
+};
+
+
 }
 
 #endif

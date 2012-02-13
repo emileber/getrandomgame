@@ -6,8 +6,8 @@
  */
  
 
-#ifndef GLOBAL
-#define GLOBAL
+#ifndef GLOBAL_H_
+#define GLOBAL_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -69,4 +69,4 @@
   * FIN DE LA TEST ZONE
   *********************************/
 
-#endif /* ENUMERATION_H_ */
+#endif /* GLOBAL_H_ */
