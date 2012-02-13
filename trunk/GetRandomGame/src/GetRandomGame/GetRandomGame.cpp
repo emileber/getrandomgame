@@ -17,9 +17,9 @@ using namespace std;
  */
 Texture * _background, *_pave, *_cat, *_grass;
 SDL_Surface * _semiTransSurf;
-int testx = 0, testy = 0;
+GLfloat testx = 0, testy = 0;
 Uint32 last = 0;
-SectionStruct * tileTestRect;
+SectionRect * tileTestRect;
 /**
  * END OF TEST DECLARATIONS
  ***************************/
@@ -45,7 +45,7 @@ void GetRandomGame::init(int w, int h) {
 
 	_grass = new Texture("image/grass.png");
 
-	tileTestRect = new SectionStruct;
+	tileTestRect = new SectionRect;
 	tileTestRect->x = 0;
 	tileTestRect->y = 24;
 	tileTestRect->w = 40;
@@ -81,8 +81,25 @@ void GetRandomGame::draw() {
 		}
 	}
 	tileTestRect->x = 0;
-	_grass->drawSection(50, 50, tileTestRect, 1, 0,
-			((140 + testx) / 256) * 1.0f, (140 / 256) * 1.0f, (0 / 256) * 1.0f);
+	GLfloat red = testx / 100;
+	_graphic->drawFilledRectangle(49, 49 , 42, 42, 1, 0, 0, 1);
+
+	_grass->drawSection(50, 50, tileTestRect, 1, 0, red, 1.0f, 0.0f);
+
+	_graphic->drawFilledRectangle(99, 49 , 42, 42, 1, 0, 0, 1);
+	_grass->drawSection(100, 50, tileTestRect, 1, 0, 0.90f, 1.0f,
+			0.0f);
+	_graphic->drawFilledRectangle(149, 49 , 42, 42, 1, 0, 0, 1);
+	_grass->drawSection(150, 50, tileTestRect, 1, 0, 0.75f, 1.0f,
+			0.0f);
+	_graphic->drawFilledRectangle(199, 49 , 42, 42, 1, 0, 0, 1);
+	_grass->drawSection(200, 50, tileTestRect, 1, 0, 0.5f, 1.0f,
+			0.0f);
+	_graphic->drawFilledRectangle(249, 49 , 42, 42, 1, 0, 0, 1);
+	_grass->drawSection(250, 50, tileTestRect, 1, 0, 0.25f, 1.0f,
+			0.0f);
+	_graphic->drawFilledRectangle(299, 49 , 42, 42, 1, 0, 0, 1);
+	_grass->drawSection(300, 50, tileTestRect, 1, 0, 1, 1, 1);
 
 }
 

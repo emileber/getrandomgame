@@ -270,7 +270,7 @@ void Texture::reload() {
 /// @param Y a GLfloat
 ///
 void Texture::initializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
-		GLfloat y, SectionStruct *rect) {
+		GLfloat y, SectionRect *rect) {
 	Graphic *graphics = Graphic::getInstance();
 	//check if the right texture is bound
 	if (graphics->getCurrentTexture() != _Texture) {
@@ -359,38 +359,7 @@ void Texture::draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-//void Texture::drawSection(GLfloat x, GLfloat y, RectStruct * box, GLfloat scale,
-//		GLfloat rotation, GLfloat red, GLfloat green, GLfloat blue,
-//		GLfloat alpha) {
-//	glPushMatrix();
-//	initializeDraw(scale, rotation, x, y, box);
-//	//width for drawing
-//	GLfloat box_width = m_Width * (box->right - box->left);
-//	GLfloat box_height = m_Height * (box->top - box->bottom);
-//	GLfloat box_top = 1.0f - box->top;
-//	GLfloat box_bottom = 1.0f - box->bottom;
-//	//draw the quad
-//	glBegin(GL_QUADS);
-//	//bottom-left vertex (corner)
-//	glColor4f(red, green, blue, alpha);
-//	glTexCoord2f(box->left, box_bottom);
-//	glVertex2f(0, 0);
-//	//bottom-right vertex (corner)
-//	glTexCoord2f(box->right, box_bottom);
-//	glVertex2f(box_width, 0);
-//	//top-right vertex (corner)
-//	glTexCoord2f(box->right, box_top);
-//	glVertex2f(box_width, box_height);
-//	//top-left vertex (corner)
-//	glTexCoord2f(box->left, box_top);
-//	glVertex2f(0, box_height);
-//	glEnd();
-//	//reset the color
-//	glColor3f(1.0f, 1.0f, 1.0f);
-//	glPopMatrix();
-//}
-
-void Texture::drawSection(GLfloat x, GLfloat y, SectionStruct * box,
+void Texture::drawSection(GLfloat x, GLfloat y, SectionRect * box,
 		GLfloat scale, GLfloat rotation, GLfloat red, GLfloat green,
 		GLfloat blue, GLfloat alpha) {
 	glPushMatrix();
@@ -470,7 +439,6 @@ void TextureManager::registerTexture(Texture *Texture) {
 //	}
 //	//add the texture to the vector
 //	m_Textures.push_back(Texture);
-
 
 }
 
