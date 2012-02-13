@@ -1,19 +1,20 @@
 /*
- * TextureManager.h
+ * Texture.h
  *
- *  Created on: 2012-01-30
+ *  Created on: 2012-01-23
  *      Author: Emile
  */
 
-#ifndef TEXTURES
-#define TEXTURES
+#ifndef TEXTURE_H_
+#define TEXTURE_H_
 
 #include "Global.h"
 #include "GraphicType.h"
+#include "Ressource.h"
 
 namespace TileEngine {
 
-class Texture {
+class Texture : public Ressource{
 	friend class TextureManager;
 public:
 	/// Default Constructor
@@ -37,12 +38,8 @@ public:
 		return _Texture;
 	}
 
-	bool isLoaded() const{
-		return _isLoaded;
-	}
-
 	/// Loads a texture
-	void load(std::string filename, bool LoadCollision = false);
+	void load(std::string filename);
 
 	/// Loads file from a zip file
 	void loadFromZip(std::string filename);
@@ -71,49 +68,17 @@ protected:
 			SectionRect* rect);
 
 	/// Internal function for loading a texture from a surface
-	void makeTexture(SDL_Surface* surface, bool LoadCollision);
+	void makeTexture(SDL_Surface* surface);
 	void cleanup(); // delete the texture before loading it.
 
 	GLuint _Texture; /**< Holds the texture data */
 	SDL_Surface * _Surface;
 	std::vector<std::vector<bool> > _PixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */
-	std::string _Filename; /**< Holds the filename of the texture */
+	std::string _filename; /**< Holds the filename of the texture */
 	GLfloat _Width; /**< Stores the width of the texture */
 	GLfloat _Height; /**< Stores the height of the texture	*/
 	bool _isLoaded;
 };
 
-/*
- *
- */
-class TextureManager: public Singleton<TextureManager> {
-	friend class Singleton<TextureManager> ;
-public:
-	TextureManager();
-	virtual ~TextureManager();
-
-	bool loadTextureFromFile(std::string filename);
-
-	//void removeTexture(uint textureId);
-
-	void drawTexture(std::string textureId, GLfloat x, GLfloat y, SectionRect * rect = NULL, GLfloat scale = 1,
-	            GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1);
-
-	/// Reloads all textures
-	void reloadTextures();
-	/// Deletes all textures
-	void deleteTextures();
-
-	/// Registers a texture for management
-	void registerTexture(Texture* Texture);
-	/// Removes a texture from management
-	void unRegisterTexture(Texture* Texture);
-
-protected:
-
-	std::vector<Texture*> m_Textures; /**< Holds all textures that are managed	*/
-	//std::map< std::string, TextureSection* > m_TextureSections;
-};
-
 } /* namespace TileEngine */
-#endif /* TEXTUREMANAGER_H_ */
+#endif /* TEXTURE_H_ */

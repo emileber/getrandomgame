@@ -6,7 +6,7 @@
  */
 
 #include "GetRandomGame.h"
-#include "TextureManager.h"
+#include "Texture.h"
 #include <ctime>
 #include <iostream>
 
@@ -41,7 +41,7 @@ void GetRandomGame::init(int w, int h) {
 	 * TEST INIT
 	 *
 	 */
-	_pave = new Texture("image/pave.png");
+	_pave = Manager<Texture>::getInstance()->loadRessource("image/pave.png");
 
 	_grass = new Texture("image/grass.png");
 
