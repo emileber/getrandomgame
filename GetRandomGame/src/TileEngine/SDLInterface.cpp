@@ -6,9 +6,8 @@
  */
 
 #include "SDLInterface.h"
-#include "Global.h"
-#include <cstdio>
 #include <iostream>
+#include <sstream>
 
 using namespace std;
 

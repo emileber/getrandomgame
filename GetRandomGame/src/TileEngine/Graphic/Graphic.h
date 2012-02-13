@@ -10,11 +10,12 @@
  *
  */
 
-#include "Global.h"
-#include "GraphicType.h"
-
 #ifndef GRAPHIC
 #define GRAPHIC
+
+#include "Global.h"
+#include "GraphicType.h"
+#include <stack>
 
 namespace TileEngine
 {

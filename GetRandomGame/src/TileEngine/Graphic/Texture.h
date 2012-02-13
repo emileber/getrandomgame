@@ -11,6 +11,7 @@
 #include "Global.h"
 #include "GraphicType.h"
 #include "Ressource.h"
+#include <vector>
 
 namespace TileEngine {
 
@@ -39,7 +40,7 @@ public:
 	}
 
 	/// Loads a texture
-	void load(std::string filename);
+	virtual void load(std::string filename);
 
 	/// Loads file from a zip file
 	void loadFromZip(std::string filename);
@@ -69,15 +70,16 @@ protected:
 
 	/// Internal function for loading a texture from a surface
 	void makeTexture(SDL_Surface* surface);
-	void cleanup(); // delete the texture before loading it.
 
 	GLuint _Texture; /**< Holds the texture data */
 	SDL_Surface * _Surface;
 	std::vector<std::vector<bool> > _PixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */
-	std::string _filename; /**< Holds the filename of the texture */
 	GLfloat _Width; /**< Stores the width of the texture */
 	GLfloat _Height; /**< Stores the height of the texture	*/
-	bool _isLoaded;
+};
+
+class TextureManager : public Manager<Texture>{
+
 };
 
 } /* namespace TileEngine */

@@ -41,7 +41,11 @@ void GetRandomGame::init(int w, int h) {
 	 * TEST INIT
 	 *
 	 */
-	_pave = Manager<Texture>::getInstance()->loadRessource("image/pave.png");
+	Manager<Texture> * _textMan = Manager<Texture>::getInstance();
+	_pave = _textMan->loadRessource("image/pave.png");
+
+	cout << "Manager has loaded image/pave.png? "
+			<< _textMan->isLoaded("image/pave.png") << endl;
 
 	_grass = new Texture("image/grass.png");
 
@@ -82,23 +86,19 @@ void GetRandomGame::draw() {
 	}
 	tileTestRect->x = 0;
 	GLfloat red = testx / 100;
-	_graphic->drawFilledRectangle(49, 49 , 42, 42, 1, 0, 0, 1);
+	_graphic->drawFilledRectangle(49, 49, 42, 42, 1, 0, 0, 1);
 
 	_grass->drawSection(50, 50, tileTestRect, 1, 0, red, 1.0f, 0.0f);
 
-	_graphic->drawFilledRectangle(99, 49 , 42, 42, 1, 0, 0, 1);
-	_grass->drawSection(100, 50, tileTestRect, 1, 0, 0.90f, 1.0f,
-			0.0f);
-	_graphic->drawFilledRectangle(149, 49 , 42, 42, 1, 0, 0, 1);
-	_grass->drawSection(150, 50, tileTestRect, 1, 0, 0.75f, 1.0f,
-			0.0f);
-	_graphic->drawFilledRectangle(199, 49 , 42, 42, 1, 0, 0, 1);
-	_grass->drawSection(200, 50, tileTestRect, 1, 0, 0.5f, 1.0f,
-			0.0f);
-	_graphic->drawFilledRectangle(249, 49 , 42, 42, 1, 0, 0, 1);
-	_grass->drawSection(250, 50, tileTestRect, 1, 0, 0.25f, 1.0f,
-			0.0f);
-	_graphic->drawFilledRectangle(299, 49 , 42, 42, 1, 0, 0, 1);
+	_graphic->drawFilledRectangle(99, 49, 42, 42, 1, 0, 0, 1);
+	_grass->drawSection(100, 50, tileTestRect, 1, 0, 0.90f, 1.0f, 0.0f);
+	_graphic->drawFilledRectangle(149, 49, 42, 42, 1, 0, 0, 1);
+	_grass->drawSection(150, 50, tileTestRect, 1, 0, 0.75f, 1.0f, 0.0f);
+	_graphic->drawFilledRectangle(199, 49, 42, 42, 1, 0, 0, 1);
+	_grass->drawSection(200, 50, tileTestRect, 1, 0, 0.5f, 1.0f, 0.0f);
+	_graphic->drawFilledRectangle(249, 49, 42, 42, 1, 0, 0, 1);
+	_grass->drawSection(250, 50, tileTestRect, 1, 0, 0.25f, 1.0f, 0.0f);
+	_graphic->drawFilledRectangle(299, 49, 42, 42, 1, 0, 0, 1);
 	_grass->drawSection(300, 50, tileTestRect, 1, 0, 1, 1, 1);
 
 }

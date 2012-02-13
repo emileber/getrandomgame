@@ -9,7 +9,7 @@
 #define ENVIRONMENT_H_
 
 #include "World.h"
-#include "Singleton.h"
+//#include "Singleton.h"
 #include "SDLInterface.h"
 #include "Timer.h"
 #include "Graphic.h"

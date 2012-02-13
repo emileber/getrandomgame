@@ -9,9 +9,6 @@
 #include "Graphic.h"
 #include "Camera.h"
 #include "GraphicType.h"
-#include "SDLInterface.h"
-//#include "SDL_rwops_zzip.h"
-#include "Singleton.h"
 
 using namespace std;
 
@@ -23,8 +20,6 @@ Texture::Texture() {
 	_Width = 0;
 	_Height = 0;
 	_Texture = 0;
-	_filename = "";
-	_isLoaded = false;
 }
 
 //
@@ -41,46 +36,6 @@ Texture::~Texture() {
 	deleteTexture();
 }
 
-////
-//// Returns the width of the texture
-///// @return The width of the texture
-/////
-//GLfloat Texture::getWidth() {
-//	return m_Width;
-//}
-//
-////
-//// Returns the height of the texture
-///// @return the height of the texture
-/////
-//GLfloat Texture::getHeight() {
-//	return m_Height;
-//}
-
-//
-// Loads file from a zip file
-/// @param filename s std::string
-/// Note: format is packname/filename,
-///	 a packfile can not have directories within it
-//	void Texture::LoadFromZip(std::string filename)
-//	{
-//		string mode = "rb";
-//
-//		SDL_RWops* ImageData = SDL_RWFromZZIP(filename.c_str(), mode.c_str());
-//
-//		if(ImageData == NULL)
-//		{
-//			cout << "Failed to load the image from zip: " << filename << endl;
-//			return;
-//		}
-//
-//		SDL_Surface* Surface = IMG_Load_RW(ImageData, 0);
-//		SDL_FreeRW(ImageData);
-//
-//		m_Filename = filename;
-//		MakeTexture(Surface);
-//	}
-
 //
 // Loads the texture to memory
 /// @param filename a std::string
@@ -96,11 +51,10 @@ void Texture::load(std::string filename) {
 		return;
 	}
 
-	_filename = filename;
+	_filename = filename; // Ressource filename
 
 	makeTexture(surface);
-	_isLoaded = true;
-	//TextureManager::getInstance()->registerTexture(this);
+	_isLoaded = true; // Ressource loaded
 }
 
 //
@@ -178,62 +132,9 @@ void Texture::makeTexture(SDL_Surface* Surface) {
 	}
 	//TextureManager::getInstance()->registerTexture(this);
 
-	_isLoaded = true;
+	_isLoaded = true; // Ressource loaded
 
 }
-
-//void Texture::makeTexture(SDL_Surface* surface, bool LoadCollision) {
-//	cleanup();
-//
-//	if (surface == NULL) {
-//		return;
-//	}
-//
-//	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-//
-//	glGenTextures(1, &m_Texture);
-//
-//	glBindTexture(GL_TEXTURE_2D, m_Texture);
-//
-//	SDL_LockSurface(surface);
-//
-//	printf("%s BPP: %d\n", m_Filename.c_str(), surface->format->BytesPerPixel);
-//
-////	int Mode = GL_RGB;
-////
-////	if (surface->format->BytesPerPixel == 4) {
-////		Mode = GL_RGBA;
-////	} else if (surface->format->BytesPerPixel == 1) {
-////		//Mode = GL_BGR;
-////	}
-//
-//	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-//
-//	glTexImage2D(GL_TEXTURE_2D, 0, 3, surface->w, surface->h, 0, GL_BGR_EXT,
-//			GL_UNSIGNED_BYTE, surface->pixels);
-//
-//	//gluBuild2DMipmaps(GL_TEXTURE_2D, 3, surface->w, surface->h, GL_RGB,
-//	//GL_UNSIGNED_BYTE, surface->pixels);
-//
-//	m_Width = surface->w;
-//	m_Height = surface->h;
-//
-//	TextureManager::getInstance()->RegisterTexture(this);
-//
-//	SDL_UnlockSurface(surface);
-//}
-//
-////-----------------------------------------------------------------------------
-//void Texture::cleanup() {
-//	if (m_Texture > 0) {
-//		glDeleteTextures(1, &m_Texture);
-//		m_Texture = 0;
-//	}
-//}
 
 //
 // Deletes the texture
@@ -386,20 +287,4 @@ void Texture::drawSection(GLfloat x, GLfloat y, SectionRect * box,
 	glPopMatrix();
 }
 
-//////////////////////////////////////////////////////////////
-//	start texture manager code
-//////////////////////////////////////////////////////////////
-//
-// Default Constructor
-//
-//TextureManager::TextureManager() {
-//
-//}
-//
-////
-//// Default Destructor
-////
-//TextureManager::~TextureManager() {
-//	//deleteTextures();
-//}
-}
+} // fin du namespace
