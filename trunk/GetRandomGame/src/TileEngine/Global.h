@@ -9,19 +9,6 @@
 #ifndef GLOBAL_H_
 #define GLOBAL_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <iostream>
-#include <fstream>
-#include <sstream>
-
-#include <vector>
-#include <list>
-#include <map>
-#include <stack>
-
 #include "Singleton.h"
 #include "Manager.h"
 

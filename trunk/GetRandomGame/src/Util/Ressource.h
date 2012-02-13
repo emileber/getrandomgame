@@ -8,24 +8,27 @@
 #ifndef RESSOURCE_H_
 #define RESSOURCE_H_
 
-
 class Ressource {
 public:
 
 	Ressource() {
 		_filename = "";
 		_isLoaded = false;
-		//this->load(filename);
 	}
 	virtual ~Ressource() {
 	}
+
+	/**
+	 * Pure virtual function
+	 * MUST be implement
+	 */
 	virtual void load(std::string filename) = 0;
 
 	std::string getFilename() const {
 		return _filename;
 	}
 
-	bool isLoaded() const{
+	bool isLoaded() const {
 		return _isLoaded;
 	}
 

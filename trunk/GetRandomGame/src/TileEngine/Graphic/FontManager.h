@@ -13,6 +13,7 @@
 #define FONTMAN
 
 #include "Global.h"
+#include <vector>
 //#include "FTGLPixmapFont.h"
 
 namespace TileEngine {

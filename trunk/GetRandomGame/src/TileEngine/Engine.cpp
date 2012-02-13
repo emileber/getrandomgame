@@ -57,18 +57,6 @@ void Engine::init(int screenW, int screenH, string caption, string fontFile,
 	_frame = 0; // start the frame counter
 	_quit = false;
 
-	// get a pointer to the sdl interface
-//	_sdl = SDLInterface::getInstance();
-//
-//	// then init the interface with default values
-//	if (_sdl->init(_screenWidth, _screenHeight, SCREEN_BPP, caption,
-//			TOTAL_LAYER) == false) {
-//		cout << "TileEngine::init sdl init = ERROR" << endl;
-//	}
-//	if (_sdl->setFont(fontFile, 15) == false) {
-//		cout << "TileEngine::init setFont = ERROR" << endl;
-//	}
-
 	_graphic = Graphic::getInstance();
 	_graphic->initialize(_screenWidth, _screenHeight, SCREEN_BPP, caption);
 	_graphic->makeWindow();
