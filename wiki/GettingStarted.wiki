@@ -22,27 +22,32 @@ Le jeu utilise le Tile Engine qui lui est générique et ne devrait pas contenir
 En gros, le Tile Engine comprend la base dans le Dossier TileEngine et le Jeu contient ses fichiers, qui héritent du Tile Engine, dans le dossier GetRandomGame. Chaque classe de l'Engine est dans le namespace TileEngine.
 
 Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r75:
-  * dir->GetRandomGame
+  * ====GetRandomGame (namespace) ====
     * GetRandomGame (Sous-classe Environement, big mama du jeu)
     * GRGInputHandler
     * Launcher
-  * dir->TileEngine
-    * dir->Graphic
-      * (1)FontManager (Font est déclaré dedans)  - pas encore implémenté
-      * (1)TextureManager (Texture est déclaré dedans)
+  * ==== TileEngine (namespace) ====
+    * ==== Graphic ====
+      * Font : Ressource (Font est déclaré dedans)  - pas encore implémenté
+      * Texture : Ressource (Texture est déclaré dedans)
       * (1)Camera (the view point)
       * (1)Graphic (Interface Singleton
-      * (1)AnimationManager (Animation déclaré dedans) - pas encore implémenté
+      * Animation : Ressource (Animation déclaré dedans) - pas encore implémenté
+      * GraphicType (défini les structures du type rect et section et point)
+
     * Global (constante et include)
     * Environment (Environment générique, redéfini par GetRandomGame)
     * InputHandler (générique, contient pratiquement rien)
     * (1)SDLInterface (Encapsulation de fonction relié à SDL)
-    * Singleton (Template pour créer des singleton sans avoir a implémenter le code dans chaque classe)
     * (1)Engine (la boucle de jeu)
     * Timer (donne du temps en milisec avec le tick SDL)
     * World (monde de jeu générique, presque vide aussi, c'est a redéfinir dans le jeu)
+  * ==== Util ====
+    * Singleton (Template pour créer des singleton sans avoir a implémenter le code dans chaque classe)
+    * (1)Manager (Template class, sert de genre de Factory)
+    * Ressource (Classe Abstraite Pure pour les ressources du manager)
 
-(1) = Singleton
+(1) = Singleton, class Specific : class Parent
 
 == Global.h WTF? ==
 
@@ -135,47 +140,73 @@ L’environnement crée un monde et s'occupe d'updater les objets actifs dont no
 Bon alors j'ai encapsulé le boute chiant donc vous n'aurai pas a jouer avec des trucs d'affichage.
 
 Lorsque terminé, l'interface permettra les choses suivantes:
-  * afficher des images (même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire (bien que l'on ne le voit pas)
+  * afficher des images (même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire, bien que l'on ne le voit pas)
   * afficher du texte
   * Sur x Layer différentes (et c'est ajustable à volonter)
   * transparence
   * Rotation
   * Resize
-  * Teinte (couleur ajusté)
+  * Teinte (couleur ajusté, comme les biomes dans Minecraft, les textures seront en grayscale)
   * Éventuellement, un éclairage dynamique.
 
 == Son contenu ==
 
-Vous devez retenir seulement:
-  * TextureManager::getInstance()->loadTextureFromFile(filename);
-  * Les fonctions de dessins: Graphic::getInstance()->
-    * drawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
-    * drawFilledRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
-    * drawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
-  * sur une texture déjà chargé, draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1)
+Ce qui est interessant:
+{{{
+ // Les fonctions de dessins: 
+Graphic::getInstance()->drawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+ // drawFilledRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+ // drawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 
+}}}
 La plupart des fonctions sont auto-explicatives.
-
-=== loadTextureFromFile ===
-
-Elle vous retourne une Texture à partir d'une String et permet de la dessiner facilement.
 
 == Comment afficher une image? ==
 
   # Crée une Texture ou une Animation
-  # À chaque iteration, appeler la fonction "draw" de cet objet.
+  # À chaque iteration, appeler la fonction "draw" de cet objet. (soit dans le draw de l'environnement ou de la classe parente)
 
 
 {{{
-// Création de Texture ou d'animation
-_hello = _textureManager->loadTextureFromFile("image/pave.bmp");
+// Load une texture
+Texture * textureTest = Manager<Texture>::getInstance()->loadRessource(filename);
 
-/* [...] */
+// dessine une texture
+textureTest->draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1);
 
-// ensuite, à chaque itération, il s'agit d'appeler draw
-_hello->draw(x,y); // à placer dans la zone draw de l'objet qui le contient
-// ou 
-_hello->draw(x,y, scale, rotation, red, green, blue, alpha);
+// aussi, il y a drawSection qui est importante
+}}}
+
+----
+= Util =
+
+Dans notre projet, il y a un dossier nommé Util. Il contient des classes et des templates génériques qui ne font pas parti du namespace TileEngine. Ils sont par contre essentiels.
+
+== Singleton ==
+
+Le [http://en.wikipedia.org/wiki/Singleton_pattern concept du singleton] est de limiter la création d'une classe à une instance unique et de la rendre en même temps globale. Pour y arriver, nous laissons le soin à la classe elle-même de gérer sa création par le biais du Design Pattern nommé Singleton.
+
+J'ai donc inclue un Template du Singleton qui nous permet de facilement créer une classe singleton. Comment y arriver?
+  # Crée une nouvelle classe et fais la hériter de Singleton`<taClasse>`
+  # Ensuite, question de respecter le principe du Singleton, ajoute la classe singleton comme étant un FRIEND comme ceci "friend class Singleton`<taClasse>`;"
+  # Place les constructeur/destructeur dans la partie privé de la classe
+  # accède de n'importe où à l'instance unique de ta classe avec: "taClasse::getInstance();"
+
+=== Exemple de Singleton ===
+{{{
+class TaClasse: public Singleton<TaClasse> {
+	friend class Singleton<TaClasse> ;
+public:
+
+	// fonctions public
+private:
+	TaClasse() {
+	}
+	virtual ~TaClasse() {
+	}
+
+	// membres privés
+};
 }}}
 
 ----
