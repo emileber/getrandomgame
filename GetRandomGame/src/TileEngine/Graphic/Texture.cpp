@@ -1,15 +1,11 @@
-/**
- *  File: TextureManager.cpp
- *  Project: Kore-Engine
+/*
+ * Texture.cpp
  *
- *  Description: This file contains all the texture functions
- *
- *  Created by Sean Chapel on 1/21/06.
- *  Copyright 2006 Seoushi Games. All rights reserved.
- *
+ *  Created on: 2012-01-23
+ *      Author: Emile
  */
 
-#include "TextureManager.h"
+#include "Texture.h"
 #include "Graphic.h"
 #include "Camera.h"
 #include "GraphicType.h"
@@ -27,7 +23,7 @@ Texture::Texture() {
 	_Width = 0;
 	_Height = 0;
 	_Texture = 0;
-	_Filename = "";
+	_filename = "";
 	_isLoaded = false;
 }
 
@@ -89,7 +85,7 @@ Texture::~Texture() {
 // Loads the texture to memory
 /// @param filename a std::string
 ///
-void Texture::load(std::string filename, bool LoadCollision) {
+void Texture::load(std::string filename) {
 	//load the image from a file via sdl_img
 	SDL_Surface* surface = IMG_Load(filename.c_str());
 
@@ -100,18 +96,18 @@ void Texture::load(std::string filename, bool LoadCollision) {
 		return;
 	}
 
-	_Filename = filename;
+	_filename = filename;
 
-	makeTexture(surface, LoadCollision);
+	makeTexture(surface);
 	_isLoaded = true;
-	TextureManager::getInstance()->registerTexture(this);
+	//TextureManager::getInstance()->registerTexture(this);
 }
 
 //
 // Internal function for loading a texture from a surface
 /// @param Surface a SDL_Surface pointer
 ///
-void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
+void Texture::makeTexture(SDL_Surface* Surface) {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 	glGenTextures(1, &_Texture);
@@ -132,44 +128,44 @@ void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
 	_Width = (GLfloat) (Surface->w);
 	_Height = (GLfloat) (Surface->h);
 	//setup the pixel data (used for collisions)
-	if (LoadCollision) {
-		SDL_LockSurface(Surface);
-		Uint32 *sur_pixels = (Uint32*) (Surface->pixels);
-		Uint32 pixel;
-		SDL_UnlockSurface(Surface);
-		SDL_PixelFormat *format = Surface->format;
-		Uint32 temp;
-		Uint8 alpha;
-		std::vector<bool> pixTemp;
-		for (int x = 0; x < (int) (_Width); x++) {
-			pixTemp.push_back(false);
-		}
-		for (int y = 0; y < (int) (_Height); y++) {
-			_PixelOn.push_back(pixTemp);
-		}
-		pixel = *(sur_pixels++);
-		for (int y = 0; y < (int) (_Height); y++) {
-			for (int x = 0; x < (int) (_Width); x++) {
-				temp = pixel & format->Amask;
-				temp = temp >> fmt->Ashift;
-				temp = temp << fmt->Aloss;
-				alpha = (Uint8) (temp);
-				if (alpha >= 200) {
-					_PixelOn[y][x] = true;
-				}
-				pixel = *(sur_pixels++);
-			}
-
-		}
-
-		//flip rows so it's represented right in memory
-		vector<vector<bool> > colTmp;
-		for (int y = _Height - 1; y >= 0; y--) {
-			colTmp.push_back(_PixelOn[y]);
-		}
-		_PixelOn.clear();
-		_PixelOn = colTmp;
-	}
+//	if (LoadCollision) {
+//		SDL_LockSurface(Surface);
+//		Uint32 *sur_pixels = (Uint32*) (Surface->pixels);
+//		Uint32 pixel;
+//		SDL_UnlockSurface(Surface);
+//		SDL_PixelFormat *format = Surface->format;
+//		Uint32 temp;
+//		Uint8 alpha;
+//		std::vector<bool> pixTemp;
+//		for (int x = 0; x < (int) (_Width); x++) {
+//			pixTemp.push_back(false);
+//		}
+//		for (int y = 0; y < (int) (_Height); y++) {
+//			_PixelOn.push_back(pixTemp);
+//		}
+//		pixel = *(sur_pixels++);
+//		for (int y = 0; y < (int) (_Height); y++) {
+//			for (int x = 0; x < (int) (_Width); x++) {
+//				temp = pixel & format->Amask;
+//				temp = temp >> fmt->Ashift;
+//				temp = temp << fmt->Aloss;
+//				alpha = (Uint8) (temp);
+//				if (alpha >= 200) {
+//					_PixelOn[y][x] = true;
+//				}
+//				pixel = *(sur_pixels++);
+//			}
+//
+//		}
+//
+//		//flip rows so it's represented right in memory
+//		vector<vector<bool> > colTmp;
+//		for (int y = _Height - 1; y >= 0; y--) {
+//			colTmp.push_back(_PixelOn[y]);
+//		}
+//		_PixelOn.clear();
+//		_PixelOn = colTmp;
+//	}
 
 	//if there is alpha
 	if (fmt->Amask) {
@@ -180,7 +176,7 @@ void Texture::makeTexture(SDL_Surface* Surface, bool LoadCollision) {
 		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, _Width, _Height, GL_RGB,
 				GL_UNSIGNED_BYTE, Surface->pixels);
 	}
-	TextureManager::getInstance()->registerTexture(this);
+	//TextureManager::getInstance()->registerTexture(this);
 
 	_isLoaded = true;
 
@@ -249,7 +245,7 @@ void Texture::deleteTexture() {
 		SDL_FreeSurface(_Surface);
 	}
 	// this line has a BUG fix it!
-	TextureManager::getInstance()->unRegisterTexture(this);
+	Manager<Texture>::getInstance()->unRegisterRessource(this);
 }
 
 //
@@ -257,8 +253,8 @@ void Texture::deleteTexture() {
 //
 void Texture::reload() {
 	//only reload if it's a real file
-	if (_Filename != "") {
-		load(_Filename);
+	if (_filename != "") {
+		load(_filename);
 	}
 }
 
@@ -396,82 +392,14 @@ void Texture::drawSection(GLfloat x, GLfloat y, SectionRect * box,
 //
 // Default Constructor
 //
-TextureManager::TextureManager() {
-	m_Textures.clear();
-}
-
+//TextureManager::TextureManager() {
 //
-// Default Destructor
+//}
 //
-TextureManager::~TextureManager() {
-	deleteTextures();
-}
-
-//
-// Reloads all textures
-//
-void TextureManager::reloadTextures() {
-	//reload all textures
-//	for (uint i = 0; i < m_Textures.size(); i++) {
-//		m_Textures[i]->reload();
-//	}
-}
-
-//
-// Deletes all textures
-//
-void TextureManager::deleteTextures() {
-	//delete all textures
-//	for (uint i = 0; i < m_Textures.size(); i++) {
-//		m_Textures[i]->deleteTexture();
-//	}
-}
-
-//
-// Registers a texture for management
-//
-void TextureManager::registerTexture(Texture *Texture) {
-	//check to see if the texture isn't actually just been reloaded
-//	for (uint i = 0; i < m_Textures.size(); i++) {
-//		if (m_Textures[i]->_Texture == Texture->_Texture) {
-//			return;
-//		}
-//	}
-//	//add the texture to the vector
-//	m_Textures.push_back(Texture);
-
-}
-
-bool TextureManager::loadTextureFromFile(std::string filename) {
-	Texture * newTexture = new Texture(filename);
-
-	return newTexture->isLoaded();
-}
-
-//
-// Removes a texture from the texture manager
-//
-void TextureManager::unRegisterTexture(Texture *Texture) {
-	int place = -1;
-	//lets find where the texture is in the vector
-	for (uint i = 0; i < m_Textures.size(); i++) {
-		if (m_Textures[i]->_Texture == Texture->_Texture) {
-			place = i;
-		}
-	}
-	//if its not registed then do nothing
-	if (place == -1) {
-		return;
-	}
-	//if the place is at the end just remove the texture
-	if ((place + 1) == (int) (m_Textures.size())) {
-		m_Textures.erase(m_Textures.begin() + place);
-	} else // move the last place to the empty slot and remove the last one element
-	{
-		m_Textures[place] = m_Textures[m_Textures.size() - 1];
-		m_Textures.erase(m_Textures.begin() + place);
-	}
-
-	delete Texture;
-}
+////
+//// Default Destructor
+////
+//TextureManager::~TextureManager() {
+//	//deleteTextures();
+//}
 }

@@ -16,7 +16,7 @@ Environment::Environment() {
 	_world = new World();
 	_sdl = SDLInterface::getInstance();
 	_graphic = Graphic::getInstance();
-	_textureManager = TextureManager::getInstance();
+	_textureManager = Manager<Texture>::getInstance();
 	_frameCount = 0;
 	_screenWidth = 0;
 	_screenHeight = 0;

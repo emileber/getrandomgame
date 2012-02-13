@@ -13,7 +13,7 @@
 #include "SDLInterface.h"
 #include "Timer.h"
 #include "Graphic.h"
-#include "TextureManager.h"
+#include "Texture.h"
 #include "Global.h"
 
 namespace TileEngine {
@@ -36,7 +36,7 @@ protected:
 	World * _world;
 	SDLInterface * _sdl;
 	Graphic * _graphic;
-	TextureManager * _textureManager;
+	Manager<Texture> * _textureManager;
 	Timer _gameTime;
 	int _screenWidth, _screenHeight;
 	Uint32 _frameCount;

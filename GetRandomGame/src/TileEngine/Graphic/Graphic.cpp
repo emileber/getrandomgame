@@ -13,7 +13,7 @@
 #include "Global.h"
 #include "Graphic.h"
 //#include "Singleton.h"
-#include "TextureManager.h"
+#include "Texture.h"
 #include "Camera.h"
 
 using namespace std;
@@ -52,7 +52,7 @@ bool Graphic::initialize(int Width, int Height, int Bpp,
 
 	//if we reinitalize then reload the textures
 	if (_isLoaded) {
-		TextureManager::getInstance()->reloadTextures();
+		Manager<Texture>::getInstance()->reloadAllRessource();
 	}
 
 	_isLoaded = true;
@@ -154,7 +154,7 @@ void Graphic::resizeWindow(int width, int height) {
 	initGl();
 
 	//reload textures
-	TextureManager::getInstance()->reloadTextures();
+	Manager<Texture>::getInstance()->reloadAllRessource();
 }
 
 //

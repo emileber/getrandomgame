@@ -12,8 +12,10 @@ template<typename T>
 class Singleton {
 protected:
 	// Constructeur/destructeur
-	Singleton() {}
-	virtual ~Singleton() {}
+	Singleton() {
+	}
+	virtual ~Singleton() {
+	}
 
 public:
 	// Interface publique
