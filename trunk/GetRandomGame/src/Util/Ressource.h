@@ -15,14 +15,15 @@ public:
 		_filename = "";
 		_isLoaded = false;
 	}
-	virtual ~Ressource() {
-	}
+	virtual ~Ressource() {}
 
 	/**
 	 * Pure virtual function
 	 * MUST be implement
 	 */
 	virtual void load(std::string filename) = 0;
+
+	virtual void reload() = 0;
 
 	std::string getFilename() const {
 		return _filename;
@@ -35,8 +36,6 @@ public:
 protected:
 	std::string _filename;
 	bool _isLoaded;
-private:
-
 };
 
 #endif /* RESSOURCE_H_ */

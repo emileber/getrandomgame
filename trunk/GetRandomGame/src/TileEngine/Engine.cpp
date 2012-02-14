@@ -163,10 +163,13 @@ void Engine::fpsRegulator() {
  *
  */
 void Engine::stop() {
+	cout << "Engine::stop()" << endl;
 	_environment->close();
 	_graphic->shutdown();
 	_graphic->kill();
-	//_sdl->cleanUp();
+	Manager<Texture>::getInstance()->deleteAllRessource();
+	Manager<Texture>::getInstance()->kill();
+	cout << "Engine::stop()::END" << endl;
 }
 
 }

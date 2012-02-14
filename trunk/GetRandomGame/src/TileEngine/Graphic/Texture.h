@@ -23,7 +23,7 @@ public:
 	/// Constructor that loads a texture
 	Texture(std::string filename);
 	/// Default Destructor
-	~Texture();
+	virtual ~Texture();
 
 	/// Returns the texture width
 	GLfloat getWidth() const {
@@ -42,13 +42,12 @@ public:
 	/// Loads a texture
 	virtual void load(std::string filename);
 
-	/// Loads file from a zip file
-	void loadFromZip(std::string filename);
+	/// Reloads the texture
+	virtual void reload();
 
 	/// Deletes the texture
-	void deleteTexture();
-	/// Reloads the texture
-	void reload();
+	void kill();
+
 
 	/// Returns the pixel data
 	std::vector<std::vector<bool> >* getPixels();
@@ -76,10 +75,6 @@ protected:
 	std::vector<std::vector<bool> > _PixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */
 	GLfloat _Width; /**< Stores the width of the texture */
 	GLfloat _Height; /**< Stores the height of the texture	*/
-};
-
-class TextureManager : public Manager<Texture>{
-
 };
 
 } /* namespace TileEngine */
