@@ -23,6 +23,7 @@ You need:
 
 Voir la [http://code.google.com/p/getrandomgame/downloads/list Download List] pour trouver certains fichier facilement.
 
+
 == MinGW ==
 F*ck, all you need is to click next!
 
@@ -39,7 +40,8 @@ Téléchargez la version de SDL spécialement compilé pour Mingw.
   # Copier le contenu de SDL-version\include (copier le dossier SDL) vers C:\MinGW\include\
   # Ajouter C:\MinGW\bin à la variable système PATH et restart pc
 
-=== Partie Eclipse ===
+----
+= Partie Eclipse =
 
 Dans les propriétés du projet
 
@@ -68,7 +70,8 @@ add the folowing libraries (Libraries -l)
 MinGW C++ Linker > Miscellaneous
 Linker flags: -mwindows
 
-=== SDL Extension Libraries ===
+----
+= SDL Extension Libraries =
 
 Chaque bibliothèque SDL possède trois parties essentielles :
 
@@ -82,7 +85,8 @@ Chaque bibliothèque SDL possède trois parties essentielles :
 
 [http://loka.developpez.com/tutoriel/sdl/bibliotheques/bib_codeblocks/images/SDL_image_CodeBlocks.png]
 
-== OpenGL ==
+----
+= OpenGL =
 ça c'est déjà inclu dans Global, mais au cas ou, les voici:
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -91,3 +95,15 @@ Chaque bibliothèque SDL possède trois parties essentielles :
 MinGW C++ Linker > Libraries
   * opengl32
   * glu32
+
+----
+= Project's Specific Settings =
+
+Chaque sous-dossier du dossier "src" doivent être inclus des les Include du GCC C++ Compiler settings.
+
+Donc, jusqu'à maintenant:
+  * TileEngine
+  * TileEngine/Graphics
+  * Util
+
+Pas besoin d'ajouter le dossier de jeu puisqu'il est considéré par défaut comme le dossier de développement. Par contre, les sous-dossier de GetRandomGame devront être ajouté dans les Include.
