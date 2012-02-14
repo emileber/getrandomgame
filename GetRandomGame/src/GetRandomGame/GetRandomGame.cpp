@@ -6,6 +6,7 @@
  */
 
 #include "GetRandomGame.h"
+#include "WorldMap.h"
 #include "Texture.h"
 #include <ctime>
 #include <iostream>
@@ -26,7 +27,7 @@ SectionRect * tileTestRect;
 
 GetRandomGame::GetRandomGame() {
 	cout << "new GetRandomGame()" << endl;
-
+	_world = new WorldMap();
 	cout << "new GetRandomGame()::End" << endl;
 }
 
@@ -51,6 +52,11 @@ void GetRandomGame::init(int w, int h) {
 	tileTestRect->y = 24;
 	tileTestRect->w = 40;
 	tileTestRect->h = 40;
+
+//	Uint32 start = _gameTime.get_ticks();
+//
+//	cout << "Map Generation: " << (_gameTime.get_ticks() - start) << " ms" << endl;
+
 
 	/*
 	 * END OF TEST INIT
@@ -82,7 +88,6 @@ void GetRandomGame::draw() {
 			_pave->drawSection(x * 40, y * 40, tileTestRect);
 		}
 	}
-
 
 	// GRASS tile test
 	tileTestRect->x = 0;

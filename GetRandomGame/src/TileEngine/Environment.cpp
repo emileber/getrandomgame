@@ -13,7 +13,6 @@ namespace TileEngine {
 
 Environment::Environment() {
 	cout << "new Environment" << endl;
-	_world = new World();
 	_sdl = SDLInterface::getInstance();
 	_graphic = Graphic::getInstance();
 	_textureManager = Manager<Texture>::getInstance();
