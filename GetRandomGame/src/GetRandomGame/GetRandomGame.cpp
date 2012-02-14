@@ -42,12 +42,9 @@ void GetRandomGame::init(int w, int h) {
 	 *
 	 */
 	Manager<Texture> * _textMan = Manager<Texture>::getInstance();
+
 	_pave = _textMan->loadRessource("image/pave.png");
-
-	cout << "Manager has loaded image/pave.png? "
-			<< _textMan->isLoaded("image/pave.png") << endl;
-
-	_grass = new Texture("image/grass.png");
+	_grass = _textMan->loadRessource("image/grass.png");
 
 	tileTestRect = new SectionRect;
 	tileTestRect->x = 0;
@@ -78,18 +75,20 @@ void GetRandomGame::update() {
 
 void GetRandomGame::draw() {
 
+	// background floor
 	for (int x = 0; x < 30; x++) {
 		for (int y = 0; y < 15; y++) {
 			tileTestRect->x = ((x * y + (x ^ y)) % 5) * 40;
 			_pave->drawSection(x * 40, y * 40, tileTestRect);
 		}
 	}
+
+
+	// GRASS tile test
 	tileTestRect->x = 0;
 	GLfloat red = testx / 100;
 	_graphic->drawFilledRectangle(49, 49, 42, 42, 1, 0, 0, 1);
-
 	_grass->drawSection(50, 50, tileTestRect, 1, 0, red, 1.0f, 0.0f);
-
 	_graphic->drawFilledRectangle(99, 49, 42, 42, 1, 0, 0, 1);
 	_grass->drawSection(100, 50, tileTestRect, 1, 0, 0.90f, 1.0f, 0.0f);
 	_graphic->drawFilledRectangle(149, 49, 42, 42, 1, 0, 0, 1);
@@ -111,9 +110,4 @@ void GetRandomGame::testFunction(int xMod, int yMod) {
 void GetRandomGame::close() {
 	cout << "GetRandomGame::close()" << endl;
 	Environment::close(); // call the generic close function to close general stuff
-
-//	delete _background;
-//	delete _cat;
-//	delete _hello;
-//	delete _pave;
 }

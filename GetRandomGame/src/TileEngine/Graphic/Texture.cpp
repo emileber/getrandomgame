@@ -20,6 +20,7 @@ Texture::Texture() {
 	_Width = 0;
 	_Height = 0;
 	_Texture = 0;
+	_Surface = NULL;
 }
 
 //
@@ -33,7 +34,7 @@ Texture::Texture(std::string Filename) {
 // Default destructor
 //
 Texture::~Texture() {
-	deleteTexture();
+	kill();
 }
 
 //
@@ -52,6 +53,8 @@ void Texture::load(std::string filename) {
 	}
 
 	_filename = filename; // Ressource filename
+
+	_Surface = surface;
 
 	makeTexture(surface);
 	_isLoaded = true; // Ressource loaded
@@ -139,14 +142,11 @@ void Texture::makeTexture(SDL_Surface* Surface) {
 //
 // Deletes the texture
 //
-void Texture::deleteTexture() {
-
+void Texture::kill() {
 	if (_isLoaded) {
 		glDeleteTextures(1, &_Texture);
 		SDL_FreeSurface(_Surface);
 	}
-	// this line has a BUG fix it!
-	Manager<Texture>::getInstance()->unRegisterRessource(this);
 }
 
 //

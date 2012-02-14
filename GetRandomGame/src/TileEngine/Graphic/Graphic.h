@@ -28,10 +28,7 @@ namespace TileEngine
 		//friend class cTextureManager;
 
 		public:
-			/// Default Constructor
-			Graphic();
-			/// Default Destructor
-			~Graphic();
+
 
 			/// Intializes all a window for creation
 			bool initialize(int Width = 640, int Height = 480, int Bpp = 32, std::string WindowTitle = "");
@@ -97,6 +94,11 @@ namespace TileEngine
 			GLuint m_CurrentTexture; 	/**< contains the current texture that is in graphics memory	*/
 
 			std::stack< RectStruct > m_ClippingArea;
+		private:
+			/// Default Constructor
+			Graphic();
+			/// Default Destructor
+			~Graphic();
 	};
 }
 
