@@ -209,6 +209,100 @@ private:
 };
 }}}
 
+== Manager et Ressource ==
+
+De façon à limiter l'ouverture d'un fichier et de son chargement à une unique fois, il nous faut une classe qui gère cela et nous l'appelons ici le Manager. De façon à avoir accès à un Manager unique et ce partout, chaque Manager doit être Singleton et c'est pourquoi la classe créé gère cela elle-même.
+
+Le Manager est une classe Template, donc elle s'ajuste au contenu qu'elle gère mais pour s'assurer du bon fonctionnement de la classe et de l'implémentation des bonnes fonctions, chaque classe que le manager devra géré DOIT IMPÉRATIVEMENT hériter de la classe abstraite Ressource.
+
+Son utilisation:
+  # `Manager<TaClasse_a_Manager>::getInstance()`;
+  # Ensuite, utiliser la fonction loadRessource(string filename)
+  # Retourne à tous coup une instance de TaClasse_a_Manager et automatiquement l'ajoute aux ressources chargées
+    * Si la ressource est déjà chargé, il retourne l'instance déjà chargé.
+
+*IMPORTANT* Le Manager se sert du nom de fichier (string filename) pour classer et donc savoir ce qui est déjà chargé.
+
+=== la classe Manager ===
+{{{
+template<typename T>
+class Manager: public Singleton<Manager<T> > {
+	friend class Singleton<Manager<T> > ;
+public:
+	T * loadRessource(std::string filename) {
+		if (!isLoaded(filename)) {
+			T * newRessource = new T();
+			newRessource->load(filename);
+			registerRessource(newRessource);
+			return newRessource;
+		}
+		return _ressourceMap[filename];
+	}
+
+	void deleteAllRessource(); // pas encore implémenté
+	void reloadAllRessource() {} // pas encore implémenté
+
+	bool isLoaded(std::string filename) {
+		if (_ressourceMap.find(filename) != _ressourceMap.end()) {
+			return true;
+		}
+		return false;
+	}
+        /// Add a ressource to manage
+	void registerRessource(T * ressource) {
+		if (!isLoaded(ressource->getFilename())) {
+			_ressourceMap[ressource->getFilename()] = ressource;
+		}
+	}
+	/// Removes a Ressource from management
+	void unRegisterRessource(T * ressource) {
+		if (isLoaded(ressource->getFilename())) {
+			_ressourceMap.erase(ressource->getFilename());
+		}
+	}
+private:
+        // Constructor et destructor PRIVATE parce que Singleton
+	Manager() {}
+	virtual ~Manager() {}
+	std::map<std::string, T *> _ressourceMap; // Map qui gere les ressources
+};
+}}}
+
+=== Ressource ===
+La classe abstraite pure Ressource sert uniquement à être hérité par une sous-classe qui sera géré par le Manager de la classe en question.
+
+Son utilisation (Exemple avec Texture):
+  # Texture hérite de Ressource
+  # Texture redéfini la fonction load(string filename) et c'est OBLIGATOIRE
+  # ensuite il est possible facilement de faire `Manager<Texture>::getInstance()` pour obtenir un gestionnaire de Ressource
+
+{{{
+class Ressource {
+public:
+	Ressource() {
+		_filename = "";
+		_isLoaded = false;
+	}
+	virtual ~Ressource() {}
+
+	/**
+	 * Pure virtual function
+	 * MUST be implement
+	 */
+	virtual void load(std::string filename) = 0;
+
+	std::string getFilename() const {
+		return _filename;
+	}
+	bool isLoaded() const {
+		return _isLoaded;
+	}
+protected:
+	std::string _filename;
+	bool _isLoaded;
+};
+}}}
+
 ----
 = Les modules à développer =
 
