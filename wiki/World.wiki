@@ -6,7 +6,8 @@
 Table Of Content:
 <wiki:toc max_depth="2" />
 ----
-
+= Exemple de carte du monde =
+[http://a6.sphotos.ak.fbcdn.net/hphotos-ak-ash4/422880_10150540166906898_574736897_9562246_1931949067_n.jpg]
 = How far can we walk? =
 
 La dimension de la carte du monde sera déterminé en Région. Trois dimensions de base détermineront la taille du monde, soit:
