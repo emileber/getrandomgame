@@ -38,7 +38,7 @@ void Timer::stop() {
 	paused = false;
 }
 
-Uint32 Timer::get_ticks() {
+uint32_t Timer::get_ticks() {
 	//Si le timer est en marche
 	if (started == true) {
 		//Si le timer est en pause

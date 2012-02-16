@@ -22,7 +22,7 @@ class DiamondSquare
     public :
 
     DiamondSquare(){};
-    void Randomize(int** tableau, float smoothing, int seed, int rRange, int size, float pFactor, int it=0);
+    void Randomize(int** tableau, float smoothing, int rRange, int size, float pFactor, int it=0);
 
 
 };

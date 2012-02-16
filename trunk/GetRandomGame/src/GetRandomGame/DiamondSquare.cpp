@@ -3,7 +3,7 @@
 //made bu DUPA
 
 
-void DiamondSquare::Randomize(int** tableau, float smoothing, int seed, int rRange,int size, float pFactor, int it)
+void DiamondSquare::Randomize(int** tableau, float smoothing, int rRange,int size, float pFactor, int it)
 {
     arraySize = size;
     sideSize = arraySize-1;
@@ -11,7 +11,7 @@ void DiamondSquare::Randomize(int** tableau, float smoothing, int seed, int rRan
     randomRange=rRange;
     smoother=smoothing;
     positiveFactor=pFactor;
-    srand(seed);
+
     if(it==0)
     {
         tableau[0][size-1]= (rand()%rRange)-rRange/2;
