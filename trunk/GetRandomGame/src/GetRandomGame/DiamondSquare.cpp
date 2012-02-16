@@ -12,6 +12,13 @@ void DiamondSquare::Randomize(int** tableau, float smoothing, int seed, int rRan
     smoother=smoothing;
     positiveFactor=pFactor;
     srand(seed);
+    if(it==0)
+    {
+        tableau[0][size-1]= (rand()%rRange)-rRange/2;
+        tableau[size-1][size-1]= (rand()%rRange)-rRange/2;
+        tableau[0][0]= (rand()%rRange)-rRange/2;
+        tableau[size-1][0]= (rand()%rRange)-rRange/2;
+    }
     for(int i =0; i<it;i++)
     {
         sideSize=sideSize/2;

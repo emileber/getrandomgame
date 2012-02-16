@@ -14,6 +14,15 @@ class MapGenerator
     WorldMap* map;
     int mapSize;
 
+   int waterHeatRange;
+    int heightToTLoss;
+    int extremeT;
+    int temptoHuRatio;
+    int WaterHuRange;
+    int montainHuRange;
+    int waterHuModifier;
+    int waterHeatModifier;
+
     void SkewHuMap();
     void SkewVMap();
     void SkewTMap();
@@ -21,7 +30,7 @@ class MapGenerator
 
     public :
     MapGenerator();
-    WorldMap* GenerateANewWorld(int size,float smoothing, int rRange);
+    WorldMap* GenerateANewWorld(int size,float smoothing, int rRange, int seed);
     template <class T>
     T** getArray(int size);
 };

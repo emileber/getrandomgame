@@ -5,9 +5,17 @@ using namespace std;
 MapGenerator::MapGenerator()
 {
     map = new WorldMap(0);
+    waterHeatRange=5;
+    waterHeatModifier=3;
+    heightToTLoss=8;
+    extremeT=14;
+    temptoHuRatio=4;
+    WaterHuRange=9;
+    montainHuRange=9;
+    waterHuModifier=4;
 }
 
-WorldMap* MapGenerator::GenerateANewWorld(int size,float smoothing, int rRange)
+WorldMap* MapGenerator::GenerateANewWorld(int size,float smoothing, int rRange, int seed)
 {
     //delete(map);
 
@@ -20,22 +28,24 @@ WorldMap* MapGenerator::GenerateANewWorld(int size,float smoothing, int rRange)
     mapSize=size;
     DiamondSquare* ds = new DiamondSquare();
     std::cout<<"got a map"<<std::endl;
-    ds->Randomize(map->getHMap(),smoothing, 65887, rRange, size, 0.0);
+    ds->Randomize(map->getHMap(),smoothing, seed++, rRange, size, 0.15);
 
 std::cout<<"got a hmap"<<std::endl;
 
+
+
+    ds->Randomize(map->getTMap(),smoothing, seed++, rRange, size,0.2);
+    std::cout<<"got a Tmap"<<std::endl;
     SkewTMap();
 
-    ds->Randomize(map->getTMap(),smoothing, 2323695, rRange, size,0.0);
-std::cout<<"got a Tmap"<<std::endl;
+    ds->Randomize(map->getHuMap(),smoothing, seed++, rRange, size,0);
+    std::cout<<"got a HUmap"<<std::endl;
     SkewHuMap();
 
-    ds->Randomize(map->getHuMap(),smoothing, 10065, rRange, size,0);
-std::cout<<"got a HUmap"<<std::endl;
-    SkewVMap();
 
-    ds->Randomize(map->getVMap(),smoothing, 1000000, rRange, size,0);
-std::cout<<"got a Vmap"<<std::endl;
+    ds->Randomize(map->getVMap(),smoothing, seed++, rRange, size,0);
+    std::cout<<"got a Vmap"<<std::endl;
+    SkewVMap();
     CreateBiomesMap();
     std::cout<<"got a Bmap"<<std::endl;
 
@@ -46,7 +56,7 @@ void MapGenerator::SkewTMap()
 {
     int** tMap = map->getTMap();
     int** hMap = map->getHMap();
-    //la map de température est plus froide aux poles et en hauteur
+    //la map de température est plus froide aux poles et en hauteur, plus chaude autour de l'eau
     for(int y =0; y<mapSize; y++)
     {
         //les 3 prochaines lignes batissent un fonction absolu inversé, qui peak au millieu de la map
@@ -54,13 +64,25 @@ void MapGenerator::SkewTMap()
 
         baseT = ((baseT >= 0) ? -baseT : baseT);
 
-        baseT+=(mapSize-1)/4;
+        baseT+=(mapSize-1)/3;
 
 
 
         for(int x=0; x<mapSize; x++)
         {
-            tMap[x][y]=baseT-(hMap[x][y]/8);
+            if(hMap[x][y]<0)
+            {
+                for(int i =0; i<waterHeatRange; i++)
+                {
+                    for(int j =0; j<waterHeatRange;j++)
+                    {
+                        if((x-(waterHeatRange-1)/2+i)>0&&(x-2+i)<mapSize&&(y-(waterHeatRange-1)/2+i)>0&&(y-(waterHeatRange-1)/2+i)<mapSize)
+                            tMap[x-(waterHeatRange-1)/2+i][y-(waterHeatRange-1)/2+j]+=waterHeatModifier;
+                    }
+                }
+            }
+            tMap[x][y]+=(baseT-(hMap[x][y]/heightToTLoss));
+
         }
 
     }
@@ -73,7 +95,7 @@ void MapGenerator::SkewHuMap()
     int** huMap = map->getHuMap();
     int halfMap=((mapSize-1)/2);
 
-    //les océans augmentent l'humidité autour d'eux, les montagnes augmentent l'humidité vers le millieu et la diminue vers les poles
+    //les océans augmentent l'humidité autour d'eux
     //Les températures extremes diminuent l'humidité
     for(int y =0; y<mapSize; y++)
     {
@@ -82,39 +104,20 @@ void MapGenerator::SkewHuMap()
         {
              int hemisphereMod;
             int absTemp = ((tMap[x][y] >= 0) ? -tMap[x][y] : tMap[x][y]);
-            absTemp+=10;
-            huMap[x][y]+=absTemp/4;
+            absTemp+=extremeT;
+            huMap[x][y]+=absTemp/temptoHuRatio;
             if(hMap[x][y]<0)
             {
-                for(int i =0; i<3; i++)
+                for(int i =0; i<WaterHuRange; i++)
                 {
-                    for(int j =0; j<3;j++)
+                    for(int j =0; j<WaterHuRange;j++)
                     {
-                        if((x-1+i)>0&&(x-1+i)<mapSize&&(y-1+i)>0&&(y-1+i)<mapSize)
-                            huMap[x-1+i][y-1+j]+=1;
+                        if((x-(WaterHuRange-1)/2+i)>0&&(x-2+i)<mapSize&&(y-WaterHuRange+i)>0&&(y-WaterHuRange+i)<mapSize)
+                            huMap[x-(WaterHuRange-1)/2+i][y-(WaterHuRange-1)/2+j]+=waterHuModifier;
                     }
                 }
             }
-            else
-            {
-                if(hMap[x][y]>20)
-                {
-                    if(y>=halfMap)
-                         hemisphereMod = 1;
-                    else
-                         hemisphereMod = -1;
-                    for(int i =0 ;i<4;i++)
-                    {
-                        if(y-i>0)
-                        huMap[x][y-i]+=(i*(hMap[x][y]/4))*hemisphereMod;
-                    }
-                    for(int i =0 ;i<4;i++)
-                    {
-                        if(y+i<mapSize)
-                        huMap[x][y-i]+=(i*(hMap[x][y]/4))*(-1*hemisphereMod);
-                    }
-                }
-            }
+
         }
 
     }
@@ -134,7 +137,7 @@ void MapGenerator::SkewVMap()
 
         for(int x=0; x<mapSize; x++)
         {
-            vMap[x][y]+=((tMap[x][y]*hMap[x][y])/16)-hMap[x][y]/4;
+            vMap[x][y]+=(((tMap[x][y]*hMap[x][y])/16)-hMap[x][y]/4)+huMap[x][y]/4;
 
         }
 
@@ -164,13 +167,13 @@ void MapGenerator::CreateBiomesMap()
             {
                 if(hMap[x][y]>30)
                 {
-                     biomeMap[x][y]='A';//montagne
+                     biomeMap[x][y]='M';//montagne
                 }
                 else
                 {
                     if(hMap[x][y]>20)
                     {
-                        biomeMap[x][y]='M';//grosse montagne
+                        biomeMap[x][y]='A';//grosse montagne
                     }
                     else
                     {
@@ -178,19 +181,25 @@ void MapGenerator::CreateBiomesMap()
                         {
                             if(huMap[x][y]>20)
                             {
-                                if(vMap[x][y]>20)
+                                if(vMap[x][y]>30)
                                 {
                                     biomeMap[x][y]='W';//Wild Jungle
                                 }
-                                else
-                                {
-                                    if(vMap[x][y]>0)
+                                else{
+                                    if(vMap[x][y]>20)
                                     {
                                         biomeMap[x][y]='J';//Jungle
                                     }
                                     else
                                     {
-                                        biomeMap[x][y]='R'; // Rainy Grassland
+                                        if(vMap[x][y]>0)
+                                        {
+                                            biomeMap[x][y]='s';//flooded savannah
+                                        }
+                                        else
+                                        {
+                                            biomeMap[x][y]='R'; // Rainy Grassland
+                                        }
                                     }
                                 }
                             }
@@ -200,13 +209,13 @@ void MapGenerator::CreateBiomesMap()
                                 {
                                     if(vMap[x][y]>20)
                                     {
-                                        biomeMap[x][y]='w';//Wild Tropical Forest
+                                        biomeMap[x][y]='J';//Jungle
                                     }
                                     else
                                     {
                                         if(vMap[x][y]>0)
                                         {
-                                            biomeMap[x][y]='T';//Tropical Forest
+                                            biomeMap[x][y]='S';//Savannah
                                         }
                                         else
                                         {
@@ -224,7 +233,7 @@ void MapGenerator::CreateBiomesMap()
                                     {
                                         if(vMap[x][y]>0)
                                         {
-                                            biomeMap[x][y]='d';//Desert
+                                            biomeMap[x][y]='d';//draught-friendly badlands
                                         }
                                         else
                                         {
@@ -281,7 +290,7 @@ void MapGenerator::CreateBiomesMap()
 
                                         if(vMap[x][y]>0)
                                         {
-                                            biomeMap[x][y]='S';//Savannah
+                                            biomeMap[x][y]='G';//Grassland
                                         }
                                         else
                                         {
@@ -298,6 +307,7 @@ void MapGenerator::CreateBiomesMap()
 
                                      if(huMap[x][y]>0)
                                     {
+
                                         if(vMap[x][y]>20)
                                         {
                                             biomeMap[x][y]='C';//Boreal forest
@@ -316,20 +326,23 @@ void MapGenerator::CreateBiomesMap()
                                     }
                                     else
                                     {
-
-                                        if(vMap[x][y]>20)
+                                        if(vMap[x][y]>30)
                                         {
-                                            biomeMap[x][y]='B';//woodland
+                                            biomeMap[x][y]='C';//Boreal forest
                                         }
                                         else
                                         {
-                                            if(vMap[x][y]>0)
+
+
+                                            if(vMap[x][y]>20)
                                             {
-                                                biomeMap[x][y]='b';//boreal grassland
+                                                biomeMap[x][y]='B';//woodland
                                             }
                                             else
                                             {
-                                                biomeMap[x][y]='H' ;//Thundra
+
+                                                biomeMap[x][y]='b';//boreal grassland
+
                                             }
                                         }
                                     }
@@ -345,14 +358,9 @@ void MapGenerator::CreateBiomesMap()
                                         }
                                         else
                                         {
-                                            if(vMap[x][y]>0)
-                                            {
+
                                                 biomeMap[x][y]='I';//Taiga
-                                            }
-                                            else
-                                            {
-                                                biomeMap[x][y]='E'; //Eternal Snow
-                                            }
+
                                         }
                                     }
                                     else
