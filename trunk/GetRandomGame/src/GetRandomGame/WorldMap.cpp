@@ -6,33 +6,14 @@
  */
 
 #include "WorldMap.h"
-#include "DiamondSquare.h"
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
-WorldMap::WorldMap() {
-	DiamondSquare* ds = new DiamondSquare();
-	int** tab = ds->getArray(65);
+WorldMap::WorldMap(int size) {
 
-	ds->Randomize(tab, 2, 23534, 40, 65);
-
-	for (int i = 0; i < 65; i++) {
-		for (int j = 0; j < 65; j++) {
-			//cout << tab[j][i] << '\t';
-			if (tab[j][i] < 0) {
-				cout << "~";
-			} else if ((tab[j][i] < 10) && (tab[j][i] >= 0)) {
-				cout << "p";
-			} else if ((tab[j][i] < 20) && (tab[j][i] >= 10)) {
-				cout << "h";
-			} else if (tab[j][i] >= 20) {
-				cout << "M";
-			}
-		}
-		cout << endl;
-	}
-
+mapSize=size;
 }
 
 WorldMap::~WorldMap() {
@@ -43,5 +24,56 @@ void WorldMap::update() {
 }
 
 void WorldMap::draw() {
+
+    for (int i = 0; i < mapSize; i++) {
+		for (int j = 0; j < mapSize; j++) {
+			cout << biomesMap[j][i] << '\t';
+		}
+		cout << endl;
+	}
 }
 
+void WorldMap::dropXML() {
+
+  ofstream xmldump;
+  xmldump.open ("map.xml");
+
+    xmldump << "<?xml version=\"1.0\"?>\n<?mso-application progid=\"Excel.Sheet\"?>\n<Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\"\nxmlns:o=\"urn:schemas-microsoft-com:office:office\"\nxmlns:x=\"urn:schemas-microsoft-com:office:excel\"\nxmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\"\nxmlns:html=\"http://www.w3.org/TR/REC-html40\">\n<ExcelWorkbook xmlns=\"urn:schemas-microsoft-com:office:excel\">\n <WindowHeight>9525</WindowHeight>\n<WindowWidth>15315</WindowWidth>\n<WindowTopX>360</WindowTopX>\n<WindowTopY>75</WindowTopY>\n <ProtectStructure>False</ProtectStructure>\n <ProtectWindows>False</ProtectWindows>\n </ExcelWorkbook>\n <Styles>\n <Style ss:ID=\"Default\" ss:Name=\"Normal\">\n <Alignment ss:Vertical=\"Bottom\"/>\n<Borders/>\n<Font/>\n<Interior/>\n <NumberFormat/>\n<Protection/>\n </Style>";
+  xmldump<< "<Style ss:ID=\"H\">\n<Interior ss:Color=\"#CCFFFF\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"A\">\n<Interior ss:Color=\"#C8C4C3\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"e\">\n<Interior ss:Color=\"#0c1daf\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"M\">\n<Interior ss:Color=\"#1a1a1a\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"W\">\n<Interior ss:Color=\"#043104\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"J\">\n<Interior ss:Color=\"#089f0b\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"R\">\n<Interior ss:Color=\"#00ff48\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"w\">\n<Interior ss:Color=\"#17c707\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"T\">\n<Interior ss:Color=\"#15fd00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"G\">\n<Interior ss:Color=\"#51f467\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"S\">\n<Interior ss:Color=\"#A4E837\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"d\">\n<Interior ss:Color=\"#f5ff3d\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"D\">\n<Interior ss:Color=\"#ffe101\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"P\">\n<Interior ss:Color=\"#630a83\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"h\">\n<Interior ss:Color=\"#a521d5\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"F\">\n<Interior ss:Color=\"#1ed30a\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"B\">\n<Interior ss:Color=\"#76723d\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"C\">\n<Interior ss:Color=\"#489156\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"b\">\n<Interior ss:Color=\"#74d086\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"Z\">\n<Interior ss:Color=\"#22f4f4\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"I\">\n<Interior ss:Color=\"#adEBEB\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"E\">\n<Interior ss:Color=\"#E7fdfd\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+
+ xmldump << "</Styles>\n<Worksheet ss:Name=\"Sheet1\">\n<Table ss:ExpandedColumnCount=\"65\" ss:ExpandedRowCount=\"65\" x:FullColumns=\"1\"\nx:FullRows=\"1\">\n<Column ss:AutoFitWidth=\"0\" ss:Width=\"19.5\" ss:Span=\"64\"/>\n";
+
+
+    for (int i = 0; i < mapSize; i++) {
+        xmldump<<"<Row>\n";
+		for (int j = 0; j < mapSize; j++) {
+			xmldump <<" <Cell  ss:StyleID=\""<<biomesMap[j][i]<<"\"><Data ss:Type=\"String\">"<<biomesMap[j][i]<<"</Data></Cell>\n";
+		}
+		xmldump <<"</Row>\n";
+	}
+
+	xmldump<<"  </Table>\n<WorksheetOptions xmlns=\"urn:schemas-microsoft-com:office:excel\">\n<Selected/>\n<Panes>\n<Pane>\n <Number>1</Number>\n <ActiveCol>1</ActiveCol>\n </Pane>\n </Panes>\n <ProtectObjects>False</ProtectObjects>\n <ProtectScenarios>False</ProtectScenarios>\n</WorksheetOptions>\n</Worksheet>\n</Workbook>";
+
+  xmldump.close();
+}

@@ -11,6 +11,9 @@
 #include <ctime>
 #include <iostream>
 
+#include "MapGenerator.h"
+#include "WorldMap.h"
+
 using namespace std;
 
 /***************************
@@ -27,7 +30,7 @@ SectionRect * tileTestRect;
 
 GetRandomGame::GetRandomGame() {
 	cout << "new GetRandomGame()" << endl;
-	_world = new WorldMap();
+
 	cout << "new GetRandomGame()::End" << endl;
 }
 
@@ -36,6 +39,11 @@ void GetRandomGame::init(int w, int h) {
 	Environment::init(w, h); // parent class init
 	//srand((unsigned) time(0)); // seed the random gen
 	//srand(5);
+	MapGenerator* generator = new MapGenerator();
+
+	WorldMap* map = generator->GenerateANewWorld(65, 1.3, 25);
+	map->dropXML();
+	map->draw();
 
 	/****************************************
 	 *

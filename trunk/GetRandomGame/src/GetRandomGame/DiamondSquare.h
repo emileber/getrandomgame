@@ -1,5 +1,6 @@
 #ifndef DIAMONDSQUARE_H_INCLUDED
 #define DIAMONDSQUARE_H_INCLUDED
+//made by dUPA
 
 class DiamondSquare
 {
@@ -10,7 +11,10 @@ class DiamondSquare
     float smoother;
     int sideSize;
     int arraySize;
+    int halfSide;
     float randomRange;
+    //un chiffre de 1 a -1 qui tire la map ver le postif ou le negatif
+    float positiveFactor;
 
     void DoDiamond(int** tableau);
     void DoSquare(int** tableau);
@@ -18,8 +22,8 @@ class DiamondSquare
     public :
 
     DiamondSquare(){};
-    void Randomize(int** tableau, float smoothing, int seed, int rRange, int ize, int it=0);
-    int** getArray(int size);
+    void Randomize(int** tableau, float smoothing, int seed, int rRange, int size, float pFactor, int it=0);
+
 
 };
 

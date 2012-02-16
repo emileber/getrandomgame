@@ -18,6 +18,9 @@ const int SCREEN_HEIGHT = 600;
 
 int main(int argc, char* args[]) {
 	//cout << "Main START" << endl;
+
+
+
 	TileEngine::Engine::getInstance()->init(SCREEN_WIDTH, SCREEN_HEIGHT,
 			"Tile Game test", "CaslonBold.ttf", new GetRandomGame(),
 			new GRGInputHandler());
