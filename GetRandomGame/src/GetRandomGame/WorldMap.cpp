@@ -35,31 +35,31 @@ void WorldMap::draw() {
 
 void WorldMap::dropXML() {
 
+//donne un fichier XML lisible avec excel
   ofstream xmldump;
   xmldump.open ("map.xml");
 
     xmldump << "<?xml version=\"1.0\"?>\n<?mso-application progid=\"Excel.Sheet\"?>\n<Workbook xmlns=\"urn:schemas-microsoft-com:office:spreadsheet\"\nxmlns:o=\"urn:schemas-microsoft-com:office:office\"\nxmlns:x=\"urn:schemas-microsoft-com:office:excel\"\nxmlns:ss=\"urn:schemas-microsoft-com:office:spreadsheet\"\nxmlns:html=\"http://www.w3.org/TR/REC-html40\">\n<ExcelWorkbook xmlns=\"urn:schemas-microsoft-com:office:excel\">\n <WindowHeight>9525</WindowHeight>\n<WindowWidth>15315</WindowWidth>\n<WindowTopX>360</WindowTopX>\n<WindowTopY>75</WindowTopY>\n <ProtectStructure>False</ProtectStructure>\n <ProtectWindows>False</ProtectWindows>\n </ExcelWorkbook>\n <Styles>\n <Style ss:ID=\"Default\" ss:Name=\"Normal\">\n <Alignment ss:Vertical=\"Bottom\"/>\n<Borders/>\n<Font/>\n<Interior/>\n <NumberFormat/>\n<Protection/>\n </Style>";
-  xmldump<< "<Style ss:ID=\"H\">\n<Interior ss:Color=\"#CCFFFF\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"A\">\n<Interior ss:Color=\"#C8C4C3\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"e\">\n<Interior ss:Color=\"#0c1daf\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"M\">\n<Interior ss:Color=\"#1a1a1a\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"W\">\n<Interior ss:Color=\"#043104\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"J\">\n<Interior ss:Color=\"#089f0b\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"H\">\n<Interior ss:Color=\"#00FFFF\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"A\">\n<Interior ss:Color=\"#969696\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"e\">\n<Interior ss:Color=\"#0000ff\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"M\">\n<Interior ss:Color=\"#333333\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"W\">\n<Interior ss:Color=\"#003300\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"J\">\n<Interior ss:Color=\"#008000\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"R\">\n<Interior ss:Color=\"#00ff48\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"w\">\n<Interior ss:Color=\"#17c707\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"T\">\n<Interior ss:Color=\"#15fd00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"G\">\n<Interior ss:Color=\"#51f467\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"S\">\n<Interior ss:Color=\"#A4E837\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"d\">\n<Interior ss:Color=\"#f5ff3d\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"D\">\n<Interior ss:Color=\"#ffe101\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"P\">\n<Interior ss:Color=\"#630a83\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"h\">\n<Interior ss:Color=\"#a521d5\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"F\">\n<Interior ss:Color=\"#1ed30a\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"B\">\n<Interior ss:Color=\"#76723d\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"C\">\n<Interior ss:Color=\"#489156\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"b\">\n<Interior ss:Color=\"#74d086\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"Z\">\n<Interior ss:Color=\"#22f4f4\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"I\">\n<Interior ss:Color=\"#adEBEB\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"s\">\n<Interior ss:Color=\"#00ff00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"G\">\n<Interior ss:Color=\"#CCFFCC\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"S\">\n<Interior ss:Color=\"#99CC00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"d\">\n<Interior ss:Color=\"#FFFF99\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"D\">\n<Interior ss:Color=\"#FF9900\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"P\">\n<Interior ss:Color=\"#666699\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"h\">\n<Interior ss:Color=\"#800080\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"F\">\n<Interior ss:Color=\"#00ff00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"B\">\n<Interior ss:Color=\"#808000\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"C\">\n<Interior ss:Color=\"#008080\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"b\">\n<Interior ss:Color=\"#CCFFCC\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"Z\">\n<Interior ss:Color=\"#33CCCC\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"I\">\n<Interior ss:Color=\"#FFFFFF\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"E\">\n<Interior ss:Color=\"#E7fdfd\" ss:Pattern=\"Solid\"/>\n</Style>\n";
 
  xmldump << "</Styles>\n<Worksheet ss:Name=\"Sheet1\">\n<Table ss:ExpandedColumnCount=\"65\" ss:ExpandedRowCount=\"65\" x:FullColumns=\"1\"\nx:FullRows=\"1\">\n<Column ss:AutoFitWidth=\"0\" ss:Width=\"19.5\" ss:Span=\"64\"/>\n";
