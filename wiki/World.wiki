@@ -7,7 +7,33 @@ Table Of Content:
 <wiki:toc max_depth="2" />
 ----
 = Exemple de carte du monde =
+== Height Map ==
 [http://a6.sphotos.ak.fbcdn.net/hphotos-ak-ash4/422880_10150540166906898_574736897_9562246_1931949067_n.jpg]
+
+== Biome Map ==
+{{{
+e = EAU évidement
+
+W = wild jungle
+J = jungle
+s = flooded savannah
+S = savannah
+d = Badlands
+D = arid desert
+P = Swamp
+F = feuillu
+B = Woodlands
+h = marsh
+G = Grassland
+C = boreal forest
+b = boreal grassland
+Z = frozen forest
+I = taiga
+H = thundra
+}}}
+[http://a5.sphotos.ak.fbcdn.net/hphotos-ak-ash4/423545_10150545531486898_574736897_9575678_764434020_n.jpg]
+
+----
 = How far can we walk? =
 
 La dimension de la carte du monde sera déterminé en Région. Trois dimensions de base détermineront la taille du monde, soit:
