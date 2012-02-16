@@ -29,7 +29,7 @@ void Environment::init(int w, int h) {
 }
 
 void Environment::update() {
-	_world->update();
+//	_world->update();
 	//cout << "Environment::update()" << endl;
 }
 

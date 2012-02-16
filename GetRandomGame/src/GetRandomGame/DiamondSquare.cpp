@@ -1,21 +1,23 @@
 #include "DiamondSquare.h"
 #include <stdlib.h>
+//made bu DUPA
 
 
-void DiamondSquare::Randomize(int** tableau, float smoothing, int seed, int rRange,int size, int it)
+void DiamondSquare::Randomize(int** tableau, float smoothing, int seed, int rRange,int size, float pFactor, int it)
 {
     arraySize = size;
     sideSize = arraySize-1;
     iteration=it;
     randomRange=rRange;
     smoother=smoothing;
+    positiveFactor=pFactor;
     srand(seed);
     for(int i =0; i<it;i++)
     {
         sideSize=sideSize/2;
         randomRange=randomRange/smoother;
     }
-
+    halfSide=sideSize/2;
 
     while(sideSize>1)
     {
@@ -24,6 +26,7 @@ void DiamondSquare::Randomize(int** tableau, float smoothing, int seed, int rRan
         it++;
         sideSize=sideSize/2;
         randomRange=randomRange/smoother;
+        halfSide=sideSize/2;
 
     }
 
@@ -40,8 +43,8 @@ void DiamondSquare::DoDiamond(int** tableau)
         for(int y = 0;y<arraySize-1;y+=sideSize)
         {
             moyenne=(tableau[x][y]+tableau[x+sideSize][y+sideSize]+tableau[x+sideSize][y]+tableau[x][y+sideSize])/4;
-            int lerandom = (rand() % ((int)randomRange*2))-randomRange;
-            tableau[x+sideSize/2][y+sideSize/2]=moyenne + lerandom;
+            int lerandom = ((rand() % ((int)randomRange*2))-randomRange)+(randomRange*positiveFactor);
+            tableau[x+halfSide][y+halfSide]=moyenne + lerandom+tableau[x+halfSide][y+halfSide];
         }
     }
 
@@ -53,29 +56,18 @@ void DiamondSquare::DoSquare(int** tableau)
 
     int moyenne;
 
-    for(int x=0;x<arraySize;x+=sideSize/2)
+    for(int x=0;x<arraySize;x+=halfSide)
     {
-        for(int y=(x+sideSize/2)%sideSize;y<arraySize;y+=sideSize)
+        for(int y=(x+halfSide)%sideSize;y<arraySize;y+=sideSize)
         {
-            moyenne = (tableau[((x-sideSize/2)+arraySize)%arraySize][y] + tableau[(x+sideSize/2)%arraySize][y] + tableau[x][(y+sideSize/2)%arraySize] + tableau[x][(y-sideSize/2+arraySize)%arraySize])/4;
-            int lerandom = (rand() % ((int)randomRange*2))-randomRange;
-            tableau[x][y]= moyenne + lerandom;
+            moyenne = (tableau[((x-halfSide)+arraySize)%arraySize][y] + tableau[(x+halfSide)%arraySize][y] + tableau[x][(y+halfSide)%arraySize] + tableau[x][(y-halfSide+arraySize)%arraySize])/4;
+            int lerandom = ((rand() % ((int)randomRange*2))-randomRange)+(positiveFactor*randomRange);
+            tableau[x][y]= moyenne + lerandom+tableau[x][y];
         }
     }
 }
 
-int** DiamondSquare::getArray(int size)
-{
-    int **board=new int*[size];
-    for (int i=0; i<size; i++)
-    {
-       board[i] = new int[size];
-       for (int j=0; j<size; j++)
-         board[i][j]=0;
-    }
-
-    return board;
 
 
-}
+
 
