@@ -312,7 +312,7 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
     * Gestion de l'affichage
     * Gestion des contrôles
     * Peut-être ajouter un aspect réseau
-  * Créer le Monde [World (voir la page)]
+  * Créer le Monde [World (voir la page)] (Alexandre DT est pas mal la dessus)
     * une fois une tile map affichée, il faut le coté RANDOM de la map
   * Les menu/interface (inventaire, stats, hotbar, healt/xp/mana bar, etc)... je sais, c'est pas le plus le fun
     * ça implique faire des classes générique genre Button et Labels et Menu, voir Class Diagram et Maquette
@@ -346,7 +346,13 @@ Finalement
   * des animations
   * autre contenu
 
-== IMPORTANT ==
-Consulter les membres de l'équipe et surtout la documentation sur le wiki et dans le dossier docs du projet AVANT de commencer à travailler, puis inscrivez votre nom devant l'élément de la liste que vous allez travailler. Merci!
+== IMPORTANT avant de commencer ==
+  # Consultez les membres de l'équipe
+  # Consultez la documentation sur le wiki et dans le dossier docs du projet
+  # Regardez et comprenez le [http://code.google.com/p/getrandomgame/source/browse/trunk/GetRandomGame/docs/getArandomGame.uml Diagramme de Classe] (nécessite [http://staruml.sourceforge.net/en/download.php StarUML])
+  # Vous ne trouvez pas de page dans le wiki sur le module que vous désirez? créez-la et expliquez votre module.
+  # puis inscrivez votre nom devant l'élément de la liste que vous allez travailler. 
+
+Merci et bon développement!
 
 Voilà, s'il manque quelque chose, n'hésitez pas à modifier les pages.
