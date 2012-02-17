@@ -39,11 +39,18 @@ void GetRandomGame::init(int w, int h) {
 	Environment::init(w, h); // parent class init
 	//srand((unsigned) time(0)); // seed the random gen
 	//srand(5);
+
+	uint32_t startTime = _gameTime.get_ticks();
+	cout << "StarTime: " << startTime << " ms" << endl;
+
 	MapGenerator* generator = new MapGenerator();
 
-	WorldMap* map = generator->GenerateANewWorld(65, 1.55,35,999);
+	//WorldMap* map = generator->GenerateANewWorld(65, 1.55,35,time(0));
+	WorldMap* map = generator->GenerateANewWorld(65, 1.55,35,99999);
 	map->dropXML();
 	map->draw();
+
+	cout << "Map gen time: " << _gameTime.get_ticks() - startTime << " ms" << endl;
 
 	/****************************************
 	 *
