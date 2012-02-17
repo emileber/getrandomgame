@@ -11,8 +11,11 @@ Table Of Content:
 [http://a6.sphotos.ak.fbcdn.net/hphotos-ak-ash4/422880_10150540166906898_574736897_9562246_1931949067_n.jpg]
 
 == Biome Map ==
-{{{
+<pre>
 e = EAU évidement
+
+A = High Mountain
+M = mountain
 
 W = wild jungle
 J = jungle
@@ -30,7 +33,7 @@ b = boreal grassland
 Z = frozen forest
 I = taiga
 H = thundra
-}}}
+</pre>
 [http://a5.sphotos.ak.fbcdn.net/hphotos-ak-ash4/423545_10150545531486898_574736897_9575678_764434020_n.jpg]
 
 ----
