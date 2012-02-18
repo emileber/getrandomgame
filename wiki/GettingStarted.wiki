@@ -329,6 +329,10 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
   * Le système d'interaction
     * Mouvement dans les tuiles
     * interaction de combat autant qu'avec des objets (classe générique Interaction)
+    Proposition pour interactions entre les tokens : 
+    Créer un systeme de message entre les différentes entitées.
+    Une entitée pourrait alors, en implémentant une interface, envoyer des messages et en recevoir.
+   Une entitée peut donc, par exemple, recevoir un message qui lui permette de changer son état actuel.
     * Les interactions Magiques (spells)
     * Interactions sociales
   * Le pathfinding
