@@ -5,3 +5,4 @@
   * [World How far can I walk?]
   * [Crafting Can I make potions?]
   * [SpellSystem Where is the magic?]
+  * [SystemeInteraction Systeme d'interactions]
