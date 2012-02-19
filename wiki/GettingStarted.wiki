@@ -310,7 +310,8 @@ protected:
   # Consultez la documentation sur le wiki et dans le dossier docs du projet
   # Regardez et comprenez le [http://code.google.com/p/getrandomgame/source/browse/trunk/GetRandomGame/docs/getArandomGame.uml Diagramme de Classe] (nécessite [http://staruml.sourceforge.net/en/download.php StarUML])
   # Vous ne trouvez pas de page dans le wiki sur le module que vous désirez? créez-la et expliquez votre module.
-  # puis inscrivez votre nom devant l'élément de la liste que vous allez travailler. 
+  # puis inscrivez votre nom devant l'élément de la liste que vous allez travailler.
+  # Ajuster vos [http://code.google.com/p/getrandomgame/people/list Duties]
 
 Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à prendre le module suivant qui vous intéresse:
   * <font size="3" color="green">Paufiner le Tile Engine (Emile)</font>
