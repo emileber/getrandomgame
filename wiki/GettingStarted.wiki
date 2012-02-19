@@ -322,8 +322,8 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
     * Donc faire les classes Item et Inventaire
     * puis importer le système de génération aléatoire avec préfixe et suffixe
     * Le système de crafting
-  * Les Characters
-    * Player
+  * Les Characters (FreD)
+    * Player (FreD)
     * NPC
     * Monsters
   * Le système d'interaction
