@@ -11,33 +11,14 @@
 
 	[http://code.google.com/p/getrandomgame/wiki/Setup Setup ton Environnement de développement]
 
-	Then take a look at [http://code.google.com/p/getrandomgame/wiki/Crafting Craftings]
+	Then take a look at [Crafting Craftings] and the [SpellSystem spell system]
 
-	Tu veux aider, va voir les [http://code.google.com/p/getrandomgame/issues/list issues] ou commente cette page.
+== Tu veux aider? ==
+  # va voir les [http://code.google.com/p/getrandomgame/issues/list issues]
+  # Apprend [GettingStarted Comment ça fonctionne] et [setup installe-toi] un environnement de développement
+  # commente cette page.
 
-	Listes des features
-
-	Take a look at [Features#Would_be_cool_to_have What would be cool to have]
-
-= Already implemented =
 [http://www.refrag.com/wp-content/uploads/2009/03/tileset2.png]
-	== Tile Engine ==
-  * SDLInterface (affichage) encapsulé
-    * affiche texte et image facilement
-    * Layers
-  * Boucle de jeu (Géré par FPS)
-  * Brouillon de classes
-
-= Work in progress =
-
-  * Tile Engine Générique
-  * Le jeu RPG/Minecraft/dynamic/générique/etc Style
-    * Documentation relative au jeu
-
-	== Tile Engine ==
-  * World affichage
-  * Random World generation
-  * SDL Sounds
 
 = Would be cool to have =
 
