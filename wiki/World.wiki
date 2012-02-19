@@ -36,6 +36,9 @@ H = thundra
 </pre>
 [http://a5.sphotos.ak.fbcdn.net/hphotos-ak-ash4/423545_10150545531486898_574736897_9575678_764434020_n.jpg]
 
+== Objectif ==
+[http://rpgmaker.net/media/content/games/82/screenshots/worldmap_label_large.png]
+
 ----
 = How far can we walk? =
 
