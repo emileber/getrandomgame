@@ -152,12 +152,12 @@ void Texture::kill() {
 //
 // Reloads the texture
 //
-void Texture::reload() {
-	//only reload if it's a real file
-	if (_filename != "") {
-		load(_filename);
-	}
-}
+//void Texture::reload() {
+//	//only reload if it's a real file
+//	if (_filename != "") {
+//		load(_filename);
+//	}
+//}
 
 //
 // Moves the camera, binds the texture if nessiary and does scaling/rotation
