@@ -47,22 +47,22 @@ void WorldMap::dropXML() {
   xmldump<< "<Style ss:ID=\"W\">\n<Interior ss:Color=\"#003300\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"J\">\n<Interior ss:Color=\"#008000\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"R\">\n<Interior ss:Color=\"#00ff48\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"s\">\n<Interior ss:Color=\"#00ff00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"G\">\n<Interior ss:Color=\"#CCFFCC\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"s\">\n<Interior ss:Color=\"#99CC00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"G\">\n<Interior ss:Color=\"#00ff00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"S\">\n<Interior ss:Color=\"#99CC00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"d\">\n<Interior ss:Color=\"#FFFF99\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"D\">\n<Interior ss:Color=\"#FF9900\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"P\">\n<Interior ss:Color=\"#666699\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"h\">\n<Interior ss:Color=\"#800080\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"F\">\n<Interior ss:Color=\"#00ff00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"F\">\n<Interior ss:Color=\"#008080\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"B\">\n<Interior ss:Color=\"#808000\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"C\">\n<Interior ss:Color=\"#008080\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"b\">\n<Interior ss:Color=\"#CCFFCC\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"b\">\n<Interior ss:Color=\"#00ff00\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"Z\">\n<Interior ss:Color=\"#33CCCC\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-  xmldump<< "<Style ss:ID=\"I\">\n<Interior ss:Color=\"#FFFFFF\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+  xmldump<< "<Style ss:ID=\"I\">\n<Interior ss:Color=\"#CCFFCC\" ss:Pattern=\"Solid\"/>\n</Style>\n";
   xmldump<< "<Style ss:ID=\"E\">\n<Interior ss:Color=\"#E7fdfd\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-
- xmldump << "</Styles>\n<Worksheet ss:Name=\"Sheet1\">\n<Table ss:ExpandedColumnCount=\"65\" ss:ExpandedRowCount=\"65\" x:FullColumns=\"1\"\nx:FullRows=\"1\">\n<Column ss:AutoFitWidth=\"0\" ss:Width=\"19.5\" ss:Span=\"64\"/>\n";
+    int maps=mapSize-1;
+ xmldump << "</Styles>\n<Worksheet ss:Name=\"Sheet1\">\n<Table ss:ExpandedColumnCount=\""<<mapSize<<"\" ss:ExpandedRowCount=\""<<mapSize<<"\" x:FullColumns=\"1\"\nx:FullRows=\"1\">\n<Column ss:AutoFitWidth=\"0\" ss:Width=\"19.5\" ss:Span=\""<<maps<<"\"/>\n";
 
 
     for (int i = 0; i < mapSize; i++) {

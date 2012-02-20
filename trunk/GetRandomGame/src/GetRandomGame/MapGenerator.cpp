@@ -1,18 +1,19 @@
 #include "MapGenerator.h"
 #include <iostream>
 #include <stdlib.h>
+#include "point.h"
 
 using namespace std;
 MapGenerator::MapGenerator() {
 	map = new WorldMap(0);
 	waterHeatRange = 5;
-	waterHeatModifier = 3;
+	waterHeatModifier = 1;
 	heightToTLoss = 8;
-	extremeT = 14;
+	extremeT = 15;
 	temptoHuRatio = 4;
-	WaterHuRange = 9;
-	montainHuRange = 9;
-	waterHuModifier = 4;
+	WaterHuRange = 13;
+	montainHuRange = 5;
+	waterHuModifier = 1;
 }
 
 WorldMap* MapGenerator::GenerateANewWorld(int size, float smoothing, int rRange,
@@ -38,13 +39,14 @@ WorldMap* MapGenerator::GenerateANewWorld(int size, float smoothing, int rRange,
 	std::cout << "got a Tmap" << std::endl;
 	SkewTMap();
 
-	ds->Randomize(map->getHuMap(), smoothing, rRange, size, 0);
+	ds->Randomize(map->getHuMap(), smoothing, rRange, size, 0.2);
 	std::cout << "got a HUmap" << std::endl;
 	SkewHuMap();
 
-	ds->Randomize(map->getVMap(), smoothing, rRange, size, 0);
+
+	ds->Randomize(map->getVMap(), smoothing, rRange, size, 0.2);
 	std::cout << "got a Vmap" << std::endl;
-	SkewVMap();
+    SkewVMap();
 	CreateBiomesMap();
 	std::cout << "got a Bmap" << std::endl;
 
@@ -62,6 +64,8 @@ void MapGenerator::SkewTMap() {
 		baseT = ((baseT >= 0) ? -baseT : baseT);
 
 		baseT += (mapSize - 1) / 3;
+
+		baseT /=((mapSize-1)/32);
 
 		for (int x = 0; x < mapSize; x++) {
 			if (hMap[x][y] < 0) {
@@ -103,7 +107,7 @@ void MapGenerator::SkewHuMap() {
 				for (int i = 0; i < WaterHuRange; i++) {
 					for (int j = 0; j < WaterHuRange; j++) {
 						if ((x - (WaterHuRange - 1) / 2 + i) > 0
-								&& (x - 2 + i) < mapSize
+								&& (x - (WaterHuRange - 1) / 2  + i) < mapSize
 								&& (y - WaterHuRange + i) > 0
 								&& (y - WaterHuRange + i) < mapSize)
 							huMap[x - (WaterHuRange - 1) / 2 + i][y
@@ -123,16 +127,49 @@ void MapGenerator::SkewVMap() {
 	int** hMap = map->getHMap();
 	int** vMap = map->getVMap();
 	int** huMap = map->getHuMap();
-	//la vegetation est moin abondante dans le froid et en millieu sec et en hauteur et en mer...
+	//la vegetation est moins abondante dans le froid et en milieu sec
 	for (int y = 0; y < mapSize; y++) {
 
 		for (int x = 0; x < mapSize; x++) {
-			vMap[x][y] += (((tMap[x][y] * hMap[x][y]) / 16) - hMap[x][y] / 4)
-					+ huMap[x][y] / 4;
+			vMap[x][y] += (((tMap[x][y] + huMap[x][y]) )/4);
 
 		}
 
 	}
+}
+void MapGenerator::CreateBiomes()
+{
+    bool** check = getArray<bool>(mapSize);
+    for(int y =0; y<mapSize; y++)
+    {
+        for(int x =0; x<mapSize; x++)
+        {
+            if(!check[x][y])
+            //todo ya un nouveau biome qui spawn ici, faut le gerer.
+                BiomesParser(map->getBiomesMap()[x][y], check, new point(x, y));
+        }
+    }
+}
+
+
+void MapGenerator::BiomesParser(char type, bool** check, point* debut)
+{
+    for(int i =0; i<3; i++)
+    {
+        for(int j =0; j<3; j++)
+        {
+            int checkX=debut->Getx()-i+1;
+            int checkY=debut->Gety()-j+1;
+            if(checkX<mapSize&&checkX>0&&checkY<mapSize&&checkY>0)
+            if(!check[checkX][checkY]&&map->getBiomesMap()[checkX][checkY]==type)
+            {
+                check[checkX][checkY]=true;
+                //TODO domper ca dans un vecteur pis le tirer dans biome pour que biome s'arrange.
+                BiomesParser(type,check,new point(checkX,checkY));
+            }
+
+        }
+    }
 }
 void MapGenerator::CreateBiomesMap() {
 	int** tMap = map->getTMap();
