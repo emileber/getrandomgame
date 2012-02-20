@@ -35,7 +35,7 @@ WorldMap* MapGenerator::GenerateANewWorld(int size, float smoothing, int rRange,
 
 	std::cout << "got a hmap" << std::endl;
 
-	ds->Randomize(map->getTMap(), smoothing, rRange, size, 0.2);
+	ds->Randomize(map->getTMap(), smoothing, rRange, size, 0.1);
 	std::cout << "got a Tmap" << std::endl;
 	SkewTMap();
 

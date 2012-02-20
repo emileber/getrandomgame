@@ -46,7 +46,7 @@ void GetRandomGame::init(int w, int h) {
 	MapGenerator* generator = new MapGenerator();
 
 	//WorldMap* map = generator->GenerateANewWorld(65, 1.55,35,time(0));
-	WorldMap* map = generator->GenerateANewWorld(65, 1.55,35,999);
+	WorldMap* map = generator->GenerateANewWorld(65, 1.55,35,974599);
 	map->dropXML();
 	map->draw();
 
