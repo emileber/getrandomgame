@@ -1,7 +1,7 @@
 #include "MapGenerator.h"
 #include <iostream>
 #include <stdlib.h>
-#include "point.h"
+
 
 using namespace std;
 MapGenerator::MapGenerator() {
@@ -39,7 +39,7 @@ WorldMap* MapGenerator::GenerateANewWorld(int size, float smoothing, int rRange,
 	std::cout << "got a Tmap" << std::endl;
 	SkewTMap();
 
-	ds->Randomize(map->getHuMap(), smoothing, rRange, size, 0.2);
+	ds->Randomize(map->getHuMap(), smoothing, rRange, size, 0.0005);
 	std::cout << "got a HUmap" << std::endl;
 	SkewHuMap();
 
@@ -124,7 +124,7 @@ void MapGenerator::SkewHuMap() {
 
 void MapGenerator::SkewVMap() {
 	int** tMap = map->getTMap();
-	int** hMap = map->getHMap();
+	//int** hMap = map->getHMap();
 	int** vMap = map->getVMap();
 	int** huMap = map->getHuMap();
 	//la vegetation est moins abondante dans le froid et en milieu sec

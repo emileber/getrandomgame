@@ -12,27 +12,28 @@
 #ifndef FONTMAN
 #define FONTMAN
 
+
 #include "Global.h"
+#include "Ressource.h"
 #include <vector>
-//#include "FTGLPixmapFont.h"
+#include "FTGL/ftgl.h"
+//#include "FTGL/FTGLPixmapFont.h"
 
 namespace TileEngine {
 ///
 /// Holds all the information about a font and its functions
 ///
-class Font {
-	friend class FontManager;
+class Font : public Ressource{
 
 public:
 	/// Default Constructor
-	Font(std::string filename = "");
+	Font();
 	/// Default Destructor
 	~Font();
 
-	/// Loads a font from a zip
-	bool LoadFromZip(std::string filename);
 	/// Loads a font from file
-	bool Load(std::string filename);
+	virtual void load(std::string filename);
+
 	/// Deletes a font from memory
 	void Delete();
 
@@ -50,33 +51,10 @@ public:
 	GLfloat GetWidth(std::string text);
 
 private:
-	TTF_Font * m_Font; /**< Stores the font				*/
+	FTFont * m_Font; /**< Stores the font				*/
 	bool m_Static; /**< Tells if the font moves with the camera 	*/
 	int m_FaceSize; /**< Stores the size of the font		*/
 };
-
-///
-/// This class manages all fonts
-///
-class FontManager: public Singleton<FontManager> {
-	friend class Singleton<FontManager> ;
-
-public:
-	/// Default Constructor
-	FontManager();
-	/// Default Destructor
-	~FontManager();
-
-	/// Deletes all fonts from memory
-	void DeleteFonts();
-	/// Registers a font for management
-	void RegisterFont(Font* font);
-	/// Removes a font from management
-	void UnRegisterFont(Font* font);
-private:
-
-	std::vector<Font*> m_Fonts; /**< Pointers to all the managed fonts */
-};
-}
+} // namespace end
 
 #endif

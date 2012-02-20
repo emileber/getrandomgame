@@ -45,12 +45,13 @@ void GetRandomGame::init(int w, int h) {
 
 	MapGenerator* generator = new MapGenerator();
 
-	//WorldMap* map = generator->GenerateANewWorld(65, 1.55,35,time(0));
-	WorldMap* map = generator->GenerateANewWorld(65, 1.55,35,974599);
+	//WorldMap* map = generator->GenerateANewWorld(65, 1.55,36,time(0));
+	WorldMap* map = generator->GenerateANewWorld(65, 1.55, 36, 9999);
 	map->dropXML();
 	map->draw();
 
-	cout << "Map gen time: " << _gameTime.get_ticks() - startTime << " ms" << endl;
+	cout << "Map gen time: " << _gameTime.get_ticks() - startTime << " ms"
+			<< endl;
 
 	/****************************************
 	 *
@@ -71,7 +72,6 @@ void GetRandomGame::init(int w, int h) {
 //	Uint32 start = _gameTime.get_ticks();
 //
 //	cout << "Map Generation: " << (_gameTime.get_ticks() - start) << " ms" << endl;
-
 
 	/*
 	 * END OF TEST INIT

@@ -5,8 +5,11 @@
 class point
 {
     public:
-        point(int nx, int ny);
-        virtual ~point();
+        point(int nx, int ny){
+            x=nx;
+            y=ny;
+        }
+        virtual ~point(){}
 
         int Getx() { return x; }
         void Setx(int val) { x = val; }

@@ -43,7 +43,7 @@ public:
 	virtual void load(std::string filename);
 
 	/// Reloads the texture
-	virtual void reload();
+	//virtual void reload();
 
 	/// Deletes the texture
 	void kill();
