@@ -63,9 +63,9 @@ void MapGenerator::SkewTMap() {
 
 		baseT = ((baseT >= 0) ? -baseT : baseT);
 
-		baseT += (mapSize - 1) / 3;
+		baseT += (mapSize - 1) / 4;
 
-		baseT /=((mapSize-1)/32);
+		baseT /=((mapSize-1)/64);
 
 		for (int x = 0; x < mapSize; x++) {
 			if (hMap[x][y] < 0) {
