@@ -20,9 +20,8 @@ You need:
     * SDL_ttf (SDL_ttf-devel-2.0.10-VC.zip)
   # OpenGL
     * dossier include/GL/ je crois qu'il est déjà avec MinGW.
-    * [http://getrandomgame.googlecode.com/files/ftgl-2.1.3-rc5.tar.gz FTGL]
     * [http://getrandomgame.googlecode.com/files/ft248.zip FreeType2]
-
+    * [http://getrandomgame.googlecode.com/files/ftgl-2.1.3-rc5.tar.gz FTGL]
 Voir la [http://code.google.com/p/getrandomgame/downloads/list Download List] pour trouver certains fichier facilement.
 
 
@@ -98,7 +97,7 @@ MinGW C++ Linker > Libraries
   * opengl32
   * glu32
 
-== FreeType2 ==
+== Free Type 2 ==
 
   # Unzip wherever you want (not in the project workspace)
   # Compile the lib with MinGW (you can import the MS visual C++ or visual studio project in code::block, link the right directories and it does it all for you)
