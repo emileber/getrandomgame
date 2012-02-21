@@ -20,6 +20,8 @@ You need:
     * SDL_ttf (SDL_ttf-devel-2.0.10-VC.zip)
   # OpenGL
     * dossier include/GL/ je crois qu'il est déjà avec MinGW.
+    * [http://getrandomgame.googlecode.com/files/ftgl-2.1.3-rc5.tar.gz FTGL]
+    * [http://getrandomgame.googlecode.com/files/ft248.zip FreeType2]
 
 Voir la [http://code.google.com/p/getrandomgame/downloads/list Download List] pour trouver certains fichier facilement.
 
@@ -96,6 +98,24 @@ MinGW C++ Linker > Libraries
   * opengl32
   * glu32
 
+== FreeType2 ==
+
+  # Unzip wherever you want (not in the project workspace)
+  # Compile the lib with MinGW (you can import the MS visual C++ or visual studio project in code::block, link the right directories and it does it all for you)
+  # Copy/paste the content of the include folder in the Include folder of MinGW directory
+  # Copy the lib that you've just compiled and paste it in the lib folder of the MinGW
+  # Add the linker flag: "libfreetype" (or the name of the lib you've got)
+
+== FTGL ==
+
+*It needs a working copy of FreeType2, so you need to compile FreeType2 first*
+
+  # Unzip wherever you want (not in the project workspace)
+  # Compile the lib with MinGW (you can import the MS visual C++ or visual studio project in code::block, link the right directories and it does it all for you)
+  # Copy/paste the FTGL folder in the Include folder of MinGW
+  # Copy the lib that you've just compiled and paste it in the lib folder of the MinGW
+  # Add the linker flag: "libftgl" (or the name of the lib you've got)
+
 ----
 = Project's Specific Settings =
 
@@ -107,3 +127,12 @@ Donc, jusqu'à maintenant:
   * Util
 
 Pas besoin d'ajouter le dossier de jeu puisqu'il est considéré par défaut comme le dossier de développement. Par contre, les sous-dossier de GetRandomGame devront être ajouté dans les Include.
+
+== Linker flags ==
+
+You should have something like that:
+{{{
+-lmingw32 -lSDLmain -lSDL -lSDL_image -lSDL_net -lSDL_ttf -llibftgl -llibfreetype -lopengl32 -lglu32
+}}}
+
+The names may change but <font color="red">*the order shouldn't be change*</font>!
