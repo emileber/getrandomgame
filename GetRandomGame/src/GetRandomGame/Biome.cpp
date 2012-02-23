@@ -1,8 +1,8 @@
 #include "Biome.h"
 
-Biome::Biome()
+Biome::Biome(char t)
 {
-    //ctor
+    type=t;
 }
 
 Biome::~Biome()

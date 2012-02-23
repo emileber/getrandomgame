@@ -8,12 +8,13 @@ MapGenerator::MapGenerator() {
 	map = new WorldMap(0);
 	waterHeatRange = 5;
 	waterHeatModifier = 1;
-	heightToTLoss = 8;
+	heightToTLoss = 16;
 	extremeT = 15;
 	temptoHuRatio = 4;
 	WaterHuRange = 13;
 	montainHuRange = 5;
 	waterHuModifier = 1;
+	tempDeviation=2;
 }
 
 WorldMap* MapGenerator::GenerateANewWorld(int size, float smoothing, int rRange,
@@ -39,16 +40,17 @@ WorldMap* MapGenerator::GenerateANewWorld(int size, float smoothing, int rRange,
 	std::cout << "got a Tmap" << std::endl;
 	SkewTMap();
 
-	ds->Randomize(map->getHuMap(), smoothing, rRange, size, 0.0005);
+	ds->Randomize(map->getHuMap(), smoothing, rRange, size, 0);
 	std::cout << "got a HUmap" << std::endl;
 	SkewHuMap();
 
 
-	ds->Randomize(map->getVMap(), smoothing, rRange, size, 0.2);
+	ds->Randomize(map->getVMap(), smoothing, rRange, size, 0.1);
 	std::cout << "got a Vmap" << std::endl;
     SkewVMap();
 	CreateBiomesMap();
 	std::cout << "got a Bmap" << std::endl;
+	CreateBiomes();
 
 	return map;
 }
@@ -59,11 +61,11 @@ void MapGenerator::SkewTMap() {
 	//la map de température est plus froide aux poles et en hauteur, plus chaude autour de l'eau
 	for (int y = 0; y < mapSize; y++) {
 		//les 3 prochaines lignes batissent un fonction absolu inversé, qui peak au millieu de la map
-		int baseT = y - ((mapSize - 1) / 2);
+		int baseT = (y - ((mapSize - 1) / 2))*tempDeviation;
 
 		baseT = ((baseT >= 0) ? -baseT : baseT);
 
-		baseT += (mapSize - 1) / 4;
+		baseT += (mapSize - 1) / (4/tempDeviation);
 
 		baseT /=((mapSize-1)/64);
 
@@ -139,33 +141,44 @@ void MapGenerator::SkewVMap() {
 }
 void MapGenerator::CreateBiomes()
 {
+     BiomeManager* bManager = new BiomeManager();
     bool** check = getArray<bool>(mapSize);
     for(int y =0; y<mapSize; y++)
     {
         for(int x =0; x<mapSize; x++)
         {
             if(!check[x][y])
-            //todo ya un nouveau biome qui spawn ici, faut le gerer.
-                BiomesParser(map->getBiomesMap()[x][y], check, new point(x, y));
+            {
+                //on start un biomes ici, vu que le parser est pas encore passser dessus
+
+                check[x][y]=true;
+                BiomesParser((char)map->getBiomesMap()[x][y], (bool**)check, new point(x, y),bManager,bManager->createNewBiome(map->getBiomesMap()[x][y]));
+            }
         }
     }
+        bManager->generate(map->getBiomesMap(),mapSize);
 }
 
 
-void MapGenerator::BiomesParser(char type, bool** check, point* debut)
+
+void MapGenerator::BiomesParser(char type, bool** check, point* debut, BiomeManager* bManager, int num)
 {
+    check[debut->Getx()][debut->Gety()]=true;
+    bManager->GetBiome(num)->AddTile(debut);
+    //check autour de la tile si ya une autre tile a mettre dans le, biomes on call la même fonctione ensuite.
+
     for(int i =0; i<3; i++)
     {
         for(int j =0; j<3; j++)
         {
             int checkX=debut->Getx()-i+1;
             int checkY=debut->Gety()-j+1;
-            if(checkX<mapSize&&checkX>0&&checkY<mapSize&&checkY>0)
+            if(checkX<mapSize&&checkX>=0&&checkY<mapSize&&checkY>=0)
             if(!check[checkX][checkY]&&map->getBiomesMap()[checkX][checkY]==type)
             {
-                check[checkX][checkY]=true;
-                //TODO domper ca dans un vecteur pis le tirer dans biome pour que biome s'arrange.
-                BiomesParser(type,check,new point(checkX,checkY));
+
+
+                BiomesParser(type,check,new point(checkX,checkY), bManager,num);
             }
 
         }

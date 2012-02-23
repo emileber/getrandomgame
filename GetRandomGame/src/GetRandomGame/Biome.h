@@ -2,6 +2,7 @@
 #define BIOME_H
 
 #include "point.h"
+#include "ZoneType/zoneType.h"
 
 #include<vector>
 using namespace std;
@@ -10,19 +11,20 @@ using namespace std;
 class Biome
 {
     public:
-        Biome();
+        Biome(char t);
         virtual ~Biome();
-        vector<point> Gettile() { return tile; }
+        vector<point*> Gettile() { return tile; }
 
-        void Settile(vector<point> val) { tile = val; }
+        void Settile(vector<point*> val) { tile = val; }
+        void AddTile(point* t) { tile.push_back(t); }
         char Gettype() { return type; }
         void Settype(char val) { type = val; }
 
-        void generate(){};
+        virtual int generate(char** map,int mapsize){return 0;}
 
     protected:
-    private:
-        vector<point> tile;
+        vector<point*> tile;
+        vector<zoneType*> possibleZoneTypes;
         char type;
 };
 
