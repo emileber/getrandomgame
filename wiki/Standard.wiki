@@ -8,7 +8,11 @@
 Table Of Content:
 <wiki:toc max_depth="1" />
 ----
+=The Complete Standard=
 
+see [http://www.possibility.com/Cpp/CppCodingStandard.html this]
+
+----
 =Class Names=
 
   * Use upper case letters as word separators, lower case for the rest of a word
@@ -26,6 +30,7 @@ Example
    class Name
 }}}
 
+----
 =Class Library Names=
 
   * Now that name spaces are becoming more widely implemented, name spaces should be used to prevent class name conflicts among libraries from different vendors and groups.
@@ -41,6 +46,7 @@ class JjLinkList
    }
 }}}
 
+----
 =Method Names=
 
   * Use the same rule as for class names.
@@ -59,6 +65,7 @@ Example
    }
 }}}
 
+----
 =Class Attribute Names=
 
   * Attribute names should be prepended with the character 'm'.
@@ -83,6 +90,7 @@ Example
    }
 }}}
 
+----
 =Method Argument Names=
 
   * The first character should be lower case.
