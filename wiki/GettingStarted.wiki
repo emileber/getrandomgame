@@ -10,6 +10,8 @@ Table Of Content:
 = IMPORTANT =
 <font color="red">if you don't have your development environment ready, [Setup see this].</font>
 
+And read the [Standard]
+
 ----
 = OMG there's a lot of files =
 
