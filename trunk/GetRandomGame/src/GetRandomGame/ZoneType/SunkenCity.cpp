@@ -19,7 +19,7 @@ SunkenCity::SunkenCity(char** map, point* p) : zoneType()
 }
 int SunkenCity::place(char** map, std::vector<point*>* possible, int mapsize)
 {
-    bool found=false;
+    //bool found=false; // unused
     int num=rand()%((int)(possible->size()));
 
     size = (rand()%10)+1;

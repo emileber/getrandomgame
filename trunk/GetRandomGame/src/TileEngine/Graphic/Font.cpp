@@ -8,13 +8,16 @@
  *  Copyright 2006 Seoushi Games. All rights reserved.
  *
  */
-
+//#include "config.h"
 #include "Font.h"
 //#include "SDL_rwops_zzip.h"
 #include "Graphic.h"
 #include "Camera.h"
 
 using namespace std;
+
+
+
 
 namespace TileEngine {
 //
@@ -37,9 +40,11 @@ Font::~Font() {
 /// @param Filename a std::string
 ///
 void Font::load(std::string filename) {
+	//m_Font = ftglCreatePixmapFont("/home/user/Arial.ttf");
 	//FTGLPixmapFont font(filename.c_str());
 	//m_Font = new FTPixmapFont(filename.c_str());
 	//m_Font = new FTTextureFont(filename.c_str());
+	//m_Font = new FTHaloFont(filename.c_str());
 
 	if (m_Font->Error()) {
 		cout << "Error loading Font '" << filename << "'" << endl;
@@ -128,9 +133,8 @@ void Font::SetStatic(bool isStatic) {
 // returns the height of the font
 /// @return Width of the string
 ///
-GLfloat Font::GetHeight()
-{
-    return (GLfloat) m_Font->LineHeight();
+GLfloat Font::GetHeight() {
+	return (GLfloat) m_Font->LineHeight();
 }
 
 //
@@ -138,9 +142,8 @@ GLfloat Font::GetHeight()
 /// @param text a std::string
 /// @return width of the string
 ///
-GLfloat Font::GetWidth(std::string text)
-{
-    return (GLfloat) m_Font->Advance(text.c_str());
+GLfloat Font::GetWidth(std::string text) {
+	return (GLfloat) m_Font->Advance(text.c_str());
 }
 
 }
