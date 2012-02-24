@@ -1,9 +1,15 @@
 #summary Features qui sont incluses présentement et qui seront incluses
 #labels Featured,Phase-Design
 
+= Getting Started =
+<g:plusone/>
+
+Table Of Content:
+<wiki:toc max_depth="2" />
+----
+
 [http://www.thespecialistsltd.com/files/RPG7-(replica)_0.jpg]
 = RPG: Role Playing.. Gun? =
-	<g:plusone size="medium"></g:plusone>
 
 	Last video of the project:
 
@@ -13,34 +19,42 @@
 
 	Then take a look at [Crafting Craftings] and the [SpellSystem spell system]
 
-== Tu veux aider? ==
+----
+= Tu veux aider? =
   # va voir les [http://code.google.com/p/getrandomgame/issues/list issues]
   # Apprend [GettingStarted Comment ça fonctionne] et [setup installe-toi] un environnement de développement
   # commente cette page.
 
+_Example of a tile-based game/engine:_
+
 [http://www.refrag.com/wp-content/uploads/2009/03/tileset2.png]
 
+----
 = Would be cool to have =
 
-	== World Related ==
+== World Related ==
   * Corruption/zones enchantées (valeur de magie pour chaque région)
   * Dimension/Plan (Éthéré, mort, etc)
   * Triggered Dynamic Events
-[http://cdn.gamefront.com/wp-content/uploads/2011/08/Terraria4.jpg]
   * Dynamic lighting
 
-	== Magie ==
-	=== Buff et Curse ===
-  * l'état du personnage affecte les actions qu'il porte
-[http://www.foxnews.com/images/267901/3_61_captain_america.jpg]
+_An example of a Triggered Dynamic Event:_
 
-(Difficile d'attaquer lorsqu'on est presque mort)
+[http://cdn.gamefront.com/wp-content/uploads/2011/08/Terraria4.jpg]
+
+----
+== Magie ==
+=== Buff et Curse ===
+  * l'état du personnage affecte les actions qu'il porte
   * Finish moves/special ou des buffs après plusieurs hit de suite
   * Stun / aveuglé / paralysé / Silence / Pétrifié / en feu / Gelé / Sourd / confu / sleep / bleeding / poisonned / slowed
-  * État permanent (Vampire / lycanthropie
+  * État permanent (Vampire / lycanthropie / diseases)
 
-	=== Spell ===
-[http://cdn.gamerant.com/wp-content/uploads/Skyrim-Magic-Spells.jpg]
+_Difficile d'attaquer lorsqu'on est presque mort:_
+
+[http://www.foxnews.com/images/267901/3_61_captain_america.jpg]
+
+=== [SpellSystem Spell] ===
   * qui affecte la vision du joueur (tenebre, lumière)
   * Possibilité de Critique
   * Téléportation de groupe (création de portail)
@@ -53,26 +67,34 @@
   * MASS DESTRUCTION
   * [http://faqs.ign.com/articles/913/913599p1.html Lost odyssey spell list]
 
-	== Crafting ==
+----
+== [Crafting Crafting] ==
   * Potions:
     * vision nocturne
   * Récupération d'équipement Magique (shard, ou rune, etc)
-  * Alchemy qui vaut la peine, pas de crap useless puis longue
-  * Crafting diversifié (Un personnage devrait pouvoir etre un artisan si il le décide)
+  * [Crafting Alchemy] qui vaut la peine, pas de crap useless puis longue
+  * [Crafting Crafting] diversifié (Un personnage devrait pouvoir etre un artisan si il le décide)
   * Possibilité de miner, de cultiver des herbes, de bucher du bois (style Ultima Online)
   * Métier d'artisanat (Créer des tables, des coffres, des lits pour meubler les maisons)
   * Métier de crafting, gathering (Ramasser des plantes pour faire des remedes, bucher du bois pour faire des meubles)
 
-	== Other Stuff ==
+----
+==Game Rules Related==
+  * Chance de réussite ou d'échec
+  * XP sont un mixe de [http://en.wikipedia.org/wiki/Experience_point#Cash-In_Advancement cash-IN], [http://en.wikipedia.org/wiki/Experience_point#Free-form_advancement Free-form advancement] et [http://en.wikipedia.org/wiki/Experience_point#Activity-based_progression Activity based]
+  
+----
+== Other Stuff ==
   * Transporter quelqu'un
   * Distance de vision variable (capacité à faire un zoom-out)
   * Possibilité d'avoir des ailes
   * Personnages jouables dans des mondes différents
+  * Possibilité d'annexer un monde à gauche ou a droite d'un monde existant
   * Physique des liquides
-  * Température/climat visible
+  * Température/climat visible (Biomes)
   * Flying monster
   * Big monster
-  * Avertissement proche de la mort
+  * L'état du personnage affecte la vision du joueur
   * Crier pour avertir les personnages autour
   * Précision?
   * Loans, ou commanditaires
