@@ -14,7 +14,7 @@ BiomeManager::~BiomeManager()
 void BiomeManager::generate(char** map, int mapsize)
 {
 
-    for(int i =0 ;i<biomes.size();i++)
+    for(unsigned int i =0 ;i<biomes.size();i++)
         {
         biomes[i]->generate(map, mapsize);
         }
@@ -34,6 +34,7 @@ int BiomeManager::createNewBiome(char t)
     default :
     {
         biomes.push_back(new Biome(t));
+        break;
     }
     }
 
