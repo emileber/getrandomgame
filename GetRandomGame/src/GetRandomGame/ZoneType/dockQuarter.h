@@ -11,7 +11,7 @@ class dockQuarter : public zoneType
         dockQuarter();
         dockQuarter(char** map, point* p);
         virtual ~dockQuarter(){};
-        virtual int place(char** map, std::vector<point*>* possible, int mapsize){};
+        virtual int place(char** map, std::vector<point*>* possible, int mapsize){return 0;};
     protected:
     private:
 };

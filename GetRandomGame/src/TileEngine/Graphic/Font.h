@@ -12,18 +12,24 @@
 #ifndef FONTMAN
 #define FONTMAN
 
+#include "config.h"
+
+#include <FTGL/ftgl.h>
+//#include "FTGL/FTGLPixmapFont.h"
+//#include "FTGL/FTFont.h"
+//#include "FTGlyph/FTPixmapGlyphImpl.h"
 
 #include "Global.h"
 #include "Ressource.h"
 #include <vector>
-#include "FTGL/ftgl.h"
+
 //#include "FTGL/FTGLPixmapFont.h"
 
 namespace TileEngine {
 ///
 /// Holds all the information about a font and its functions
 ///
-class Font : public Ressource{
+class Font: public Ressource {
 
 public:
 	/// Default Constructor
@@ -56,5 +62,48 @@ private:
 	int m_FaceSize; /**< Stores the size of the font		*/
 };
 } // namespace end
+
+class FTHaloGlyph : public FTPolygonGlyph
+{
+    public:
+        FTHaloGlyph(FT_GlyphSlot glyph) : FTPolygonGlyph(glyph, 0, true)
+        {
+            for(int i = 0; i < 5; i++)
+            {
+                subglyph[i] = new FTOutlineGlyph(glyph, i, true);
+            }
+        }
+
+    private:
+        const FTPoint& Render(const FTPoint& pen, int renderMode)
+        {
+            glPushMatrix();
+            for(int i = 0; i < 5; i++)
+            {
+                glTranslatef(0.0, 0.0, -2.0);
+                subglyph[i]->Render(pen, renderMode);
+            }
+            glPopMatrix();
+
+            return FTPolygonGlyph::Render(pen, renderMode);
+        }
+
+        FTGlyph *subglyph[5];
+};
+
+//  FTHaloFont is a simple FTFont derivation that builds FTHaloGlyph
+//  objects.
+//
+class FTHaloFont : public FTFont
+{
+    public:
+        FTHaloFont(char const *fontFilePath) : FTFont(fontFilePath) {}
+
+    protected:
+        virtual FTGlyph* MakeGlyph(FT_GlyphSlot slot)
+        {
+            return new FTHaloGlyph(slot);
+        }
+};
 
 #endif
