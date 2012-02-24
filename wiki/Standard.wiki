@@ -1,0 +1,105 @@
+#summary C++ coding standard
+#labels Phase-Requirements,Phase-Implementation
+
+=C++ Coding Standard=
+
+<g:plusone/>
+
+Table Of Content:
+<wiki:toc max_depth="1" />
+----
+
+=Class Names=
+
+  * Use upper case letters as word separators, lower case for the rest of a word
+  * First character in a name is upper case
+  * No underbars (`'_'`)
+==_Justification_==
+
+Of all the different naming strategies many people found this one the best compromise.
+
+Example
+
+{{{
+   class NameOneTwo
+  
+   class Name
+}}}
+
+=Class Library Names=
+
+  * Now that name spaces are becoming more widely implemented, name spaces should be used to prevent class name conflicts among libraries from different vendors and groups.
+  * When not using name spaces, it's common to prevent class name clashes by prefixing class names with a unique string. Two characters is sufficient, but a longer length is fine.
+
+Example
+
+John Johnson's complete data structure library could use JJ as a prefix, so classes would be:
+   
+{{{
+class JjLinkList
+   {
+   }
+}}}
+
+=Method Names=
+
+  * Use the same rule as for class names.
+
+==_Justification_==
+
+Of all the different naming strategies many people found this one the best compromise.
+
+Example
+{{{
+   class NameOneTwo
+   {
+   public:
+      int                   DoIt();
+      void                  HandleError();
+   }
+}}}
+
+=Class Attribute Names=
+
+  * Attribute names should be prepended with the character 'm'.
+  * After the 'm' use the same rules as for class names.
+  * 'm' always precedes other name modifiers like 'p' for pointer.
+
+==_Justification_==
+
+Prepending 'm' prevents any conflict with method names. Often your methods and attribute names will be similar, especially for accessors.
+
+Example
+{{{
+   class NameOneTwo
+   {
+   public:
+      int                   VarAbc();
+      int                   ErrorNumber();
+   private:
+      int                   mVarAbc;
+      int                   mErrorNumber;
+      String*               mpName;
+   }
+}}}
+
+=Method Argument Names=
+
+  * The first character should be lower case.
+  * All word beginnings after the first letter should be upper case as with class names.
+
+==_Justification_==
+
+  * You can always tell which variables are passed in variables.
+  * You can use names similar to class names without conflicting with class names.
+
+Example
+{{{
+   class NameOneTwo
+   {
+   public:
+      int                   StartYourEngines(
+                               Engine& rSomeEngine, 
+                               Engine& rAnotherEngine);
+   }
+}}}
