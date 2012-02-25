@@ -16,7 +16,7 @@ namespace TileEngine {
  * CONSTRUCTOR
  *
  */
-SDLInterface::SDLInterface() {
+SdlInterface::SdlInterface() {
 	printf("new SDLInterface\n");
 
 	_transColor.r = 0;
@@ -72,7 +72,7 @@ SDLInterface::SDLInterface() {
  * intToString
  *  cast int to string...
  */
-string SDLInterface::intToString(Uint32 number) {
+string SdlInterface::IntToString(Uint32 number) {
 	stringstream ss; //create a stringstream
 	ss << number; //add number to the stream
 	return ss.str(); //return a string with the contents of the stream
@@ -82,19 +82,19 @@ string SDLInterface::intToString(Uint32 number) {
  * formatTime
  *  return a readable time format string from a milisec value
  */
-string SDLInterface::formatTime(Uint32 total) {
+string SdlInterface::FormatTime(Uint32 total) {
 	// Render the FPS on screen
 	Uint32 minute = abs(total / 60000);
 	Uint32 second = abs((total % 60000) / 1000);
 	Uint32 milisec = abs((total % 60000) - (second * 1000));
 
-	return intToString(minute) + ":" + intToString(second) + "."
-			+ intToString(milisec);
+	return IntToString(minute) + ":" + IntToString(second) + "."
+			+ IntToString(milisec);
 	//string timeString = "Time: " + intToString(total);
 	//_sdl->renderText(10, 20, 3, timeString, 200);
 }
 
-void SDLInterface::setTransparentColor(int r, int g, int b) {
+void SdlInterface::SetTransparentColor(int r, int g, int b) {
 	if (abs(r) <= 255) {
 		_transColor.r = abs(r);
 	}
@@ -132,7 +132,7 @@ void SDLInterface::setTransparentColor(int r, int g, int b) {
  * Load an image and return an optimized SDL_Surface version of it
  *
  */
-SDL_Surface * SDLInterface::load_image(string filename) {
+SDL_Surface * SdlInterface::LoadImage(string filename) {
 	//printf("SDLInterface::load_image(%s)\n", filename.c_str());
 	//L'image qui est chargée
 	SDL_Surface* loadedImage = NULL;
@@ -171,7 +171,7 @@ SDL_Surface * SDLInterface::load_image(string filename) {
  * createTextSurface
  * Return an SDL_Surface out of a text
  */
-SDL_Surface * SDLInterface::createTextSurface(TTF_Font * font, string text,
+SDL_Surface * SdlInterface::CreateTextSurface(TTF_Font * font, string text,
 		uint r, uint g, uint b) {
 	SDL_Color fontColor = { r, g, b };
 	return TTF_RenderText_Solid(font, text.c_str(), fontColor);

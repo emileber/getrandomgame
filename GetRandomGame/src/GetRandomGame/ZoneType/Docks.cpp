@@ -1,20 +1,20 @@
-#include "ZoneType/docks.h"
-#include "ZoneType/dockQuarter.h"
+#include "ZoneType/Docks.h"
+#include "ZoneType/DockQuarter.h"
 #include <stdlib.h>
 
-docks::docks() {
+Docks::Docks() {
 	probabilite = 4;
 	size = 1;
 }
-docks::~docks() {
+Docks::~Docks() {
 
 }
 
-docks::docks(char** map, point* p) :
-		zoneType() {
+Docks::Docks(char** map, point* p) :
+		ZoneType() {
 	map[p->Getx()][p->Gety()] = 'd';
 }
-int docks::place(char** map, std::vector<point*>* possible, int mapsize) {
+int Docks::Place(char** map, std::vector<point*>* possible, int mapsize) {
 	bool found = false;
 	int i = rand() % ((int) (possible->size()));
 	while (!found) {

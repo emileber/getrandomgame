@@ -44,7 +44,7 @@ void Font::load(std::string filename) {
 	//FTGLPixmapFont font(filename.c_str());
 	//m_Font = new FTPixmapFont(filename.c_str());
 	//m_Font = new FTTextureFont(filename.c_str());
-	//m_Font = new FTHaloFont(filename.c_str());
+	m_Font = new FTHaloFont(filename.c_str());
 
 	if (m_Font->Error()) {
 		cout << "Error loading Font '" << filename << "'" << endl;
