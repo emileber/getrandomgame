@@ -20,10 +20,10 @@ WorldMap::~WorldMap() {
 	// TODO Auto-generated destructor stub
 }
 
-void WorldMap::update() {
+void WorldMap::Update() {
 }
 
-void WorldMap::draw() {
+void WorldMap::Draw() {
 
 	for (int i = 0; i < mapSize; i++) {
 		for (int j = 0; j < mapSize; j++) {
@@ -47,7 +47,7 @@ void WorldMap::draw() {
 	}
 }
 
-void WorldMap::dropXML() {
+void WorldMap::DropXML() {
 
 //donne un fichier XML lisible avec excel
 	ofstream xmldump;

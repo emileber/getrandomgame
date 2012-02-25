@@ -25,9 +25,9 @@ private :
 public:
 	WorldMap(int size);
 	virtual ~WorldMap();
-	virtual void update();
-	virtual void draw();
-	void dropXML();
+	virtual void Update();
+	virtual void Draw();
+	void DropXML();
 
 	int** getHMap(){return hMap;}
 	int** getHuMap(){return huMap;}

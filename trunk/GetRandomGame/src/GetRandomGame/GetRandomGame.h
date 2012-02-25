@@ -3,6 +3,10 @@
  *
  *  Created on: 2012-01-03
  *      Author: Emile
+ *
+ *      Sub-class of Environment, it serves as
+ *      the game specific environement.
+ *
  */
 
 #ifndef GETRANDOMGAME_H_
@@ -20,10 +24,10 @@ class GetRandomGame: public Environment {
 public:
 	GetRandomGame();
 	virtual ~GetRandomGame(){}
-	virtual void update();
-	virtual void draw();
-	virtual void close();
-	virtual void init(int, int);
+	virtual void Update(); // MUST be implement
+	virtual void Draw(); // MUST be implement
+	virtual void Close(); // MUST be implement
+	virtual void Init(int, int);
 	void testFunction(int,int);
 
 };

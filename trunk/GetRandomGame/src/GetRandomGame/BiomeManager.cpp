@@ -1,5 +1,5 @@
 #include "BiomeManager.h"
-#include "Biomes/eau.h"
+#include "Biomes/WaterBiome.h"
 
 BiomeManager::BiomeManager()
 {
@@ -16,7 +16,7 @@ void BiomeManager::generate(char** map, int mapsize)
 
     for(unsigned int i =0 ;i<biomes.size();i++)
         {
-        biomes[i]->generate(map, mapsize);
+        biomes[i]->Generate(map, mapsize);
         }
 }
 
@@ -28,7 +28,7 @@ int BiomeManager::createNewBiome(char t)
 
     case 'e' :
     {
-        biomes.push_back(new eau(t));
+        biomes.push_back(new WaterBiome(t));
         break;
     }
     default :

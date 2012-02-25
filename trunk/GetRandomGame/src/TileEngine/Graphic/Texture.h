@@ -3,6 +3,13 @@
  *
  *  Created on: 2012-01-23
  *      Author: Emile
+ *
+ *      IMPORTANT: image width and height MUST be
+ *                 a power of 2. (64x256, 64x64, 128x256, etc)
+ *
+ *      Load an image into an SDL_Surface, then make
+ *      an OpenGL texture out of it. Provides a Draw function.
+ *
  */
 
 #ifndef TEXTURE_H_
@@ -26,55 +33,55 @@ public:
 	virtual ~Texture();
 
 	/// Returns the texture width
-	GLfloat getWidth() const {
-		return _Width;
+	GLfloat GetWidth() const {
+		return mWidth;
 	}
 	/// Returns the texture height
-	GLfloat getHeight() const {
-		return _Height;
+	GLfloat GetHeight() const {
+		return mHeight;
 	}
 
 	// return the OpenGL id for that texture
-	GLfloat getId() const {
-		return _Texture;
+	GLfloat GetId() const {
+		return mTexture;
 	}
 
 	/// Loads a texture
-	virtual void load(std::string filename);
+	virtual void Load(std::string filename);
 
 	/// Reloads the texture
 	//virtual void reload();
 
 	/// Deletes the texture
-	void kill();
+	void Kill();
 
 
 	/// Returns the pixel data
-	std::vector<std::vector<bool> >* getPixels();
+	std::vector<std::vector<bool> >* GetPixels();
 
 	/// Draws the whole texture
-	void draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0,
+	void Draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0,
 			GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1,
 			GLfloat alpha = 1);
 
 	/// Draws a section of the texture
-	void drawSection(GLfloat x, GLfloat y, SectionRect* box,
+	void DrawSection(GLfloat x, GLfloat y, SectionRect* box,
 			GLfloat scale = 1, GLfloat rotation = 0, GLfloat red = 1,
 			GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1);
 
 protected:
 	/// Internal function to setup drawing
-	void initializeDraw(GLfloat scale, GLfloat rotation, GLfloat x, GLfloat y,
+	void InitializeDraw(GLfloat scale, GLfloat rotation, GLfloat x, GLfloat y,
 			SectionRect* rect);
 
 	/// Internal function for loading a texture from a surface
-	void makeTexture(SDL_Surface* surface);
+	void MakeTexture(SDL_Surface* surface);
 
-	GLuint _Texture; /**< Holds the texture data */
-	SDL_Surface * _Surface;
-	std::vector<std::vector<bool> > _PixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */
-	GLfloat _Width; /**< Stores the width of the texture */
-	GLfloat _Height; /**< Stores the height of the texture	*/
+	GLuint mTexture; /**< Holds the texture data */
+	SDL_Surface * mSurface;
+	std::vector<std::vector<bool> > mPixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */
+	GLfloat mWidth; /**< Stores the width of the texture */
+	GLfloat mHeight; /**< Stores the height of the texture	*/
 };
 
 } /* namespace TileEngine */

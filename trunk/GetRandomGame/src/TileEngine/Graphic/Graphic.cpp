@@ -23,15 +23,17 @@ namespace TileEngine {
 // Default constructor
 //
 Graphic::Graphic() {
-	glScissor(0, 0, m_Width, m_Height);
-	_isLoaded = false;
+	mIsLoaded = false;
+	mWindowTitle = "";
+	mSdlFlags = 0;
+	mIsFullscreen = false;
 }
 
 //
 // Default destructor
 //
 Graphic::~Graphic() {
-	shutdown();
+	Shutdown();
 }
 
 //
@@ -41,23 +43,26 @@ Graphic::~Graphic() {
 /// @param Height a int
 /// @param Bpp a int
 /// @param WindowTitle a std::string
-bool Graphic::initialize(int Width, int Height, int Bpp,
+bool Graphic::Initialize(int Width, int Height, int Bpp,
 		std::string WindowTitle) {
-	m_Width = Width;
-	m_Height = Height;
-	m_Bpp = Bpp;
-	m_WindowTitle = WindowTitle;
-	_isFullscreen = false;
-	m_Surface = NULL;
-
-	//if we reinitalize then reload the textures
-	if (_isLoaded) {
-		Manager<Texture>::getInstance()->reloadAllRessource();
+	mWidth = Width;
+	mHeight = Height;
+	mBpp = Bpp;
+	//mIsFullscreen = false;
+	mSurface = NULL;
+	if (WindowTitle != "") {
+		mWindowTitle = WindowTitle;
 	}
 
-	_isLoaded = true;
+	//if we reinitalize then reload the textures
+	if (mIsLoaded) {
+		Manager<Texture>::getInstance()->ReloadAllRessource();
+	}
 
-	return 1;
+	mIsLoaded = MakeWindow();
+	glScissor(0, 0, mWidth, mHeight);
+
+	return mIsLoaded;
 }
 
 //
@@ -66,29 +71,30 @@ bool Graphic::initialize(int Width, int Height, int Bpp,
 /// before you can use any drawing functions
 /// @return Success or failure
 ///
-bool Graphic::makeWindow() {
+bool Graphic::MakeWindow() {
 	//initalize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		cout << "Unable to initialize SDL: " << SDL_GetError() << endl;
 		exit(1);
 	}
 
-	m_SdlFlags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE
-			| SDL_RESIZABLE;
-	_isFullscreen = false;
+	if (mSdlFlags == 0) {
+		mSdlFlags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE;
+		const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
 
-	const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
+		if (videoInfo->hw_available) {
+			mSdlFlags |= SDL_HWSURFACE;
+		} else {
+			mSdlFlags |= SDL_SWSURFACE;
+		}
 
-	if (videoInfo->hw_available) {
-		m_SdlFlags |= SDL_HWSURFACE;
-	} else {
-		m_SdlFlags |= SDL_SWSURFACE;
+		// This checks if hardware blits can be done
+		if (videoInfo->blit_hw) {
+			mSdlFlags |= SDL_HWACCEL;
+		}
 	}
 
-	// This checks if hardware blits can be done
-	if (videoInfo->blit_hw) {
-		m_SdlFlags |= SDL_HWACCEL;
-	}
+	//| SDL_RESIZABLE;
 
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -115,19 +121,19 @@ bool Graphic::makeWindow() {
 	atexit(SDL_Quit);
 
 	//create the surface
-	m_Surface = SDL_SetVideoMode(m_Width, m_Height, m_Bpp, m_SdlFlags);
+	mSurface = SDL_SetVideoMode(mWidth, mHeight, mBpp, mSdlFlags);
 
-	if (m_Surface == NULL) {
+	if (mSurface == NULL) {
 		cout << "Video mode set failed: " << SDL_GetError() << endl;
-		SDL_Quit();
+		return false;
 	}
 
-	initGl();
+	InitGl();
 
 	//set the window title
-	SDL_WM_SetCaption(m_WindowTitle.c_str(), NULL);
+	SDL_WM_SetCaption(mWindowTitle.c_str(), NULL);
 
-	return 1;
+	return true;
 }
 
 //
@@ -135,52 +141,54 @@ bool Graphic::makeWindow() {
 /// @param width a int
 /// @param height a int
 ///
-void Graphic::resizeWindow(int width, int height) {
+bool Graphic::ResizeWindow(int width, int height) {
+	cout << "Window is being resized" << endl;
 	// Protect against a divide by zero
 	if (height == 0) {
 		height = 1;
 	}
 
 	//resize sdl surface
-	m_Surface = SDL_SetVideoMode(width, height, m_Bpp, m_SdlFlags);
+	mSurface = SDL_SetVideoMode(width, height, mBpp, mSdlFlags);
 
-	if (m_Surface == NULL) {
+	if (mSurface == NULL) {
 		cout << "Could not get a surface after resize: " << SDL_GetError()
 				<< endl;
-		exit(1);
+		return false;
 	}
 
 	//reinitalize opengl
-	initGl();
+	InitGl();
 
 	//reload textures
-	Manager<Texture>::getInstance()->reloadAllRessource();
+	Manager<Texture>::getInstance()->ReloadAllRessource();
+	return true;
 }
 
 //
 // Returns the width of the drawing area
 /// @return Width of the drawing area
 ///
-int Graphic::getWidth() {
-	return m_Width;
+int Graphic::GetWidth() {
+	return mWidth;
 }
 
 //
 // Returns the height of the drawing area
 /// @return Height of the drawing area
 ///
-int Graphic::getHeight() {
-	return m_Height;
+int Graphic::GetHeight() {
+	return mHeight;
 }
 
-void Graphic::setCaption(string caption) {
+void Graphic::SetCaption(string caption) {
 	SDL_WM_SetCaption(caption.c_str(), NULL);
 }
 
 //
 // internal function to setup opengl's othomode
 //
-void Graphic::initGl() {
+void Graphic::InitGl() {
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 1.0f, 1.0f, 1.0f); // cyan in the background by default
 	glClearDepth(0.0f);
@@ -188,15 +196,25 @@ void Graphic::initGl() {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_ALWAYS);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
 	glDisable(GL_LIGHTING);
+
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_SCISSOR_TEST);
+
+	//glEnable(GL_SCISSOR_TEST);
+
+	// get view port values
+	GLint vPort[4];
+	glGetIntegerv(GL_VIEWPORT, vPort);
+
 	//setup ortho mode
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-	glOrtho(0, (GLfloat) (m_Width), 0, (GLfloat) (m_Height), -1, 1);
+
+	//glOrtho(0, (GLfloat) (m_Width), 0, (GLfloat) (m_Height), -1, 1);
+	glOrtho(0, vPort[2], 0, vPort[3], -1, 1);
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
@@ -205,17 +223,55 @@ void Graphic::initGl() {
 //
 // Turns fullscreen on or off
 //
-void Graphic::toggleFullScreen() {
-	_isFullscreen = !_isFullscreen;
-	if (m_Surface != NULL) {
-		SDL_WM_ToggleFullScreen(m_Surface);
-
-		if (!_isFullscreen) {
-			SDL_ShowCursor(SDL_ENABLE);
+void Graphic::ToggleFullScreen() {
+	mIsFullscreen = !mIsFullscreen;
+	if (mSurface != NULL) {
+		if (SDL_WM_ToggleFullScreen(mSurface)) {
+			cout << "SDL_WM_ToggleFullScreen OK" << endl;
 		} else {
-			SDL_ShowCursor(SDL_DISABLE);
+			cout
+					<< "SDL_WM_ToggleFullScreen NOT WORKING, trying with flag SDL_FULLSCREEN"
+					<< endl;
+
+			// trying with the SDL_FULLSCREEN flag
+			//uint32_t flags = mSurface->flags; /* Save the current flags in case toggling fails */
+			mSdlFlags = mSdlFlags ^ SDL_FULLSCREEN;
+			if (mIsFullscreen) {
+				cout << "toggle Fullscreen: " << mIsFullscreen << endl;
+				mSurface = SDL_SetVideoMode(0, 0, 0, mSdlFlags);
+			} else {
+				cout << "toggle Screen Mode: " << mIsFullscreen << endl;
+				mSurface = SDL_SetVideoMode(mWidth, mHeight, mBpp, mSdlFlags); /*Toggles Screen Mode */
+			}
+
+			// if toggling to fullscreen or screen have screwed up
+			if (mSurface == NULL) {
+				cout << "Flag NOT WORKING, switching back" << endl;
+				// toggle back
+				mSdlFlags = mSdlFlags ^ SDL_FULLSCREEN;
+				mSurface = SDL_SetVideoMode(0, 0, 0, mSdlFlags); /* If toggle FullScreen failed, then switch back */
+			}
+			if (mSurface == NULL) {
+				cout << "Switching Back ERROR, exit(1)" << endl;
+				exit(1); /* If you can't switch back for some reason, then epic fail */
+			}
+
 		}
+
+		Reload(); // reload the ressource
+
+		// to hide the cursor
+//		if (!_isFullscreen) {
+//			SDL_ShowCursor(SDL_ENABLE);
+//		} else {
+//			SDL_ShowCursor(SDL_DISABLE);
+//		}
 	}
+}
+
+void Graphic::Reload() {
+	InitGl();
+	Manager<Texture>::getInstance()->ReloadAllRessource();
 }
 
 //
@@ -229,7 +285,7 @@ void Graphic::toggleFullScreen() {
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Graphic::drawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
+void Graphic::DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
 		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
 	glPushMatrix();
 	glLoadIdentity();
@@ -256,7 +312,7 @@ void Graphic::drawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Graphic::drawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
+void Graphic::DrawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
 		GLfloat height, GLfloat red, GLfloat green, GLfloat blue,
 		GLfloat alpha) {
 	glColor4f(red, green, blue, alpha);
@@ -279,7 +335,7 @@ void Graphic::drawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Graphic::drawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2,
+void Graphic::DrawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2,
 		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
 	glColor4f(red, green, blue, alpha);
 	glBegin(GL_LINES);
@@ -291,104 +347,132 @@ void Graphic::drawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2,
 //
 // Flips the screen from the backbuffer to the screen
 //
-void Graphic::flipBuffers() {
+void Graphic::FlipBuffers() {
 	SDL_GL_SwapBuffers();
 }
 
 //
 // clears the screen with a grey color
 //
-void Graphic::clearScreen() {
+void Graphic::ClearScreen() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 //
 // Kills all graphic subsystems
 //
-void Graphic::shutdown() {
+void Graphic::Shutdown() {
+	//SDL_quit cleans up the video surface
+	SDL_Quit();
 }
 
 //
 // returns the current texture in memory
 /// @return the current texture
 ///
-GLuint Graphic::getCurrentTexture() {
-	return m_CurrentTexture;
+GLuint Graphic::GetCurrentTexture() {
+	return mCurrentTexture;
 }
 
 //
 // set the current texture in memory
 /// @param texture a Gluint
 ///
-void Graphic::setCurrentTexture(GLuint texture) {
-	m_CurrentTexture = texture;
+void Graphic::SetCurrentTexture(GLuint texture) {
+	mCurrentTexture = texture;
+}
+
+void Graphic::EnableClipping() {
+	glEnable(GL_SCISSOR_TEST);
+
+	//set scissor to the current area
+	Rectangle area;
+
+	if (mClippingArea.empty()) {
+		area.y1 = 0.0f;
+		area.y2 = (float) mHeight;
+		area.x1 = 0.0f;
+		area.x2 = (float) mWidth;
+	} else {
+		area = mClippingArea.top();
+	}
+
+	glScissor((GLsizei) area.x1, (GLsizei) area.y1, (GLint) area.x2,
+			(GLint) area.y2);
+}
+
+void Graphic::DisableClipping() {
+	glDisable(GL_SCISSOR_TEST);
 }
 
 //
 // Pushes a clipping area on the stack for drawing
 /// @param area a sRect
 ///
-void Graphic::pushClippingArea(RectStruct area) {
-	RectStruct newArea;
-	RectStruct currentArea;
+void Graphic::PushClippingArea(Rectangle area) {
+	Rectangle newArea;
+	Rectangle currentArea;
+
 	//get the current clipping area
-	if (!m_ClippingArea.empty()) {
-		currentArea = m_ClippingArea.top();
+	if (!mClippingArea.empty()) {
+		currentArea = mClippingArea.top();
 	} else {
-		RectStruct fullArea;
-		fullArea.bottom = (GLfloat) (0);
-		fullArea.top = (GLfloat) (m_Height);
-		fullArea.left = (GLfloat) (0);
-		fullArea.right = (GLfloat) (m_Width);
-		currentArea = fullArea;
+		currentArea.y1 = 0.0f;
+		currentArea.y2 = (float) mHeight;
+		currentArea.x1 = 0.0f;
+		currentArea.x2 = (float) mWidth;
 	}
-	//make the new clipping area
+
+	//make the new clipping area from the rectangle intersection
 	//bottom
-	if (currentArea.bottom > area.bottom) {
-		newArea.bottom = currentArea.bottom;
+	if (currentArea.y1 > area.y1) {
+		newArea.y1 = currentArea.y1;
 	} else {
-		newArea.bottom = area.bottom;
+		newArea.y1 = area.y1;
 	}
+
 	//top
-	if (currentArea.top < area.top) {
-		newArea.top = currentArea.top;
+	if ((currentArea.y1 + currentArea.y2) < (area.y1 + area.y2)) {
+		newArea.y2 = (currentArea.y1 + currentArea.y2) - newArea.y1;
 	} else {
-		newArea.top = area.top;
+		newArea.y2 = (area.y1 + area.y2) - newArea.y1;
 	}
+
 	//left
-	if (currentArea.left > area.left) {
-		newArea.left = currentArea.left;
+	if (currentArea.x1 > area.x1) {
+		newArea.x1 = currentArea.x1;
 	} else {
-		newArea.left = area.left;
+		newArea.x1 = area.x1;
 	}
+
 	//right
-	if (currentArea.right < area.right) {
-		newArea.right = currentArea.right;
+	if ((currentArea.x1 + currentArea.x2) < (area.x1 + area.x2)) {
+		newArea.x2 = (currentArea.x1 + currentArea.x2) - newArea.x1;
 	} else {
-		newArea.right = area.right;
+		newArea.x2 = (area.x1 + area.x2) - newArea.x1;
 	}
-	m_ClippingArea.push(newArea);
-	glScissor((GLsizei) (newArea.left), (GLsizei) (newArea.bottom),
-			(GLint) ((newArea.right - newArea.left)),
-			(GLint) ((newArea.top - newArea.bottom)));
+
+	mClippingArea.push(newArea);
+
+	glScissor((GLsizei) newArea.x1, (GLsizei) newArea.y1, (GLint) newArea.x2,
+			(GLint) newArea.y2);
 }
 
-/// Pops a clipping area off the stack
-void Graphic::popClippingArea() {
-	RectStruct newArea;
-	m_ClippingArea.pop();
-	if (m_ClippingArea.empty()) {
-		RectStruct fullArea;
-		fullArea.bottom = (GLfloat) (0);
-		fullArea.top = (GLfloat) (m_Height);
-		fullArea.left = (GLfloat) (0);
-		fullArea.right = (GLfloat) (m_Width);
-		newArea = fullArea;
+void Graphic::PopClippingArea() {
+	Rectangle newArea;
+
+	mClippingArea.pop();
+
+	if (mClippingArea.empty()) {
+		newArea.y1 = 0.0f;
+		newArea.y2 = (float) mHeight;
+		newArea.x1 = 0.0f;
+		newArea.x2 = (float) mWidth;
 	} else {
-		newArea = m_ClippingArea.top();
+		newArea = mClippingArea.top();
 	}
-	glScissor((GLsizei) (newArea.left), (GLsizei) (newArea.bottom),
-			(GLint) ((newArea.right - newArea.left)),
-			(GLint) ((newArea.top - newArea.bottom)));
+
+	glScissor((GLsizei) newArea.x1, (GLsizei) newArea.y1, (GLint) newArea.x2,
+			(GLint) newArea.y2);
 }
 }

@@ -22,18 +22,18 @@ Engine::Engine() {
 	cout << "new TileEngine" << endl;
 
 	if (DEBUG) {
-		initTimer.start();
+		initTimer.Start();
 	}
 
-	_frame = 0; // start the frame counter
-	_fps = 0;
+	mFrameCnt = 0; // start the frame counter
+	mFps = 0;
 
 	// default resolution
-	_screenWidth = 640;
-	_screenHeight = 480;
+	mScreenWidth = 640;
+	mScreenHeight = 480;
 
-	_init = false;
-	_quit = false;
+	mIsInit = false;
+	mIsExit = false;
 	printf("sizeof int: %d\n", sizeof(int));
 	cout << "new TileEngine::End" << endl;
 }
@@ -43,27 +43,26 @@ Engine::Engine() {
  *  Call that first, then call start();
  *
  */
-void Engine::init(int screenW, int screenH, string caption, string fontFile,
-		Environment * environment, InputHandler * inputHandler) {
+void Engine::Init(int screenW, int screenH, string caption, Environment * environment, InputHandler * inputHandler) {
 	cout << "Engine init" << endl;
 
-	_environment = environment;
-	_inputHandler = inputHandler;
+	mEnvironment = environment;
+	mInputHandler = inputHandler;
 
 	// set the custom resolution
-	_screenWidth = screenW;
-	_screenHeight = screenH;
+	mScreenWidth = screenW;
+	mScreenHeight = screenH;
 
-	_frame = 0; // start the frame counter
-	_quit = false;
+	mFrameCnt = 0; // start the frame counter
+	mIsExit = false;
 
-	_graphic = Graphic::getInstance();
-	_graphic->initialize(_screenWidth, _screenHeight, SCREEN_BPP, caption);
-	_graphic->makeWindow();
+	mGraphic = Graphic::getInstance();
+	mGraphic->Initialize(mScreenWidth, mScreenHeight, SCREEN_BPP, caption);
 
-	_environment->init(_screenWidth, _screenHeight);
+	mEnvironment->Init(mScreenWidth, mScreenHeight);
 
-	_init = true;
+	mIsInit = true;
+
 
 	cout << "Engine init::End" << endl;
 }
@@ -73,10 +72,10 @@ void Engine::init(int screenW, int screenH, string caption, string fontFile,
  *  It literally starts the engine
  *
  */
-void Engine::start() {
+void Engine::Start() {
 	cout << "Engine start" << endl;
-	if (_init) {
-		run(); //start the game loop
+	if (mIsInit) {
+		Run(); //start the game loop
 	}
 	cout << "Engine start::End" << endl;
 }
@@ -86,48 +85,48 @@ void Engine::start() {
  *  its the actual game loop
  *
  */
-void Engine::run() {
+void Engine::Run() {
 	cout << "Engine run" << endl;
 	if (DEBUG) {
-		_fpsTimer.start();
-		printf("Time taken for init: %d ms\n", initTimer.get_ticks());
-		initTimer.stop();
+		mFpsTimer.Start();
+		printf("Time taken for init: %d ms\n", initTimer.GetTimerTicks());
+		initTimer.Stop();
 	}
 
 	/**
 	 *  GAME LOOP
 	 */
-	while (!_quit) {
+	while (!mIsExit) {
 		/**
 		 * each iteration, do this:
 		 */
 
-		_frameTimer.start(); //Calcul le temps d'execution de l'iteration
+		mFrameTimer.Start(); //Calcul le temps d'execution de l'iteration
 
 		// Collect and handle inputs informations (return false on exit)
-		_quit = _inputHandler->handleInput(_environment);
+		mIsExit = mInputHandler->HandleInput(mEnvironment);
 
-		_environment->update(); // UPDATE the environment
+		mEnvironment->Update(); // UPDATE the environment
 
 		if (DEBUG) {
-			fpsRegulator(); // show FPS information
+			FpsRegulator(); // show FPS information
 		}
 
-		_graphic->clearScreen(); // clear the screen
+		mGraphic->ClearScreen(); // clear the screen
 
 		// all the draw OPs
-		_environment->draw();
+		mEnvironment->Draw();
 
-		_graphic->flipBuffers(); // flip the screen
+		mGraphic->FlipBuffers(); // flip the screen
 
 		// wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
-		while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
+		while (mFrameTimer.GetTimerTicks() < 1000 / FRAMES_PER_SECOND)
 			;
 		frameCount++; // test frame count
 	} // End of the GAME LOOP
 
 	// Stop the program correctly
-	stop();
+	Stop();
 
 	cout << "Engine run::End" << endl;
 }
@@ -137,23 +136,23 @@ void Engine::run() {
  * 	show the fps
  *
  */
-void Engine::fpsRegulator() {
+void Engine::FpsRegulator() {
 	//printf("SDL_getTicks: %10d\n", SDL_GetTicks());
 	//printf("fpsRegulator(_frame: %d, _fps: %d)\n", _frame, _fps);
-	_frame++; // incremente à chaque frame
+	mFrameCnt++; // incremente à chaque frame
 
 	// Render the FPS on screen
 	//_sdl->renderText(10, 5, DEBUG_LAYER, "FPS: " + _sdl->intToString(_fps));
-	_graphic->setCaption("FPS: " + _sdl->intToString(_fps));
+	mGraphic->SetCaption("FPS: " + mSdl->IntToString(mFps));
 
 	//Si une seconde est passee depuis la derniere mise à jour de la barre caption
-	if (_fpsTimer.get_ticks() > 1000) {
-		_fps = _frame; // get the current fps
+	if (mFpsTimer.GetTimerTicks() > 1000) {
+		mFps = mFrameCnt; // get the current fps
 
-		_frame = -1; // reset the frame counter
+		mFrameCnt = -1; // reset the frame counter
 
-		_fpsTimer.start(); // restart the timer for each second
-		printf("frame/Time: %4d%10d\n", frameCount, _environment->getTime());
+		mFpsTimer.Start(); // restart the timer for each second
+		printf("frame/Time: %4d%10d\n", frameCount, mEnvironment->getTime());
 	}
 	//printf("fpsRegulator END\n");
 }
@@ -162,12 +161,12 @@ void Engine::fpsRegulator() {
  *
  *
  */
-void Engine::stop() {
+void Engine::Stop() {
 	cout << "Engine::stop()" << endl;
-	_environment->close();
-	_graphic->shutdown();
-	_graphic->kill();
-	Manager<Texture>::getInstance()->deleteAllRessource();
+	mEnvironment->Close();
+	mGraphic->Shutdown();
+	mGraphic->kill();
+	Manager<Texture>::getInstance()->DeleteAllRessource();
 	Manager<Texture>::getInstance()->kill();
 	cout << "Engine::stop()::END" << endl;
 }
