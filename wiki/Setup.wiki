@@ -1,7 +1,7 @@
 #summary setup tutorial
 #labels Phase-Requirements,Phase-Implementation
 
-= Configure Eclipse CDT with SDL on Windows =
+= Configure Eclipse CDT with SDL and OpengGL on Windows =
 <g:plusone/>
 
 Table Of Content:
@@ -14,7 +14,7 @@ Get started!
 You need:
   # MinGW
   # Eclipse CDT
-    * [http://baptiste-wicht.developpez.com/tutoriels/eclipse/svn/ Subversion pluggin]
+    * [http://subclipse.tigris.org/servlets/ProjectProcess;jsessionid=BBB7E188C6378470662EDE0875D5CAAA?pageID=p4wYuA Subversion pluggin]
   # SDL (SDL-devel-1.2.14-mingw32.tar.gz)
     * SDL_image (SDL_image-devel-1.2.10-VC.zip)
     * SDL_ttf (SDL_ttf-devel-2.0.10-VC.zip)
