@@ -1,15 +1,15 @@
 #ifndef SunkenCity_H
 #define SunkenCity_H
-#include "zoneType.h"
+#include "ZoneType.h"
 
 
-class SunkenCity : public zoneType
+class SunkenCity : public ZoneType
 {
     public:
         SunkenCity();
         SunkenCity(char** map, point* p);
         virtual ~SunkenCity();
-        virtual int place(char** map, std::vector<point*>* possible, int mapsize);
+        virtual int Place(char** map, std::vector<point*>* possible, int mapsize);
     protected:
     private:
 };

@@ -13,31 +13,31 @@ namespace TileEngine {
 
 Environment::Environment() {
 	cout << "new Environment" << endl;
-	_sdl = SDLInterface::getInstance();
-	_graphic = Graphic::getInstance();
-	_textureManager = Manager<Texture>::getInstance();
-	_frameCount = 0;
-	_screenWidth = 0;
-	_screenHeight = 0;
+	mSdlInterface = SdlInterface::getInstance();
+	mGraphic = Graphic::getInstance();
+	mTextureManager = Manager<Texture>::getInstance();
+	mFrameCount = 0;
+	mScreenWidth = 0;
+	mScreenHeight = 0;
 	cout << "new Environment::End" << endl;
 }
 
-void Environment::init(int w, int h) {
-	_screenWidth = w;
-	_screenHeight = h;
-	_gameTime.start();
+void Environment::Init(int w, int h) {
+	mScreenWidth = w;
+	mScreenHeight = h;
+	mGameTime.Start();
 }
 
-void Environment::update() {
+void Environment::Update() {
 //	_world->update();
 	//cout << "Environment::update()" << endl;
 }
 
-void Environment::draw(){
-	_world->draw();
+void Environment::Draw(){
+	mWorld->Draw();
 }
 
-void Environment::close() {
+void Environment::Close() {
 	cout << "Environment::close()" << endl;
 }
 

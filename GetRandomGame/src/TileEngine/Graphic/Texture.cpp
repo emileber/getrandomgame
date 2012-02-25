@@ -17,58 +17,59 @@ namespace TileEngine {
 // Default contructor
 //
 Texture::Texture() {
-	_Width = 0;
-	_Height = 0;
-	_Texture = 0;
-	_Surface = NULL;
+	mWidth = 0;
+	mHeight = 0;
+	mTexture = 0;
+	mSurface = NULL;
 }
 
 //
 // Constructor that loads a file
 /// @param Filename a std::string
 Texture::Texture(std::string Filename) {
-	load(Filename);
+	Load(Filename);
 }
 
 //
 // Default destructor
 //
 Texture::~Texture() {
-	kill();
+	Kill();
 }
 
 //
 // Loads the texture to memory
 /// @param filename a std::string
 ///
-void Texture::load(std::string filename) {
+void Texture::Load(std::string filename) {
+	//cout << "load " << filename << endl;
 	//load the image from a file via sdl_img
 	SDL_Surface* surface = IMG_Load(filename.c_str());
 
 	if (surface == NULL) {
 		cout << "Failed to load the image: " << filename << ", Error: "
 				<< SDL_GetError() << endl;
-		_isLoaded = false;
+		mIsLoaded = false;
 		return;
 	}
 
-	_filename = filename; // Ressource filename
+	mFilename = filename; // Ressource filename
 
-	_Surface = surface;
+	mSurface = surface;
 
-	makeTexture(surface);
-	_isLoaded = true; // Ressource loaded
+	MakeTexture(surface);
+	mIsLoaded = true; // Ressource loaded
 }
 
 //
 // Internal function for loading a texture from a surface
 /// @param Surface a SDL_Surface pointer
 ///
-void Texture::makeTexture(SDL_Surface* Surface) {
+void Texture::MakeTexture(SDL_Surface* Surface) {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
-	glGenTextures(1, &_Texture);
-	glBindTexture(GL_TEXTURE_2D, _Texture);
+	glGenTextures(1, &mTexture);
+	glBindTexture(GL_TEXTURE_2D, mTexture);
 
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -82,8 +83,8 @@ void Texture::makeTexture(SDL_Surface* Surface) {
 	SDL_PixelFormat *fmt = Surface->format;
 
 	//setup all the information
-	_Width = (GLfloat) (Surface->w);
-	_Height = (GLfloat) (Surface->h);
+	mWidth = (GLfloat) (Surface->w);
+	mHeight = (GLfloat) (Surface->h);
 	//setup the pixel data (used for collisions)
 //	if (LoadCollision) {
 //		SDL_LockSurface(Surface);
@@ -126,26 +127,26 @@ void Texture::makeTexture(SDL_Surface* Surface) {
 
 	//if there is alpha
 	if (fmt->Amask) {
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, _Width, _Height, GL_RGBA,
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, mWidth, mHeight, GL_RGBA,
 				GL_UNSIGNED_BYTE, Surface->pixels);
 	} else // no alpha
 	{
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, _Width, _Height, GL_RGB,
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, mWidth, mHeight, GL_RGB,
 				GL_UNSIGNED_BYTE, Surface->pixels);
 	}
 	//TextureManager::getInstance()->registerTexture(this);
 
-	_isLoaded = true; // Ressource loaded
+	mIsLoaded = true; // Ressource loaded
 
 }
 
 //
 // Deletes the texture
 //
-void Texture::kill() {
-	if (_isLoaded) {
-		glDeleteTextures(1, &_Texture);
-		SDL_FreeSurface(_Surface);
+void Texture::Kill() {
+	if (mIsLoaded) {
+		glDeleteTextures(1, &mTexture);
+		SDL_FreeSurface(mSurface);
 	}
 }
 
@@ -166,16 +167,16 @@ void Texture::kill() {
 /// @param X a GLfloat
 /// @param Y a GLfloat
 ///
-void Texture::initializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
+void Texture::InitializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
 		GLfloat y, SectionRect *rect) {
 	Graphic *graphics = Graphic::getInstance();
 	//check if the right texture is bound
-	if (graphics->getCurrentTexture() != _Texture) {
+	if (graphics->GetCurrentTexture() != mTexture) {
 		//bind texture
-		glBindTexture(GL_TEXTURE_2D, _Texture);
+		glBindTexture(GL_TEXTURE_2D, mTexture);
 
 		//set graphics varible
-		graphics->setCurrentTexture(_Texture);
+		graphics->SetCurrentTexture(mTexture);
 	}
 	//scale the points if needed
 	glLoadIdentity();
@@ -196,8 +197,8 @@ void Texture::initializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
 /// Returns the pixel data
 /// @return
 ///
-std::vector<std::vector<bool> > *Texture::getPixels() {
-	return &_PixelOn;
+std::vector<std::vector<bool> > *Texture::GetPixels() {
+	return &mPixelOn;
 }
 
 //
@@ -211,7 +212,7 @@ std::vector<std::vector<bool> > *Texture::getPixels() {
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Texture::draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
+void Texture::Draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
 	glPushMatrix();
 //	RectStruct rect;
@@ -219,20 +220,20 @@ void Texture::draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 //	rect.top = 1.0f;
 //	rect.right = 1.0f;
 //	rect.left = 0.0f;
-	initializeDraw(scale, rotation, x, y, NULL);
+	InitializeDraw(scale, rotation, x, y, NULL);
 
 	//draw the quad
 	glBegin(GL_QUADS);
 	glColor4f(red, green, blue, alpha);
 	//bottom-left vertex (corner)
 	glTexCoord2f(0, 0);
-	glVertex2f(0, _Height);
+	glVertex2f(0, mHeight);
 	//bottom-right vertex (corner)
 	glTexCoord2f(1, 0);
-	glVertex2f(_Width, _Height);
+	glVertex2f(mWidth, mHeight);
 	//top-right vertex (corner)
 	glTexCoord2f(1, 1);
-	glVertex2f(_Width, 0);
+	glVertex2f(mWidth, 0);
 	//top-left vertex (corner)
 	glTexCoord2f(0, 1);
 	glVertex2f(0, 0);
@@ -256,16 +257,16 @@ void Texture::draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Texture::drawSection(GLfloat x, GLfloat y, SectionRect * box,
+void Texture::DrawSection(GLfloat x, GLfloat y, SectionRect * box,
 		GLfloat scale, GLfloat rotation, GLfloat red, GLfloat green,
 		GLfloat blue, GLfloat alpha) {
 	glPushMatrix();
-	initializeDraw(scale, rotation, x, y, box);
+	InitializeDraw(scale, rotation, x, y, box);
 	//width for drawing
-	GLfloat box_left = 1.0f * (box->x / _Width);
-	GLfloat box_right = 1.0f * ((box->x + box->w) / _Width);
-	GLfloat box_top = 1.0f - (1.0f * ((box->y + box->h) / _Height));
-	GLfloat box_bottom = 1.0f - (1.0f * (box->y / _Height));
+	GLfloat box_left = 1.0f * (box->x / mWidth);
+	GLfloat box_right = 1.0f * ((box->x + box->w) / mWidth);
+	GLfloat box_top = 1.0f - (1.0f * ((box->y + box->h) / mHeight));
+	GLfloat box_bottom = 1.0f - (1.0f * (box->y / mHeight));
 	//draw the quad
 	glBegin(GL_QUADS);
 	//bottom-left vertex (corner)

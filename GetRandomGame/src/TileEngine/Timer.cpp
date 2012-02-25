@@ -7,47 +7,49 @@
 #include "SDL/SDL.h"
 #include "Timer.h"
 
+namespace TileEngine {
+
 Timer::Timer() {
 	//Initialisation des variables
-	startTicks = 0;
-	pausedTicks = 0;
-	paused = false;
-	started = false;
+	mStartTicks = 0;
+	mPausedTicks = 0;
+	mIsPaused = false;
+	mIsStarted = false;
 }
 
 Timer::~Timer() {
 	// TODO Auto-generated destructor stub
 }
 
-void Timer::start() {
+void Timer::Start() {
 	//On demarre le timer
-	started = true;
+	mIsStarted = true;
 
 	//On enlève la pause du timer
-	paused = false;
+	mIsPaused = false;
 
 	//On récupére le temps courant
-	startTicks = SDL_GetTicks();
+	mStartTicks = SDL_GetTicks();
 }
 
-void Timer::stop() {
+void Timer::Stop() {
 	//On stoppe le timer
-	started = false;
+	mIsStarted = false;
 
 	//On enlève la pause
-	paused = false;
+	mIsPaused = false;
 }
 
-uint32_t Timer::get_ticks() {
+uint32_t Timer::GetTimerTicks() {
 	//Si le timer est en marche
-	if (started == true) {
+	if (mIsStarted == true) {
 		//Si le timer est en pause
-		if (paused == true) {
+		if (mIsPaused == true) {
 			//On retourne le nombre de ticks quand le timer a été mis en pause
-			return pausedTicks;
+			return mPausedTicks;
 		} else {
 			//On retourne le temps courant moins le temps quand il a démarré
-			return SDL_GetTicks() - startTicks;
+			return SDL_GetTicks() - mStartTicks;
 		}
 	}
 
@@ -55,35 +57,36 @@ uint32_t Timer::get_ticks() {
 	return 0;
 }
 
-void Timer::pause() {
+void Timer::Pause() {
 	//Si le timer est en marche et pas encore en pause
-	if ((started == true) && (paused == false)) {
+	if ((mIsStarted == true) && (mIsPaused == false)) {
 		//On met en pause le timer
-		paused = true;
+		mIsPaused = true;
 
 		//On calcul le pausedTicks
-		pausedTicks = SDL_GetTicks() - startTicks;
+		mPausedTicks = SDL_GetTicks() - mStartTicks;
 	}
 }
 
-void Timer::unpause() {
+void Timer::Unpause() {
 	//Si le timer est en pause
-	if (paused == true) {
+	if (mIsPaused == true) {
 		//on enlève la pause du timer
-		paused = false;
+		mIsPaused = false;
 
 		//On remet à zero le startTicks
-		startTicks = SDL_GetTicks() - pausedTicks;
+		mStartTicks = SDL_GetTicks() - mPausedTicks;
 
 		//Remise à zero du pausedTicks
-		pausedTicks = 0;
+		mPausedTicks = 0;
 	}
 }
 
-bool Timer::is_started() {
-	return started;
+bool Timer::IsStarted() {
+	return mIsStarted;
 }
 
-bool Timer::is_paused() {
-	return paused;
+bool Timer::IsPaused() {
+	return mIsPaused;
 }
+} // end of namespace

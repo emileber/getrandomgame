@@ -1,13 +1,10 @@
-/**
- *  File: cGraphics.h
- *  Project: Kore-Engine
+/*
+ * Graphic.h
  *
- *  Description: This file contains handles all the graphic subsystems and
- *		basic window management.
+ *  Created on: 2012-01-25
+ *      Author: Emile
  *
- *  Created by Sean Chapel on 1/21/06.
- *  Copyright 2006 Seoushi Games. All rights reserved.
- *
+ *      Handles windowing and basic graphic functions
  */
 
 #ifndef GRAPHIC
@@ -16,90 +13,105 @@
 #include "Global.h"
 #include "GraphicType.h"
 #include <stack>
+#include "Rectangle.h"
 
-namespace TileEngine
-{
-	///
-	/// A class to contain all graphic subsystems
-	///
-	class Graphic: public Singleton<Graphic>
-	{
-		friend class Singleton<Graphic>;
-		//friend class cTextureManager;
+namespace TileEngine {
+///
+/// A class to contain all graphic subsystems
+///
+class Graphic: public Singleton<Graphic> {
+	friend class Singleton<Graphic> ;
+	//friend class cTextureManager;
 
-		public:
+public:
 
+	/// Intializes all a window for creation
+	bool Initialize(int width = 640, int height = 480, int bpp = 32,
+			std::string windowTitle = "");
+	/// kills all graphic subsystems
+	void Shutdown();
 
-			/// Intializes all a window for creation
-			bool initialize(int Width = 640, int Height = 480, int Bpp = 32, std::string WindowTitle = "");
-			/// kills all graphic subsystems
-			void shutdown();
+	/// Clears the screen with a grey color
+	void ClearScreen();
+	/// Flips backbuffer to the screen
+	void FlipBuffers();
 
-			/// Clears the screen with a grey color
-			void clearScreen();
-			/// Flips backbuffer to the screen
-			void flipBuffers();
+	/// Creates a window for drawing
+	bool MakeWindow();
 
-			/// Creates a window for drawing
-			bool makeWindow();
+	/// Resizes the window
+	bool ResizeWindow(int width, int height);
+	/// Toggles if the window is fullscreen or not
+	void ToggleFullScreen();
 
-			/// Resizes the window
-			void resizeWindow(int width, int height);
-			/// Toggles if the window is fullscreen or not
-			void toggleFullScreen();
+	/// Use when toggling fullscreen
+	void Reload();
 
-			/// Returns the width of the drawing area
-			int getWidth();
+	/// Returns the width of the drawing area
+	int GetWidth();
 
-			/// Returns the height of the drawing area
-			int getHeight();
+	/// Returns the height of the drawing area
+	int GetHeight();
 
-            /// Draws an empty Rectangle
-			void drawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red = 0, GLfloat green = 0, GLfloat blue = 0, GLfloat alpha = 1);
+	/// Draws an empty Rectangle
+	void DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
+			GLfloat red = 0, GLfloat green = 0, GLfloat blue = 0,
+			GLfloat alpha = 1);
 
-			/// Draws an filled rectangle
-			void drawFilledRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red = 0, GLfloat green = 0, GLfloat blue = 0, GLfloat alpha = 1);
+	/// Draws an filled rectangle
+	void DrawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
+			GLfloat height, GLfloat red = 0, GLfloat green = 0,
+			GLfloat blue = 0, GLfloat alpha = 1);
 
-			/// Draws a line
-			void drawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2, GLfloat red = 0, GLfloat green = 0, GLfloat blue = 0, GLfloat alpha = 1);
+	/// Draws a line
+	void DrawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2, GLfloat red = 0,
+			GLfloat green = 0, GLfloat blue = 0, GLfloat alpha = 1);
 
-			/// returns the current texture in memory
-			GLuint getCurrentTexture();
+	/// returns the current texture in memory
+	GLuint GetCurrentTexture();
 
-			/// Set the current texture in memory
-			void setCurrentTexture(GLuint texture);
+	/// Set the current texture in memory
+	void SetCurrentTexture(GLuint texture);
 
-			void setCaption(std::string caption);
+	void SetCaption(std::string caption);
 
-			/// Pushes a clipping area on the stack for drawing
-			void pushClippingArea(RectStruct);
+	void EnableClipping();
 
-			/// Pops a clipping area off the stack
-			void popClippingArea();
+	void DisableClipping();
 
-		protected:
-			/// intializes opengl for 2d drawing
-			void initGl();
+	/// Pushes a clipping area on the stack for drawing
+	void PushClippingArea(Rectangle);
 
-			bool _isLoaded;			/**< Tells if the graphics core was successfully loaded	*/
-			int m_Width;			/**< Stores the width of the drawing area		*/
-			int m_Height;			/**< Stores the height of the drawing area		*/
-			int m_Bpp;			/**< Stores the bits per pixel of the screen		*/
-			std::string m_WindowTitle;	/**< Stores the title of the window			*/
-			bool _isFullscreen;		/**< Tells if the window id fullscreen or not		*/
+	/// Pops a clipping area off the stack
+	void PopClippingArea();
 
-			SDL_Surface* m_Surface;		/**< Stores the drawing surface				*/
-			Uint32 m_SdlFlags;		/**< Stores the drawing surface's capabilities		*/
+	bool isFullScreen() const {
+		return mIsFullscreen;
+	}
 
-			GLuint m_CurrentTexture; 	/**< contains the current texture that is in graphics memory	*/
+protected:
+	/// intializes opengl for 2d drawing
+	void InitGl();
 
-			std::stack< RectStruct > m_ClippingArea;
-		private:
-			/// Default Constructor
-			Graphic();
-			/// Default Destructor
-			~Graphic();
-	};
+	bool mIsLoaded; /**< Tells if the graphics core was successfully loaded	*/
+	int mWidth; /**< Stores the width of the drawing area		*/
+	int mHeight; /**< Stores the height of the drawing area		*/
+	int mBpp; /**< Stores the bits per pixel of the screen		*/
+	std::string mWindowTitle; /**< Stores the title of the window			*/
+	bool mIsFullscreen; /**< Tells if the window id fullscreen or not		*/
+
+	SDL_Surface* mSurface; /**< Stores the drawing surface				*/
+	Uint32 mSdlFlags; /**< Stores the drawing surface's capabilities		*/
+
+	GLuint mCurrentTexture; /**< contains the current texture that is in graphics memory	*/
+
+	std::stack<Rectangle> mClippingArea;
+
+	/// Default Constructor
+	Graphic();
+	/// Default Destructor
+	~Graphic();
+};
 }
 
 #endif

@@ -3,44 +3,51 @@
  *
  *  Created on: 2012-02-13
  *      Author: Emile
+ *
+ *      Abstract class to be used by the
+ *      generic Manager Template.
+ *
  */
 
 #ifndef RESSOURCE_H_
 #define RESSOURCE_H_
 
+#include <iostream>
+
 class Ressource {
 public:
 
 	Ressource() {
-		_filename = "";
-		_isLoaded = false;
+		mFilename = "";
+		mIsLoaded = false;
 	}
 	virtual ~Ressource() {
 	}
 
 	/**
 	 * Pure virtual function
-	 * MUST be implement
+	 * MUST be implement in sub class
 	 */
-	virtual void load(std::string filename) = 0;
+	virtual void Load(std::string filename) = 0;
 
-	virtual void reload() {
-		if (_filename != "") {
-			load(_filename);
+	virtual void Reload() {
+		//std::cout << "Ressource::reload " << _filename << std::endl;
+		if (mFilename != "") {
+			Load(mFilename);
 		}
 	}
 
-	std::string getFilename() const {
-		return _filename;
+	std::string GetFilename() const {
+		return mFilename;
 	}
 
-	bool isLoaded() const {
-		return _isLoaded;
+	bool IsLoaded() const {
+		return mIsLoaded;
 	}
 
 protected:
-	std::string _filename;
-	bool _isLoaded;
+	std::string mFilename;
+	bool mIsLoaded;
 };
 
 #endif /* RESSOURCE_H_ */

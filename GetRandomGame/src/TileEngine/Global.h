@@ -12,6 +12,7 @@
 #include "Singleton.h"
 #include "Manager.h"
 
+
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 //#include "SDL/SDL_mixer.h"
@@ -47,6 +48,10 @@
  const int FRAMES_PER_SECOND = 200;  // Le nombre de frames par seconde
  const int MOVE_TIME = 12;
  const int MOVE_DISTANCE = 3;
+
+ const int DEFAULT_FONT_SIZE = 15;
+ const int SCREEN_WIDTH = 1000;
+ const int SCREEN_HEIGHT = 600;
 
 
  /**********************************

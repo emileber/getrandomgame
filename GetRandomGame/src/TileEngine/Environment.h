@@ -3,6 +3,8 @@
  *
  *  Created on: 2011-12-18
  *      Author: Emile
+ *
+ *      Abstract class, to handle basic game stuff.
  */
 
 #ifndef ENVIRONMENT_H_
@@ -10,36 +12,39 @@
 
 #include "World.h"
 //#include "Singleton.h"
-#include "SDLInterface.h"
+#include "SdlInterface.h"
 #include "Timer.h"
 #include "Graphic.h"
 #include "Texture.h"
 #include "Global.h"
+#include "IApplication.h"
 
 namespace TileEngine {
 
-class Environment {
+class Environment: public IApplication {
 public:
 	Environment(); // generic constructor
 	virtual ~Environment() {
 	}
-	virtual void init(int, int); // generic initialization
-	virtual void update(); // generic function, redefine by the subclass
-	virtual void draw(); // generic function, redefine by the subclass
-	virtual void close(); // generic function, redefine by the subclass
+	virtual void Init(int, int); // generic initialization
+
+	virtual void Update() = 0; // generic function, redefine by the subclass
+	virtual void Draw() = 0; // generic function, redefine by the subclass
+	virtual void Close() = 0; // generic function, redefine by the subclass
+
 	virtual Uint32 getTime() {
-		return _gameTime.get_ticks();
+		return mGameTime.GetTimerTicks();
 	}
 
 protected:
 
-	World * _world;
-	SDLInterface * _sdl;
-	Graphic * _graphic;
-	Manager<Texture> * _textureManager;
-	Timer _gameTime;
-	int _screenWidth, _screenHeight;
-	Uint32 _frameCount;
+	World * mWorld;
+	SdlInterface * mSdlInterface;
+	Graphic * mGraphic;
+	Manager<Texture> * mTextureManager;
+	Timer mGameTime;
+	int mScreenWidth, mScreenHeight;
+	Uint32 mFrameCount;
 
 };
 }

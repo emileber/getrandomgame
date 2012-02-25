@@ -21,7 +21,7 @@ InputHandler::~InputHandler() {
 	// TODO Auto-generated destructor stub
 }
 
-bool InputHandler::handleInput(Environment * environment) {
+bool InputHandler::HandleInput(Environment * environment) {
 	cout << "InputHandler::handleInput" << endl;
 	//Get the keystates, used to know if a key is currently pressed
 	Uint8 *keystates = SDL_GetKeyState(NULL);
