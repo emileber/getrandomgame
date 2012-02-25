@@ -1,6 +1,6 @@
-#include "ZoneType/dockQuarter.h"
+#include "ZoneType/DockQuarter.h"
 
-dockQuarter::dockQuarter(char** map, point* p) : zoneType()
+DockQuarter::DockQuarter(char** map, point* p) : ZoneType()
 {
     map[p->Getx()][p->Gety()]='Q';
 }

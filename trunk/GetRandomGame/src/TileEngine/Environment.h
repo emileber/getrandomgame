@@ -14,8 +14,8 @@
 //#include "Singleton.h"
 #include "SdlInterface.h"
 #include "Timer.h"
-#include "Graphic.h"
-#include "Texture.h"
+#include "Graphic/Graphic.h"
+#include "Graphic/Texture.h"
 #include "Global.h"
 #include "IApplication.h"
 

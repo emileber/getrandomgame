@@ -98,6 +98,8 @@ class FTHaloFont : public FTFont
 {
     public:
         FTHaloFont(char const *fontFilePath) : FTFont(fontFilePath) {}
+        virtual ~FTHaloFont(){
+        }
 
     protected:
         virtual FTGlyph* MakeGlyph(FT_GlyphSlot slot)

@@ -7,7 +7,7 @@
 
 #include "GetRandomGame.h"
 #include "WorldMap.h"
-#include "Texture.h"
+#include "Graphic/Texture.h"
 #include <ctime>
 #include <iostream>
 

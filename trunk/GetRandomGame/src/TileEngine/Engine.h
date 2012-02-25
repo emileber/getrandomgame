@@ -22,7 +22,7 @@
 #include "Environment.h"
 #include "InputHandler.h"
 #include "Global.h"
-#include "Graphic.h"
+#include "Graphic/Graphic.h"
 #include "Timer.h"
 
 namespace TileEngine {
