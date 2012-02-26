@@ -94,8 +94,9 @@ protected:
 	void InitGl();
 
 	bool mIsLoaded; /**< Tells if the graphics core was successfully loaded	*/
-	int mWidth; /**< Stores the width of the drawing area		*/
-	int mHeight; /**< Stores the height of the drawing area		*/
+	int mWidthScreen; /**< Stores the width of the drawing area		*/
+	int mHeightScreen; /**< Stores the height of the drawing area		*/
+	int mWidthCurrent, mHeightCurrent; // current screen size
 	int mBpp; /**< Stores the bits per pixel of the screen		*/
 	std::string mWindowTitle; /**< Stores the title of the window			*/
 	bool mIsFullscreen; /**< Tells if the window id fullscreen or not		*/

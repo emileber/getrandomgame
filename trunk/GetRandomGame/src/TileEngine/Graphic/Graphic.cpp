@@ -27,6 +27,10 @@ Graphic::Graphic() {
 	mWindowTitle = "";
 	mSdlFlags = 0;
 	mIsFullscreen = false;
+	mWidthCurrent = 0;
+	mWidthScreen = 0;
+	mHeightCurrent = 0;
+	mHeightScreen = 0;
 }
 
 //
@@ -45,8 +49,8 @@ Graphic::~Graphic() {
 /// @param WindowTitle a std::string
 bool Graphic::Initialize(int Width, int Height, int Bpp,
 		std::string WindowTitle) {
-	mWidth = Width;
-	mHeight = Height;
+	mWidthCurrent = mWidthScreen = Width;
+	mHeightCurrent = mHeightScreen = Height;
 	mBpp = Bpp;
 	//mIsFullscreen = false;
 	mSurface = NULL;
@@ -60,7 +64,7 @@ bool Graphic::Initialize(int Width, int Height, int Bpp,
 	}
 
 	mIsLoaded = MakeWindow();
-	glScissor(0, 0, mWidth, mHeight);
+	glScissor(0, 0, mWidthScreen, mHeightScreen);
 
 	return mIsLoaded;
 }
@@ -121,7 +125,7 @@ bool Graphic::MakeWindow() {
 	atexit(SDL_Quit);
 
 	//create the surface
-	mSurface = SDL_SetVideoMode(mWidth, mHeight, mBpp, mSdlFlags);
+	mSurface = SDL_SetVideoMode(mWidthScreen, mHeightScreen, mBpp, mSdlFlags);
 
 	if (mSurface == NULL) {
 		cout << "Video mode set failed: " << SDL_GetError() << endl;
@@ -137,40 +141,11 @@ bool Graphic::MakeWindow() {
 }
 
 //
-// Resizes the window to the given size
-/// @param width a int
-/// @param height a int
-///
-bool Graphic::ResizeWindow(int width, int height) {
-	cout << "Window is being resized" << endl;
-	// Protect against a divide by zero
-	if (height == 0) {
-		height = 1;
-	}
-
-	//resize sdl surface
-	mSurface = SDL_SetVideoMode(width, height, mBpp, mSdlFlags);
-
-	if (mSurface == NULL) {
-		cout << "Could not get a surface after resize: " << SDL_GetError()
-				<< endl;
-		return false;
-	}
-
-	//reinitalize opengl
-	InitGl();
-
-	//reload textures
-	Manager<Texture>::getInstance()->ReloadAllRessource();
-	return true;
-}
-
-//
 // Returns the width of the drawing area
 /// @return Width of the drawing area
 ///
 int Graphic::GetWidth() {
-	return mWidth;
+	return mWidthCurrent;
 }
 
 //
@@ -178,7 +153,7 @@ int Graphic::GetWidth() {
 /// @return Height of the drawing area
 ///
 int Graphic::GetHeight() {
-	return mHeight;
+	return mHeightCurrent;
 }
 
 void Graphic::SetCaption(string caption) {
@@ -238,10 +213,10 @@ void Graphic::ToggleFullScreen() {
 			mSdlFlags = mSdlFlags ^ SDL_FULLSCREEN;
 			if (mIsFullscreen) {
 				cout << "toggle Fullscreen: " << mIsFullscreen << endl;
-				mSurface = SDL_SetVideoMode(0, 0, 0, mSdlFlags);
+				mSurface = SDL_SetVideoMode(FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT, 0, mSdlFlags);
 			} else {
 				cout << "toggle Screen Mode: " << mIsFullscreen << endl;
-				mSurface = SDL_SetVideoMode(mWidth, mHeight, mBpp, mSdlFlags); /*Toggles Screen Mode */
+				mSurface = SDL_SetVideoMode(mWidthScreen, mHeightScreen, mBpp, mSdlFlags); /*Toggles Screen Mode */
 			}
 
 			// if toggling to fullscreen or screen have screwed up
@@ -256,6 +231,14 @@ void Graphic::ToggleFullScreen() {
 				exit(1); /* If you can't switch back for some reason, then epic fail */
 			}
 
+			if (mIsFullscreen){
+				mWidthCurrent = FULL_SCREEN_WIDTH;
+				mHeightCurrent = FULL_SCREEN_HEIGHT;
+			}else{
+				mWidthCurrent = mWidthScreen;
+				mHeightCurrent = mHeightScreen;
+			}
+
 		}
 
 		Reload(); // reload the ressource
@@ -268,6 +251,36 @@ void Graphic::ToggleFullScreen() {
 //		}
 	}
 }
+
+//
+// Resizes the window to the given size
+/// @param width a int
+/// @param height a int
+///
+bool Graphic::ResizeWindow(int width, int height) {
+	cout << "Window is being resized" << endl;
+	// Protect against a divide by zero
+	if (height == 0) {
+		height = 1;
+	}
+
+	//resize sdl surface
+	mSurface = SDL_SetVideoMode(width, height, mBpp, mSdlFlags);
+
+	if (mSurface == NULL) {
+		cout << "Could not get a surface after resize: " << SDL_GetError()
+				<< endl;
+		return false;
+	}
+
+	//reinitalize opengl
+	InitGl();
+
+	//reload textures
+	Manager<Texture>::getInstance()->ReloadAllRessource();
+	return true;
+}
+
 
 void Graphic::Reload() {
 	InitGl();
@@ -390,9 +403,9 @@ void Graphic::EnableClipping() {
 
 	if (mClippingArea.empty()) {
 		area.y1 = 0.0f;
-		area.y2 = (float) mHeight;
+		area.y2 = (float) mHeightScreen;
 		area.x1 = 0.0f;
-		area.x2 = (float) mWidth;
+		area.x2 = (float) mWidthScreen;
 	} else {
 		area = mClippingArea.top();
 	}
@@ -418,9 +431,9 @@ void Graphic::PushClippingArea(Rectangle area) {
 		currentArea = mClippingArea.top();
 	} else {
 		currentArea.y1 = 0.0f;
-		currentArea.y2 = (float) mHeight;
+		currentArea.y2 = (float) mHeightScreen;
 		currentArea.x1 = 0.0f;
-		currentArea.x2 = (float) mWidth;
+		currentArea.x2 = (float) mWidthScreen;
 	}
 
 	//make the new clipping area from the rectangle intersection
@@ -465,9 +478,9 @@ void Graphic::PopClippingArea() {
 
 	if (mClippingArea.empty()) {
 		newArea.y1 = 0.0f;
-		newArea.y2 = (float) mHeight;
+		newArea.y2 = (float) mHeightScreen;
 		newArea.x1 = 0.0f;
-		newArea.x2 = (float) mWidth;
+		newArea.x2 = (float) mWidthScreen;
 	} else {
 		newArea = mClippingArea.top();
 	}
