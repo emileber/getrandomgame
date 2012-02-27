@@ -24,22 +24,36 @@ Le jeu utilise le Tile Engine qui lui est générique et ne devrait pas contenir
 En gros, le Tile Engine comprend la base dans le Dossier TileEngine et le Jeu contient ses fichiers, qui héritent du Tile Engine, dans le dossier GetRandomGame. Chaque classe de l'Engine est dans le namespace TileEngine.
 
 Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r75:
-  * ====GetRandomGame (namespace) ====
+  * ====GetRandomGame====
+    * ====Biomes====
+      * WaterBiome (la mer)
+    * ====ZoneType====
+      * DockQuarter
+      * Dock
+      * SunkenCity
+      * ZoneType (classe parente)
+    * Biome (relié à la génération de monde)
+    * BiomeManager
+    * DiamondSquare (relié à l'algo du même nom)
     * GetRandomGame (Sous-classe Environement, big mama du jeu)
     * GRGInputHandler
     * Launcher
+    * MapGenerator (Génère un monde)
+    * WorldMap (un monde de notre jeu)
   * ==== TileEngine (namespace) ====
     * ==== Graphic ====
       * Font : Ressource (Font est déclaré dedans)  - pas encore implémenté
-      * Texture : Ressource (Texture est déclaré dedans)
+      * Texture : Ressource (draw itself on Draw calls)
       * (1)Camera (the view point)
       * (1)Graphic (Interface Singleton
-      * Animation : Ressource (Animation déclaré dedans) - pas encore implémenté
+      * Animation : Ressource - pas encore implémenté
       * GraphicType (défini les structures du type rect et section et point)
+      * Font : Ressource (pour l'affichage de text TrueType font .ttf)
+    * config.h (relié a FTGL mais sera probablement retiré)
     * Global (constante et include)
     * Environment (Environment générique, redéfini par GetRandomGame)
     * InputHandler (générique, contient pratiquement rien)
-    * (1)SDLInterface (Encapsulation de fonction relié à SDL)
+    * (1)SdlInterface (Encapsulation de fonction relié à SDL)
     * (1)Engine (la boucle de jeu)
     * Timer (donne du temps en milisec avec le tick SDL)
     * World (monde de jeu générique, presque vide aussi, c'est a redéfinir dans le jeu)
@@ -47,7 +61,8 @@ Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r7
     * Singleton (Template pour créer des singleton sans avoir a implémenter le code dans chaque classe)
     * (1)Manager (Template class, sert de genre de Factory)
     * Ressource (Classe Abstraite Pure pour les ressources du manager)
-
+    * Point
+    * Rectangle
 (1) = Singleton, class Specific : class Parent
 
 == Global.h WTF? ==
