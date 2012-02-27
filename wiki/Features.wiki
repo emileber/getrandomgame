@@ -82,6 +82,9 @@ _Difficile d'attaquer lorsqu'on est presque mort:_
 ==Game Rules Related==
   * Chance de réussite ou d'échec
   * XP sont un mixe de [http://en.wikipedia.org/wiki/Experience_point#Cash-In_Advancement cash-IN], [http://en.wikipedia.org/wiki/Experience_point#Free-form_advancement Free-form advancement] et [http://en.wikipedia.org/wiki/Experience_point#Activity-based_progression Activity based]
+
+===Skill===
+  * Silent Cast
   
 ----
 == Other Stuff ==
@@ -95,7 +98,10 @@ _Difficile d'attaquer lorsqu'on est presque mort:_
   * Flying monster
   * Big monster
   * L'état du personnage affecte la vision du joueur
-  * Crier pour avertir les personnages autour
+  * Actions ayant des sons
+    * Crier (pour avertir les personnages autour)
+    * Caster un spell
+    * tirer un objet
   * Précision?
   * Loans, ou commanditaires
   * GUILDS
