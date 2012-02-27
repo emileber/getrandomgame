@@ -157,7 +157,7 @@ Bon alors j'ai encapsulé le boute chiant donc vous n'aurai pas a jouer avec des
 
 Lorsque terminé, l'interface permettra les choses suivantes:
   * afficher des images (même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire, bien que l'on ne le voit pas)
-  * afficher du texte
+  * afficher du [GettingStarted#le_texte texte]
   * Sur x Layer différentes (et c'est ajustable à volonter)
   * transparence
   * Rotation
@@ -182,7 +182,6 @@ La plupart des fonctions sont auto-explicatives.
   # Crée une Texture ou une Animation
   # À chaque iteration, appeler la fonction "draw" de cet objet. (soit dans le draw de l'environnement ou de la classe parente)
 
-
 {{{
 // Load une texture
 Texture * textureTest = Manager<Texture>::getInstance()->loadRessource(filename);
@@ -191,6 +190,21 @@ Texture * textureTest = Manager<Texture>::getInstance()->loadRessource(filename)
 textureTest->draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1);
 
 // aussi, il y a drawSection qui est importante
+}}}
+
+== Le texte ==
+
+  # Load un Font
+  # À chaque itération, appel la fonction Draw du Font avec ton texte en parametre.
+
+{{{
+_fontTest = new Font(); // Nouvelle variable
+
+// passe par le Manager pour éviter d'ouvrir plusieurs fois un fichier
+_fontTest = Manager<Font>::getInstance()->LoadRessource("font/FontFile.ttf");
+
+// puis appel draw
+_fontTest->Draw("Bayvania Crossing", x, y, red, green, blue, alpha);
 }}}
 
 ----
@@ -331,12 +345,12 @@ protected:
   # Ajuster vos [http://code.google.com/p/getrandomgame/people/list Duties]
 
 Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à prendre le module suivant qui vous intéresse:
-  * <font size="3" color="green">Paufiner le Tile Engine (Emile)</font>
+  * <font size="3" color="blue">Paufiner le Tile Engine (Emile)</font>
     * Ajout d'openGL (voir aussi pour dynamic lighting) EN COURS
     * Gestion de l'affichage
     * Gestion des contrôles
     * Peut-être ajouter un aspect réseau
-  * <font size="3" color="green">Créer le Monde [World (voir la page)] (Alexandre DT est pas mal la dessus)</font>
+  * <font size="3" color="blue">Créer le Monde [World (voir la page)] (Alexandre DT est pas mal la dessus)</font>
     * une fois une tile map affichée, il faut le coté RANDOM de la map
   * Les menu/interface (inventaire, stats, hotbar, healt/xp/mana bar, etc)
     * ça implique faire des classes générique genre Button et Labels et Menu, voir Class Diagram et Maquette
@@ -346,11 +360,11 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
     * Donc faire les classes Item et Inventaire
     * puis importer le système de génération aléatoire avec préfixe et suffixe
     * Le système de crafting
-  * <font size="3" color="green">Les Characters (FreD)</font>
+  * <font size="3" color="blue">Les Characters (FreD)</font>
     * Player (FreD)
     * NPC
     * Monsters
-  * <font size="3" color="green">Le système d'interaction (bebleu)</font>
+  * <font size="3" color="blue">Le système d'interaction (bebleu)</font>
     * Mouvement dans les tuiles
     * interaction de combat autant qu'avec des objets (classe générique Interaction)
 
