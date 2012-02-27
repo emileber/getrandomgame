@@ -6,19 +6,21 @@
 <g:plusone/>
 
 Table Of Content:
-<wiki:toc max_depth="1" />
+<wiki:toc max_depth="2" />
 ----
 =The Complete Standard=
 
 see [http://www.possibility.com/Cpp/CppCodingStandard.html this]
 
 ----
-=Class Names=
+=Naming Standard=
+
+==Class Names==
 
   * Use upper case letters as word separators, lower case for the rest of a word
   * First character in a name is upper case
   * No underbars (`'_'`)
-==_Justification_==
+===_Justification_===
 
 Of all the different naming strategies many people found this one the best compromise.
 
@@ -30,8 +32,7 @@ Example
    class Name
 }}}
 
-----
-=Class Library Names=
+==Class Library Names==
 
   * Now that name spaces are becoming more widely implemented, name spaces should be used to prevent class name conflicts among libraries from different vendors and groups.
   * When not using name spaces, it's common to prevent class name clashes by prefixing class names with a unique string. Two characters is sufficient, but a longer length is fine.
@@ -46,12 +47,12 @@ class JjLinkList
    }
 }}}
 
-----
-=Method Names=
+
+==Method Names==
 
   * Use the same rule as for class names.
 
-==_Justification_==
+===_Justification_===
 
 Of all the different naming strategies many people found this one the best compromise.
 
@@ -65,14 +66,13 @@ Example
    }
 }}}
 
-----
-=Class Attribute Names=
+==Class Attribute Names==
 
   * Attribute names should be prepended with the character 'm'.
   * After the 'm' use the same rules as for class names.
   * 'm' always precedes other name modifiers like 'p' for pointer.
 
-==_Justification_==
+===_Justification_===
 
 Prepending 'm' prevents any conflict with method names. Often your methods and attribute names will be similar, especially for accessors.
 
@@ -90,13 +90,13 @@ Example
    }
 }}}
 
-----
-=Method Argument Names=
+
+==Method Argument Names==
 
   * The first character should be lower case.
   * All word beginnings after the first letter should be upper case as with class names.
 
-==_Justification_==
+===_Justification_===
 
   * You can always tell which variables are passed in variables.
   * You can use names similar to class names without conflicting with class names.
@@ -111,3 +111,89 @@ Example
                                Engine& rAnotherEngine);
    }
 }}}
+
+
+==Pointer Variables==
+
+  * (FUCK THAT) pointers should be prepended by a 'p' in most cases
+  * place the `*` close to the pointer type not the variable name
+
+===_Justification_===
+
+  * The idea is that the difference between a pointer, object, and a reference to an object is important for understanding the code, especially in C++ where -> can be overloaded, and casting and copy semantics are important.
+  * Pointers really are a change of type so the `*` belongs near the type. One reservation with this policy relates to declaring multiple variables with the same type on the same line. In C++ the pointer modifier only applies to the closest variable, not all of them, which can be very confusing, especially for newbies. You want to have one declaration per line anyway so you can document each variable.
+
+Example
+{{{
+  String* pName= new String;
+
+  String* pName, name, address; // note, only pName is a pointer.
+}}}
+
+==Naming Class Files==
+
+===Class Definition in One File===
+
+Each class definition should be in its own file where each file is named directly after the class's name:
+  * ClassName.h
+
+===Implementation in One File===
+
+In general each class should be implemented in one source file:
+  * ClassName.cpp
+
+===But When it Gets Really Big...===
+
+If the source file gets too large or you want to avoid compiling templates all the time then add additional files named according to the following rule:
+  * ClassName_section.cpp
+section is some name that identifies why the code is chunked together. The class name and section name are separated by '_'.
+
+----
+=Documentation=
+
+==Comments Should Tell a Story==
+
+Consider your comments a story describing the system. Expect your comments to be extracted by a robot and formed into a man page. Class comments are one part of the story, method signature comments are another part of the story, method arguments another part, and method implementation yet another part. All these parts should weave together and inform someone else at another point of time just exactly what you did and why.
+
+==Document Decisions==
+
+Comments should document decisions. At every point where you had a choice of what to do place a comment describing which choice you made and why. Archeologists will find this the most useful information.
+
+==Comment All Questions a Programmer May Have When Looking at Your Code==
+
+At every point in your code think about what questions a programmer may have about the code. It's crucial you answer all those questions somehow, someway. If you don't, as the code writer, answer those questions, who will?
+If you think your code is so clear and wonderful that nobody will have any questions then you are lying to yourself. I have never seen a large system with this wonderful self-documenting code feature. I've seen very few small libraries are even a single class that are so wonderfully self-documented.
+
+You have a lot of tools at your disposal to answer questions:
+
+  # A brain to think up the questions you should be answering. Why? Who? When? How? What?
+  # Variable names.
+  # Class names.
+  # Class decomposition.
+  # Method decomposition.
+  # File names.
+  # Documentation at all levels: package, class, method, attribute, inline.
+The better you are at orchestrating all these elements together the clearer your code will be to everyone else. 
+
+I don't really consider unit tests a question answering device because if you can't understand the code by reading it, reading something else about the code you don't understand won't help you understand it better.
+
+==Include Statement Documentation==
+
+Include statements should be documented, telling the user why a particular file was included. If the file includes a class used by the class then it's useful to specify a class relationship:
+  * ISA - this class inherits from the class in the include file.
+  * HASA - this class contains, that is has as a member attribute, the class in the include file. This class owns the memory and is responsible for deleting it.
+  * USES - this class uses something from the include file.
+  * HASA-USES - this class keeps a pointer or reference to the class in the include file, but this class does not own the memory.
+
+Example
+{{{
+#ifndef XX_h
+#define XX_h
+
+// SYSTEM INCLUDES
+//
+#include                              // standard IO interface
+#include                             // HASA string interface
+#include                               // USES auto_ptr
+}}}
+Notice how just by reading the include directives the code is starting to tell you a story of why and how it was built.
