@@ -180,8 +180,8 @@ void Texture::InitializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
 	}
 	//scale the points if needed
 	glLoadIdentity();
-	glTranslatef(Camera::getInstance()->getXposition() + x,
-			Camera::getInstance()->getYposition() + y, 0.0f);
+	glTranslatef(Camera::getInstance()->GetX() + x,
+			Camera::getInstance()->GetY() + y, 0.0f);
 //	if (rotation != 0) {
 //		GLfloat x, y;
 //		x = ((rect->right - rect->left) / 2) * m_Width;

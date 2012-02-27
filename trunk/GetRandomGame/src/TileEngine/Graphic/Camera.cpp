@@ -50,7 +50,7 @@ void Camera::setPosition(GLfloat x, GLfloat y) {
 // Returns the x cooridinate of the camera
 /// @return X position of the camera
 ///
-GLfloat Camera::getXposition() {
+GLfloat Camera::GetX() {
 	return m_Xpos;
 }
 
@@ -58,7 +58,7 @@ GLfloat Camera::getXposition() {
 // Returns the y cooridinate of the camera
 /// @return Y position of the camera
 ///
-GLfloat Camera::getYposition() {
+GLfloat Camera::GetY() {
 	return m_Ypos;
 }
 }

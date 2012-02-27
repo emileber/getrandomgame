@@ -302,8 +302,8 @@ void Graphic::DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
 		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
 	glPushMatrix();
 	glLoadIdentity();
-	glTranslatef(Camera::getInstance()->getXposition() + x,
-			Camera::getInstance()->getYposition() + y, 0.0);
+	glTranslatef(Camera::getInstance()->GetX() + x,
+			Camera::getInstance()->GetY() + y, 0.0);
 	glBegin(GL_LINE_LOOP);
 	glColor4f(red, green, blue, alpha);
 	glVertex2f(x, y);

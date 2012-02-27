@@ -32,9 +32,9 @@ public:
 	void setPosition(GLfloat x, GLfloat y);
 
 	/// Returns the x cooridinate of the camera
-	GLfloat getXposition();
+	GLfloat GetX();
 	/// Returns the y  cooridinate of the camera
-	GLfloat getYposition();
+	GLfloat GetY();
 private:
 	GLfloat m_Xpos; /**< The x position of the camera 	*/
 	GLfloat m_Ypos; /**< The y position of the camera 	*/

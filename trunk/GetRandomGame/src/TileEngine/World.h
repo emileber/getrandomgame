@@ -11,11 +11,9 @@
 #ifndef WORLD_H_
 #define WORLD_H_
 
-#include "IApplication.h"
-
 namespace TileEngine{
 
-class World: public IApplication {
+class World {
 public:
 	World();
 	virtual ~World();
