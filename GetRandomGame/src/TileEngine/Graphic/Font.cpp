@@ -16,43 +16,44 @@
 
 using namespace std;
 
-
-
-
 namespace TileEngine {
 //
 // Default constructor
 /// @params Filename a std::string
 Font::Font() {
-	m_Static = true;
-	m_Font = NULL;
+	mStatic = true;
+	mFont = NULL;
 }
 
 //
 // Default destructor
 //
 Font::~Font() {
-	delete m_Font;
+	delete mFont;
 }
 
 //
 // Loads a font from a file
 /// @param Filename a std::string
 ///
-void Font::load(std::string filename) {
+void Font::Load(std::string filename) {
 	//m_Font = ftglCreatePixmapFont("/home/user/Arial.ttf");
 	//FTGLPixmapFont font(filename.c_str());
-	//m_Font = new FTPixmapFont(filename.c_str());
+
 	//m_Font = new FTTextureFont(filename.c_str());
 	//m_Font = new FTHaloFont(filename.c_str());
 
-	if (m_Font->Error()) {
-		cout << "Error loading Font '" << filename << "'" << endl;
-		delete m_Font;
-		m_Font = NULL;
-	} else {
-		//set a default size
-		m_Font->FaceSize(20);
+	if (filename != "") {
+		mFont = new FTPixmapFont(filename.c_str());
+
+		if (mFont->Error()) {
+			cout << "Error loading Font '" << filename << "'" << endl;
+			delete mFont;
+			mFont = NULL;
+		} else {
+			//set a default size
+			mFont->FaceSize(100);
+		}
 	}
 }
 
@@ -76,16 +77,17 @@ void Font::Delete() {
 void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat red,
 		GLfloat green, GLfloat blue, GLfloat alpha) {
 	//do nothing if the font isn't setup
-	if (m_Font == NULL) {
+	if (mFont == NULL) {
+		cout << "Font::Draw() error, font is NULL, can't draw..." << endl;
 		return;
 	}
 
 	glLoadIdentity();
 
 	//move with the camera if needed
-	if (!m_Static) {
-		x = Camera::getInstance()->getXposition() + x;
-		y = Camera::getInstance()->getYposition() + y;
+	if (!mStatic) {
+		x = Camera::getInstance()->GetX() + x;
+		y = Camera::getInstance()->GetY() + y;
 	}
 
 	std::string tempStr;
@@ -93,7 +95,7 @@ void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat red,
 	//fix bug in ftgl when part of the text is offscreen nothing draws
 	while ((x < 0) && (text.length() != 0)) {
 		tempStr = text[0];
-		//x += GetWidth(tempStr);
+		x += GetWidth(tempStr);
 		text = text.substr(1, text.length());
 	}
 
@@ -102,7 +104,7 @@ void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat red,
 
 	glPushMatrix();
 
-	//m_Font->Render(text.c_str());
+	mFont->Render(text.c_str());
 
 	glPopMatrix();
 }
@@ -112,13 +114,13 @@ void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat red,
 /// @param Size a uint
 ///
 void Font::SetSize(uint size) {
-	if (m_Font == NULL) {
+	if (mFont == NULL) {
 		return;
 	}
 
-	//m_Font->FaceSize(size);
+	mFont->FaceSize(size);
 
-	m_FaceSize = size;
+	mFaceSize = size;
 }
 
 //
@@ -126,7 +128,7 @@ void Font::SetSize(uint size) {
 /// @param Static a bool
 ///
 void Font::SetStatic(bool isStatic) {
-	m_Static = isStatic;
+	mStatic = isStatic;
 }
 
 //
@@ -134,7 +136,7 @@ void Font::SetStatic(bool isStatic) {
 /// @return Width of the string
 ///
 GLfloat Font::GetHeight() {
-	return (GLfloat) m_Font->LineHeight();
+	return (GLfloat) mFont->LineHeight();
 }
 
 //
@@ -143,7 +145,7 @@ GLfloat Font::GetHeight() {
 /// @return width of the string
 ///
 GLfloat Font::GetWidth(std::string text) {
-	return (GLfloat) m_Font->Advance(text.c_str());
+	return (GLfloat) mFont->Advance(text.c_str());
 }
 
 }

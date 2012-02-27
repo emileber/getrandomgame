@@ -17,11 +17,10 @@
 #include "Graphic/Graphic.h"
 #include "Graphic/Texture.h"
 #include "Global.h"
-#include "IApplication.h"
 
 namespace TileEngine {
 
-class Environment: public IApplication {
+class Environment {
 public:
 	Environment(); // generic constructor
 	virtual ~Environment() {

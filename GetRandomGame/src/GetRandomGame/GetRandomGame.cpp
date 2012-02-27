@@ -14,6 +14,7 @@
 
 #include "MapGenerator.h"
 #include "WorldMap.h"
+#include "Graphic/Font.h"
 
 using namespace std;
 
@@ -25,6 +26,7 @@ SDL_Surface * _semiTransSurf;
 GLfloat testx = 0, testy = 0;
 Uint32 last = 0;
 SectionRect * tileTestRect;
+Font * _fontTest;
 /**
  * END OF TEST DECLARATIONS
  ***************************/
@@ -69,6 +71,9 @@ void GetRandomGame::Init(int w, int h) {
 	tileTestRect->w = 40;
 	tileTestRect->h = 40;
 
+	_fontTest = new Font();
+	_fontTest = Manager<Font>::getInstance()->LoadRessource("font/Jellyka_Delicious_Cake.ttf");
+
 //	Uint32 start = _gameTime.get_ticks();
 //
 //	cout << "Map Generation: " << (_gameTime.get_ticks() - start) << " ms" << endl;
@@ -96,11 +101,12 @@ void GetRandomGame::Update() {
 
 void GetRandomGame::Draw() {
 
+	// offset when fullscreen
 	int xFullScreenOffset = ((mGraphic->GetWidth() - mScreenWidth)/2);
 	int yFullScreenOffset = ((mGraphic->GetHeight() - mScreenHeight)/2);
 
 	// test square that show screen window dimensions
-	mGraphic->DrawFilledRectangle(xFullScreenOffset-1, yFullScreenOffset-1, mScreenWidth+2, mScreenHeight+2, 1, 0, 0, 1);
+	//mGraphic->DrawFilledRectangle(xFullScreenOffset-1, yFullScreenOffset-1, mScreenWidth+2, mScreenHeight+2, 1, 0, 0, 1);
 
 	// background floor
 	for (int x = 0; x < 30; x++) {
@@ -110,7 +116,10 @@ void GetRandomGame::Draw() {
 		}
 	}
 
+	// camera position
+	//mGraphic->DrawFilledRectangle(Camera::getInstance()->GetX(), Camera::getInstance()->GetY(), 20, 20, 1, 0, 0, 1);
 
+	_fontTest->Draw("Bayvania Crossing", mGraphic->GetWidth() - _fontTest->GetWidth("Bayvania Crossing"), mGraphic->GetHeight() - _fontTest->GetHeight()/2 - 10, 0, 0, 0, 1);
 
 	// GRASS tile test
 	tileTestRect->x = 0;
