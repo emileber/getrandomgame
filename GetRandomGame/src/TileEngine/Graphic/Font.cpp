@@ -13,7 +13,6 @@
 //#include "SDL_rwops_zzip.h"
 #include "Graphic.h"
 #include "Camera.h"
-
 using namespace std;
 
 namespace TileEngine {

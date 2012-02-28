@@ -103,6 +103,9 @@ void WorldMap::DropXML() {
 			<< "<Style ss:ID=\"k\">\n<Interior ss:Color=\"#CCCCFF\" ss:Pattern=\"Solid\"/>\n</Style>\n";
     xmldump
 			<< "<Style ss:ID=\"U\">\n<Interior ss:Color=\"#000055\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+    xmldump
+			<< "<Style ss:ID=\"Y\">\n<Interior ss:Color=\"#800000\" ss:Pattern=\"Solid\"/>\n</Style>\n";
+
 	int maps = mapSize - 1;
 	xmldump
 			<< "</Styles>\n<Worksheet ss:Name=\"Sheet1\">\n<Table ss:ExpandedColumnCount=\""
