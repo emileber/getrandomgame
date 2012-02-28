@@ -210,8 +210,29 @@ Reste qu'a repasser l'algorithme diamond square(plus haut) pour avoir une map co
 [http://www.marietta.edu/~biol/biomes/whittaker.jpg]
 
 ----
+
+Bon, maintenant que le jeu nous a fait une belle map vide il viens le temps d'ajouter des choses dedans.
+
+
+== Comment le randomeur ajoute des places ==
+
+j'ai pas pris un algorythme hyper mathémathique pour cette étape la, ce qui se passe c'est que le jeu va toute regarder les tuile de la map et passer un espece de djikstra pour avoir le biome au complet. Donc si le jeu tombe sur une case qu'il n'a pas encore ajouter dans un biomes il va l'ajouter dans un biome cocher la cocher, et regarder autour s'il y aurait pas une autre case a mettre dans ce biomes la, récursivement.
+
+ensuite une fois que le jeu a défini ses biomes il vas passer les biomes et leur dire de placer le stock qu'ils ont a placer (dongeon ports, villes, etc) et déterminer plus ou moins au hasard ce qu'ils place et plus ou moins au hasard ou il le placent en prenant un point au hasard dans le vecteur de point et en vérifiant quelques conditions, défini dans les types de spread.
+
+
+== jveux progger pis j'ai ben d'l'imagination pour ajout des places ==
+
+c'est super facile d'ajouter des Types de zone dans le jeu, tout ce qui a faire c'est 
+1)on crée une nouvelle classe qui hérite de ZoneType(le .h risque d'etre pareil aux autres)
+2) on redéfini les variable membres dans le constructeur, ce qui consiste a mettre une rareté(chifre plutot arbitraire pour l'instant, plus c'est ba plus c'est rare, des entier plus gros que 0 uniquement) a associé une lettre, mettre la lettre du biome et instancier un SpreadRules pour determiner comment la zone se place.
+3)on instancie cette nouvelle classe et on la met dans le vecteur de trucs possible du biomes
+4)on run le jeu, si en ouvrant la map excel plante c'est que ca a marché!
+5)reste a ajoute une couleur pour le caractère dans la fonction XMLDmp de worldMap, je ne crois pas que ce sois le cas avec excel 2010 mais excel 2003 a une palette de couleur très limitée, donc il va falloir trouvé une alternative ou se débrouillé avec les lettres...
+
 = Tileset et Sprite sheet =
 
 [http://www.codeproject.com/Articles/106884/Implementing-Auto-tiling-Functionality-in-a-Tile-M Auto-tiling]
 
 [http://wilbefast.com/2011/02/06/tricky-auto-tiling/ Auto-tiling again]
+
