@@ -20,7 +20,7 @@ class Biome
         char Gettype() { return type; }
         void Settype(char val) { type = val; }
 
-        virtual int Generate(char** map,int mapsize){return 0;}
+        virtual void Generate(char** map,int mapsize);
 
     protected:
         vector<point*> tile;

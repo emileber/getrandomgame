@@ -1,6 +1,6 @@
 #ifndef dock_H
 #define dock_H
-#include "zoneType.h"
+#include "ZoneType.h"
 
 class Docks: public ZoneType {
 public:
