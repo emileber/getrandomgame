@@ -132,39 +132,61 @@ void SdlInterface::SetTransparentColor(int r, int g, int b) {
  * Load an image and return an optimized SDL_Surface version of it
  *
  */
+//SDL_Surface * SdlInterface::LoadImage(string filename) {
+//	//printf("SDLInterface::load_image(%s)\n", filename.c_str());
+//	//L'image qui est chargée
+//	SDL_Surface* loadedImage = NULL;
+//
+//	//L'image optimisée que nous utiliserons par la suite
+//	SDL_Surface* optimizedImage = NULL;
+//
+//	//Chargement de l'image
+//	loadedImage = IMG_Load(filename.c_str());
+//	//printf("IMG_Load OK\n");
+//	//Si l'image est chargée correctement
+//	if (loadedImage != NULL) {
+//		//printf("%s != NULL\n", filename.c_str());
+//		//creation de l'image optimisée
+//		optimizedImage = SDL_DisplayFormat(loadedImage);
+//
+//		//liberation de l'ancienne image
+//		SDL_FreeSurface(loadedImage);
+//
+//		//si l'image optimisée créé est bonne
+//		if (optimizedImage != NULL) {
+//			//transparence
+//			SDL_SetColorKey(
+//					optimizedImage,
+//					SDL_RLEACCEL | SDL_SRCCOLORKEY,
+//					SDL_MapRGB(optimizedImage->format, _transColor.r,
+//							_transColor.g, _transColor.b));
+//		}
+//	}
+//	//printf("SDLInterface::load_image::END\n");
+//	//on retourne l'image optimisé
+//	return optimizedImage;
+//}
 SDL_Surface * SdlInterface::LoadImage(string filename) {
 	//printf("SDLInterface::load_image(%s)\n", filename.c_str());
 	//L'image qui est chargée
 	SDL_Surface* loadedImage = NULL;
-
-	//L'image optimisée que nous utiliserons par la suite
-	SDL_Surface* optimizedImage = NULL;
 
 	//Chargement de l'image
 	loadedImage = IMG_Load(filename.c_str());
 	//printf("IMG_Load OK\n");
 	//Si l'image est chargée correctement
 	if (loadedImage != NULL) {
-		//printf("%s != NULL\n", filename.c_str());
-		//creation de l'image optimisée
-		optimizedImage = SDL_DisplayFormat(loadedImage);
+		//transparence
+		SDL_SetColorKey(
+				loadedImage,
+				SDL_RLEACCEL | SDL_SRCCOLORKEY,
+				SDL_MapRGB(loadedImage->format, _transColor.r, _transColor.g,
+						_transColor.b));
 
-		//liberation de l'ancienne image
-		SDL_FreeSurface(loadedImage);
-
-		//si l'image optimisée créé est bonne
-		if (optimizedImage != NULL) {
-			//transparence
-			SDL_SetColorKey(
-					optimizedImage,
-					SDL_RLEACCEL | SDL_SRCCOLORKEY,
-					SDL_MapRGB(optimizedImage->format, _transColor.r,
-							_transColor.g, _transColor.b));
-		}
 	}
 	//printf("SDLInterface::load_image::END\n");
 	//on retourne l'image optimisé
-	return optimizedImage;
+	return loadedImage;
 }
 
 /**

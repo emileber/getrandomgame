@@ -36,23 +36,26 @@ Font::~Font() {
 /// @param Filename a std::string
 ///
 void Font::Load(std::string filename) {
-	//m_Font = ftglCreatePixmapFont("/home/user/Arial.ttf");
+	//mFont = ftglCreatePixmapFont("/home/user/Arial.ttf");
 	//FTGLPixmapFont font(filename.c_str());
 
-	//m_Font = new FTTextureFont(filename.c_str());
-	//m_Font = new FTHaloFont(filename.c_str());
-
 	if (filename != "") {
-		mFont = new FTPixmapFont(filename.c_str());
+		mFilename = filename;
+
+		//mFont = new FTPixmapFont(filename.c_str());
+		mFont = new FTTextureFont(filename.c_str());
 
 		if (mFont->Error()) {
 			cout << "Error loading Font '" << filename << "'" << endl;
 			delete mFont;
 			mFont = NULL;
+			mIsLoaded = false;
 		} else {
 			//set a default size
 			mFont->FaceSize(100);
+			mIsLoaded = true;
 		}
+
 	}
 }
 
@@ -81,6 +84,8 @@ void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat red,
 		return;
 	}
 
+	glPushMatrix();
+
 	glLoadIdentity();
 
 	//move with the camera if needed
@@ -99,11 +104,15 @@ void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat red,
 	}
 
 	glColor4f(red, green, blue, alpha);
-	glRasterPos2i((int) x, (int) y);
 
-	glPushMatrix();
+	glRasterPos2i((int) x, (int) y); // for FTPixmapFont
+	glTranslatef(x, y, 0.0f); // for FTTextureFont
+	glScaled(0.5f, 0.5f, 0);
 
 	mFont->Render(text.c_str());
+
+	//reset the color
+	glColor3f(1.0f, 1.0f, 1.0f);
 
 	glPopMatrix();
 }

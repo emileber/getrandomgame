@@ -32,6 +32,8 @@ public:
 	/// Default Destructor
 	virtual ~Texture();
 
+	void Init();
+
 	/// Returns the texture width
 	GLfloat GetWidth() const {
 		return mWidth;
@@ -46,6 +48,11 @@ public:
 		return mTexture;
 	}
 
+	// Set if it moves with the camera or not
+	void SetStatic(bool isBound){
+		mIsStatic = isBound;
+	}
+
 	/// Loads a texture
 	virtual void Load(std::string filename);
 
@@ -58,6 +65,7 @@ public:
 
 	/// Returns the pixel data
 	std::vector<std::vector<bool> >* GetPixels();
+
 
 	/// Draws the whole texture
 	void Draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0,
@@ -82,6 +90,7 @@ protected:
 	std::vector<std::vector<bool> > mPixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */
 	GLfloat mWidth; /**< Stores the width of the texture */
 	GLfloat mHeight; /**< Stores the height of the texture	*/
+	bool mIsStatic; // if it moves with the camera
 };
 
 } /* namespace TileEngine */

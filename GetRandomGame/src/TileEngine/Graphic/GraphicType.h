@@ -27,12 +27,14 @@ struct SectionRect {
 	GLfloat y; /**< The Y coordinate */
 	GLfloat w;
 	GLfloat h;
+	SectionRect(GLfloat xParam, GLfloat yParam, GLfloat wParam, GLfloat hParam): x(xParam), y(yParam), w(wParam), h(hParam){}
 };
 
 struct Color3f {
 	GLfloat r;
 	GLfloat g;
 	GLfloat b;
+	Color3f(GLfloat red, GLfloat green, GLfloat blue): r(red), g(green), b(blue){}
 };
 
 

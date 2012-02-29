@@ -14,6 +14,7 @@
 #include "Graphic.h"
 //#include "Singleton.h"
 #include "Texture.h"
+#include "Font.h"
 #include "Camera.h"
 
 using namespace std;
@@ -213,10 +214,12 @@ void Graphic::ToggleFullScreen() {
 			mSdlFlags = mSdlFlags ^ SDL_FULLSCREEN;
 			if (mIsFullscreen) {
 				cout << "toggle Fullscreen: " << mIsFullscreen << endl;
-				mSurface = SDL_SetVideoMode(FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT, 0, mSdlFlags);
+				mSurface = SDL_SetVideoMode(FULL_SCREEN_WIDTH,
+						FULL_SCREEN_HEIGHT, 0, mSdlFlags);
 			} else {
 				cout << "toggle Screen Mode: " << mIsFullscreen << endl;
-				mSurface = SDL_SetVideoMode(mWidthScreen, mHeightScreen, mBpp, mSdlFlags); /*Toggles Screen Mode */
+				mSurface = SDL_SetVideoMode(mWidthScreen, mHeightScreen, mBpp,
+						mSdlFlags); /*Toggles Screen Mode */
 			}
 
 			// if toggling to fullscreen or screen have screwed up
@@ -231,10 +234,10 @@ void Graphic::ToggleFullScreen() {
 				exit(1); /* If you can't switch back for some reason, then epic fail */
 			}
 
-			if (mIsFullscreen){
+			if (mIsFullscreen) {
 				mWidthCurrent = FULL_SCREEN_WIDTH;
 				mHeightCurrent = FULL_SCREEN_HEIGHT;
-			}else{
+			} else {
 				mWidthCurrent = mWidthScreen;
 				mHeightCurrent = mHeightScreen;
 			}
@@ -281,10 +284,10 @@ bool Graphic::ResizeWindow(int width, int height) {
 	return true;
 }
 
-
 void Graphic::Reload() {
 	InitGl();
 	Manager<Texture>::getInstance()->ReloadAllRessource();
+	Manager<Font>::getInstance()->ReloadAllRessource();
 }
 
 //
@@ -328,13 +331,29 @@ void Graphic::DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
 void Graphic::DrawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
 		GLfloat height, GLfloat red, GLfloat green, GLfloat blue,
 		GLfloat alpha) {
+
+	cout << "drawing filled rect" << endl;
+//	glPushMatrix();
+//	glLoadIdentity();
+//	glTranslatef(0, 0, 0);
+
+	x = Camera::getInstance()->GetX() + x;
+	y = Camera::getInstance()->GetY() + y;
+
 	glColor4f(red, green, blue, alpha);
-	glBegin(GL_QUADS);
-	glVertex3f(x, y, 0);
-	glVertex3f(x + width, y, 0);
-	glVertex3f(x + width, y + height, 0);
-	glVertex3f(x, y + height, 0);
+//	glBegin(GL_QUADS);
+//	glVertex3f(x, y, 0);
+//	glVertex3f(x + width, y, 0);
+//	glVertex3f(x + width, y + height, 0);
+//	glVertex3f(x, y + height, 0);
+	glBegin(GL_POLYGON);
+	glVertex2f(x, y);
+	glVertex2f(x + width, y);
+	glVertex2f(x + width, y + height);
+	glVertex2f(x, y + height);
 	glEnd();
+
+	//glPopMatrix();
 }
 
 //

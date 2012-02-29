@@ -15,6 +15,8 @@
 #include "MapGenerator.h"
 #include "WorldMap.h"
 #include "Graphic/Font.h"
+#include "Graphic/Sprite.h"
+#include "GUI/GLabel.h"
 
 using namespace std;
 
@@ -27,6 +29,8 @@ GLfloat testx = 0, testy = 0;
 Uint32 last = 0;
 SectionRect * tileTestRect;
 Font * _fontTest;
+Sprite* _spriteTest;
+GLabel* _testLabel;
 /**
  * END OF TEST DECLARATIONS
  ***************************/
@@ -53,7 +57,8 @@ void GetRandomGame::Init(int w, int h) {
 	map->DropXML();
 	map->Draw();
 
-	cout << "Map gen time: " << mGameTime.GetTimerTicks() - startTime << " ms" << endl;
+	cout << "Map gen time: " << mGameTime.GetTimerTicks() - startTime << " ms"
+			<< endl;
 
 	/****************************************
 	 *
@@ -64,15 +69,23 @@ void GetRandomGame::Init(int w, int h) {
 
 	_pave = _textMan->LoadRessource("image/pave.png");
 	_grass = _textMan->LoadRessource("image/grass.png");
+	_spriteTest = new Sprite("image/gui_icons.png",
+			new SectionRect(208, 0, 55, 54));
+	_spriteTest->GetTexture()->SetStatic(true);
 
-	tileTestRect = new SectionRect;
-	tileTestRect->x = 0;
-	tileTestRect->y = 0;
-	tileTestRect->w = 40;
-	tileTestRect->h = 40;
+	//_testLabel = new GLabel("Bayvania Crossing", "font/Ellianarelle_Path.ttf");
+	_testLabel = new GLabel("Bayvania Crossing",
+			"font/Jellyka_Delicious_Cake.ttf");
+
+	tileTestRect = new SectionRect(0, 0, 40, 40);
 
 	_fontTest = new Font();
-	_fontTest = Manager<Font>::getInstance()->LoadRessource("font/Jellyka_Delicious_Cake.ttf");
+	_fontTest = Manager<Font>::getInstance()->LoadRessource(
+			"font/Jellyka_Delicious_Cake.ttf");
+	//_fontTest->SetSize(20);
+
+	Manager<Font>::getInstance()->ListAllRessourceKey();
+	Manager<Texture>::getInstance()->ListAllRessourceKey();
 
 //	Uint32 start = _gameTime.get_ticks();
 //
@@ -102,40 +115,46 @@ void GetRandomGame::Update() {
 void GetRandomGame::Draw() {
 
 	// offset when fullscreen
-	int xFullScreenOffset = ((mGraphic->GetWidth() - mScreenWidth)/2);
-	int yFullScreenOffset = ((mGraphic->GetHeight() - mScreenHeight)/2);
-
-	// test square that show screen window dimensions
-	//mGraphic->DrawFilledRectangle(xFullScreenOffset-1, yFullScreenOffset-1, mScreenWidth+2, mScreenHeight+2, 1, 0, 0, 1);
+	int xFullScreenOffset = ((mGraphic->GetWidth() - mScreenWidth) / 2);
+	int yFullScreenOffset = ((mGraphic->GetHeight() - mScreenHeight) / 2);
 
 	// background floor
 	for (int x = 0; x < 30; x++) {
 		for (int y = 14; y >= 0; y--) {
 			tileTestRect->x = ((x * y + (x ^ y)) % 5) * 40;
-			_pave->DrawSection(xFullScreenOffset + x * 40, yFullScreenOffset + y * 40, tileTestRect);
+			_pave->DrawSection(xFullScreenOffset + x * 40,
+					yFullScreenOffset + y * 40, tileTestRect);
 		}
 	}
 
-	// camera position
-	//mGraphic->DrawFilledRectangle(Camera::getInstance()->GetX(), Camera::getInstance()->GetY(), 20, 20, 1, 0, 0, 1);
+	/**
+	 * Font test
+	 */
+	int xFont = mGraphic->GetWidth() - _fontTest->GetWidth("Bayvania Crossing");
+	int yFont = mGraphic->GetHeight() - _fontTest->GetHeight() / 2 - 10;
+	//mGraphic->DrawFilledRectangle(xFont, yFont, _fontTest->GetWidth("Bayvania Crossing"), _fontTest->GetHeight(), 0.5, 1, 1, 1);
 
-	_fontTest->Draw("Bayvania Crossing", mGraphic->GetWidth() - _fontTest->GetWidth("Bayvania Crossing"), mGraphic->GetHeight() - _fontTest->GetHeight()/2 - 10, 0, 0, 0, 1);
+	//int size = 12;
+	//for (int i = 0; i < 100; i++) {
+	//_fontTest->SetSize(size++);
+	_fontTest->Draw("Bayvania Crossing", xFont++, yFont, 0, 0, 0, 1);
+	//}
 
-	// GRASS tile test
+	/**
+	 * GRASS tile test
+	 */
 	tileTestRect->x = 0;
 	GLfloat red = testx / 100;
-	mGraphic->DrawFilledRectangle(xFullScreenOffset + 49, yFullScreenOffset + 49, 42, 42, 1, 0, 0, 1);
-	_grass->DrawSection(xFullScreenOffset + 50, yFullScreenOffset + 50, tileTestRect, 1, 0, red, 1.0f, 0.0f);
-	mGraphic->DrawFilledRectangle(xFullScreenOffset + 99, yFullScreenOffset + 49, 42, 42, 1, 0, 0, 1);
-	_grass->DrawSection(xFullScreenOffset + 100, yFullScreenOffset + 50, tileTestRect, 1, 0, 0.90f, 1.0f, 0.0f);
-	mGraphic->DrawFilledRectangle(xFullScreenOffset + 149, yFullScreenOffset + 49, 42, 42, 1, 0, 0, 1);
-	_grass->DrawSection(xFullScreenOffset + 150, yFullScreenOffset + 50, tileTestRect, 1, 0, 0.75f, 1.0f, 0.0f);
-	mGraphic->DrawFilledRectangle(xFullScreenOffset + 199, yFullScreenOffset + 49, 42, 42, 1, 0, 0, 1);
-	_grass->DrawSection(xFullScreenOffset + 200, yFullScreenOffset + 50, tileTestRect, 1, 0, 0.5f, 1.0f, 0.0f);
-	mGraphic->DrawFilledRectangle(xFullScreenOffset + 249,yFullScreenOffset +  49, 42, 42, 1, 0, 0, 1);
-	_grass->DrawSection(xFullScreenOffset + 250, yFullScreenOffset + 50, tileTestRect, 1, 0, 0.25f, 1.0f, 0.0f);
-	mGraphic->DrawFilledRectangle(xFullScreenOffset + 299, yFullScreenOffset + 49, 42, 42, 1, 0, 0, 1);
-	_grass->DrawSection(xFullScreenOffset + 300, yFullScreenOffset + 50, tileTestRect, 1, 0, 1, 1, 1);
+	mGraphic->DrawFilledRectangle(xFullScreenOffset + 49,
+			yFullScreenOffset + 49, 42, 42, 1, 0, 0, 1);
+	_grass->DrawSection(xFullScreenOffset + 50, yFullScreenOffset + 50,
+			tileTestRect, 1, 0, red, 1.0f, 0.0f);
+
+	/**
+	 * Menu tests
+	 */
+	_spriteTest->Draw(200, 200);
+	_testLabel->Draw(303, 200);
 
 }
 
