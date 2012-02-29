@@ -9,6 +9,7 @@
 #include "Graphic.h"
 #include "Camera.h"
 #include "GraphicType.h"
+#include "SdlInterface.h"
 
 using namespace std;
 
@@ -17,16 +18,14 @@ namespace TileEngine {
 // Default contructor
 //
 Texture::Texture() {
-	mWidth = 0;
-	mHeight = 0;
-	mTexture = 0;
-	mSurface = NULL;
+	Init();
 }
 
 //
 // Constructor that loads a file
 /// @param Filename a std::string
 Texture::Texture(std::string Filename) {
+	Init();
 	Load(Filename);
 }
 
@@ -37,6 +36,16 @@ Texture::~Texture() {
 	Kill();
 }
 
+void Texture::Init() {
+	mWidth = 0;
+	mHeight = 0;
+	mTexture = 0;
+	mSurface = NULL;
+	mFilename = "";
+	mIsStatic = false;
+	mIsLoaded = false;
+}
+
 //
 // Loads the texture to memory
 /// @param filename a std::string
@@ -44,7 +53,11 @@ Texture::~Texture() {
 void Texture::Load(std::string filename) {
 	//cout << "load " << filename << endl;
 	//load the image from a file via sdl_img
-	SDL_Surface* surface = IMG_Load(filename.c_str());
+	//SDL_Surface* surface = IMG_Load(filename.c_str());
+
+	SDL_Surface* surface = NULL;
+
+	surface = SdlInterface::getInstance()->LoadImage(filename);
 
 	if (surface == NULL) {
 		cout << "Failed to load the image: " << filename << ", Error: "
@@ -55,9 +68,10 @@ void Texture::Load(std::string filename) {
 
 	mFilename = filename; // Ressource filename
 
-	mSurface = surface;
+	//mSurface = surface;
+	mSurface = SDL_DisplayFormatAlpha(surface);
 
-	MakeTexture(surface);
+	MakeTexture(mSurface);
 	mIsLoaded = true; // Ressource loaded
 }
 
@@ -65,7 +79,7 @@ void Texture::Load(std::string filename) {
 // Internal function for loading a texture from a surface
 /// @param Surface a SDL_Surface pointer
 ///
-void Texture::MakeTexture(SDL_Surface* Surface) {
+void Texture::MakeTexture(SDL_Surface* surface) {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
 	glGenTextures(1, &mTexture);
@@ -80,11 +94,11 @@ void Texture::MakeTexture(SDL_Surface* Surface) {
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	SDL_PixelFormat *fmt = Surface->format;
+	SDL_PixelFormat *fmt = surface->format;
 
 	//setup all the information
-	mWidth = (GLfloat) (Surface->w);
-	mHeight = (GLfloat) (Surface->h);
+	mWidth = (GLfloat) (surface->w);
+	mHeight = (GLfloat) (surface->h);
 	//setup the pixel data (used for collisions)
 //	if (LoadCollision) {
 //		SDL_LockSurface(Surface);
@@ -127,12 +141,12 @@ void Texture::MakeTexture(SDL_Surface* Surface) {
 
 	//if there is alpha
 	if (fmt->Amask) {
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, mWidth, mHeight, GL_RGBA,
-				GL_UNSIGNED_BYTE, Surface->pixels);
+		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, mWidth, mHeight, GL_BGRA,
+				GL_UNSIGNED_BYTE, surface->pixels);
 	} else // no alpha
 	{
 		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGB, mWidth, mHeight, GL_RGB,
-				GL_UNSIGNED_BYTE, Surface->pixels);
+				GL_UNSIGNED_BYTE, surface->pixels);
 	}
 	//TextureManager::getInstance()->registerTexture(this);
 
@@ -180,8 +194,13 @@ void Texture::InitializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
 	}
 	//scale the points if needed
 	glLoadIdentity();
-	glTranslatef(Camera::getInstance()->GetX() + x,
-			Camera::getInstance()->GetY() + y, 0.0f);
+
+	if (!mIsStatic) {
+		x = Camera::getInstance()->GetX() + x;
+		y = Camera::getInstance()->GetY() + y;
+	}
+	glTranslatef(x, y, 0.0f);
+
 //	if (rotation != 0) {
 //		GLfloat x, y;
 //		x = ((rect->right - rect->left) / 2) * m_Width;
