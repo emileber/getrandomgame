@@ -241,9 +241,11 @@ void Texture::Draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 //	rect.left = 0.0f;
 	InitializeDraw(scale, rotation, x, y, NULL);
 
+	glColor4f(red, green, blue, alpha);
+
 	//draw the quad
 	glBegin(GL_QUADS);
-	glColor4f(red, green, blue, alpha);
+
 	//bottom-left vertex (corner)
 	glTexCoord2f(0, 0);
 	glVertex2f(0, mHeight);
@@ -259,9 +261,9 @@ void Texture::Draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 
 	glEnd();
 
+	glPopMatrix();
 	//reset the color
 	glColor3f(1.0f, 1.0f, 1.0f);
-	glPopMatrix();
 }
 
 //
@@ -286,10 +288,13 @@ void Texture::DrawSection(GLfloat x, GLfloat y, SectionRect * box,
 	GLfloat box_right = 1.0f * ((box->x + box->w) / mWidth);
 	GLfloat box_top = 1.0f - (1.0f * ((box->y + box->h) / mHeight));
 	GLfloat box_bottom = 1.0f - (1.0f * (box->y / mHeight));
+
+	glColor4f(red, green, blue, alpha);
+
 	//draw the quad
 	glBegin(GL_QUADS);
 	//bottom-left vertex (corner)
-	glColor4f(red, green, blue, alpha);
+
 	glTexCoord2f(box_left, box_bottom);
 	glVertex2f(0, 0);
 	//bottom-right vertex (corner)

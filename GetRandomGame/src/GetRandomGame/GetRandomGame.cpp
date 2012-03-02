@@ -10,6 +10,7 @@
 #include "Graphic/Texture.h"
 #include "Graphic/Camera.h"
 #include <ctime>
+#include <string>
 #include <iostream>
 
 #include "MapGenerator.h"
@@ -132,21 +133,36 @@ void GetRandomGame::Draw() {
 	 */
 	int xFont = mGraphic->GetWidth() - _fontTest->GetWidth("Bayvania Crossing");
 	int yFont = mGraphic->GetHeight() - _fontTest->GetHeight() / 2 - 10;
-	//mGraphic->DrawFilledRectangle(xFont, yFont, _fontTest->GetWidth("Bayvania Crossing"), _fontTest->GetHeight(), 0.5, 1, 1, 1);
+	//mGraphic->DrawFilledRectangle(xFont, yFont,
+	//		_fontTest->GetWidth("Bayvania Crossing"), _fontTest->GetHeight(),
+	//		0.5, 1, 1, 1);
 
 	//int size = 12;
 	//for (int i = 0; i < 100; i++) {
 	//_fontTest->SetSize(size++);
-	_fontTest->Draw("Bayvania Crossing", xFont++, yFont, 0, 0, 0, 1);
+	_fontTest->Draw("Bayvania Crossing", 100 + xFont, yFont, 1, 0, 0, 0, 1);
+	_fontTest->Draw(
+			SdlInterface::getInstance()->IntToString(_fontTest->GetHeight()),
+			100, yFont, 1, 0, 0, 0, 1);
 	//}
+
+	/**
+	 * RECT test
+	 */
+	SectionRect* rectTest = new SectionRect(500, 500, 20, 20);
+	Color3f* rectColor = new Color3f(0.5f, 0.5f, 1);
+	mGraphic->DrawFilledRectangle(rectTest, rectColor, 1, true);
+	mGraphic->DrawRectangle(rectTest, rectColor, 1, 2, true);
+	mGraphic->DrawRectangle(20, 200, 42, 42, 1, 0, 0, 1, 3, true);
+	mGraphic->DrawFilledRectangle(20, 100, 40, 40, 1, 1, 0, 1, true);
 
 	/**
 	 * GRASS tile test
 	 */
 	tileTestRect->x = 0;
 	GLfloat red = testx / 100;
-	mGraphic->DrawFilledRectangle(xFullScreenOffset + 49,
-			yFullScreenOffset + 49, 42, 42, 1, 0, 0, 1);
+	mGraphic->DrawRectangle(xFullScreenOffset + 49, yFullScreenOffset + 49, 42,
+			42, 1, 0, 0, 1, 2);
 	_grass->DrawSection(xFullScreenOffset + 50, yFullScreenOffset + 50,
 			tileTestRect, 1, 0, red, 1.0f, 0.0f);
 
@@ -155,12 +171,11 @@ void GetRandomGame::Draw() {
 	 */
 	_spriteTest->Draw(200, 200);
 	_testLabel->Draw(303, 200);
-
 }
 
 void GetRandomGame::testFunction(int xMod, int yMod) {
-	//testx += xMod;
-	//testy += yMod;
+	testx += xMod;
+	testy += yMod;
 	Camera::getInstance()->move(-xMod, -yMod);
 }
 

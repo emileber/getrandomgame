@@ -58,15 +58,12 @@ bool Graphic::Initialize(int Width, int Height, int Bpp,
 	if (WindowTitle != "") {
 		mWindowTitle = WindowTitle;
 	}
-
 	//if we reinitalize then reload the textures
 	if (mIsLoaded) {
 		Manager<Texture>::getInstance()->ReloadAllRessource();
 	}
-
 	mIsLoaded = MakeWindow();
 	glScissor(0, 0, mWidthScreen, mHeightScreen);
-
 	return mIsLoaded;
 }
 
@@ -82,7 +79,6 @@ bool Graphic::MakeWindow() {
 		cout << "Unable to initialize SDL: " << SDL_GetError() << endl;
 		exit(1);
 	}
-
 	if (mSdlFlags == 0) {
 		mSdlFlags = SDL_OPENGL | SDL_GL_DOUBLEBUFFER | SDL_HWPALETTE;
 		const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
@@ -98,46 +94,34 @@ bool Graphic::MakeWindow() {
 			mSdlFlags |= SDL_HWACCEL;
 		}
 	}
-
 	//| SDL_RESIZABLE;
-
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 	SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
-
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
-
 	// Anti-aliasing
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 	// A-Alias x2 ou x4 ou etc
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2);
-
 	// Sets up OpenGL double buffering
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-
 	//kill sdl on exiting
 	atexit(SDL_Quit);
-
 	//create the surface
 	mSurface = SDL_SetVideoMode(mWidthScreen, mHeightScreen, mBpp, mSdlFlags);
-
 	if (mSurface == NULL) {
 		cout << "Video mode set failed: " << SDL_GetError() << endl;
 		return false;
 	}
-
 	InitGl();
-
 	//set the window title
 	SDL_WM_SetCaption(mWindowTitle.c_str(), NULL);
-
 	return true;
 }
 
@@ -172,23 +156,17 @@ void Graphic::InitGl() {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_ALWAYS);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
-
 	glDisable(GL_LIGHTING);
-
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
-
 	//glEnable(GL_SCISSOR_TEST);
-
 	// get view port values
 	GLint vPort[4];
 	glGetIntegerv(GL_VIEWPORT, vPort);
-
 	//setup ortho mode
 	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
-
 	//glOrtho(0, (GLfloat) (m_Width), 0, (GLfloat) (m_Height), -1, 1);
 	glOrtho(0, vPort[2], 0, vPort[3], -1, 1);
 	glMatrixMode(GL_MODELVIEW);
@@ -266,19 +244,15 @@ bool Graphic::ResizeWindow(int width, int height) {
 	if (height == 0) {
 		height = 1;
 	}
-
 	//resize sdl surface
 	mSurface = SDL_SetVideoMode(width, height, mBpp, mSdlFlags);
-
 	if (mSurface == NULL) {
 		cout << "Could not get a surface after resize: " << SDL_GetError()
 				<< endl;
 		return false;
 	}
-
 	//reinitalize opengl
 	InitGl();
-
 	//reload textures
 	Manager<Texture>::getInstance()->ReloadAllRessource();
 	return true;
@@ -288,6 +262,38 @@ void Graphic::Reload() {
 	InitGl();
 	Manager<Texture>::getInstance()->ReloadAllRessource();
 	Manager<Font>::getInstance()->ReloadAllRessource();
+}
+
+void Graphic::InitialiseDraw(GLfloat x, GLfloat y, GLfloat scale,
+		bool isStatic) {
+
+	glPushMatrix();
+	//
+//	if (mCurrentTexture == mLastTexture) {
+//		//bind texture
+//		glBindTexture(GL_TEXTURE_2D, mCurrentTexture);
+//	}
+
+	glDisable(GL_TEXTURE_2D);
+
+	glLoadIdentity();
+
+	if (!isStatic) {
+		x += Camera::getInstance()->GetX();
+		y += Camera::getInstance()->GetY();
+	}
+
+	glTranslatef(x, y, 0.0f);
+
+	glScaled(scale, scale, 0);
+
+}
+
+void Graphic::ResetDraw() {
+	glPopMatrix();
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glEnable(GL_TEXTURE_2D);
+
 }
 
 //
@@ -302,19 +308,81 @@ void Graphic::Reload() {
 /// @param alpha a GLfloat
 ///
 void Graphic::DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
-		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
-	glPushMatrix();
-	glLoadIdentity();
-	glTranslatef(Camera::getInstance()->GetX() + x,
-			Camera::getInstance()->GetY() + y, 0.0);
-	glBegin(GL_LINE_LOOP);
+		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha,
+		GLfloat thickness, bool isStatic) {
+//
+
+	InitialiseDraw(x, y, 1, isStatic);
+
+	if (thickness > 0) {
+		glLineWidth(thickness);
+	}
+	//GLfloat thicknessOffset = thickness/2;
 	glColor4f(red, green, blue, alpha);
-	glVertex2f(x, y);
-	glVertex2f(x + width, y + height);
-	glVertex2f(x, y + height);
-	glVertex2f(x + width, y);
+	glBegin(GL_LINE_LOOP);
+//	glVertex2f(x, y);
+//	glVertex2f(x + width, y);
+//	glVertex2f(x + width, y + height);
+//	glVertex2f(x, y + height);
+
+	glVertex2f(0, 0);
+	glVertex2f(width, 0);
+	glVertex2f(width, height);
+	glVertex2f(0, height);
+
 	glEnd();
-	glPopMatrix();
+	ResetDraw();
+}
+
+//
+// Draws an empty Rectangle
+/// @param rect a SectionRect*
+/// @param color a Color3f*
+/// @param alpha a GLfloat
+/// @param thickness a GLfloat
+/// @param isStatic a Bool
+///
+void Graphic::DrawRectangle(SectionRect *rect, Color3f *color, GLfloat alpha,
+		GLfloat thickness, bool isStatic) {
+
+	InitialiseDraw(rect->x, rect->y, 1, isStatic);
+
+	if (thickness > 0) {
+		glLineWidth(thickness);
+	}
+	//GLfloat thicknessOffset = thickness/2;
+	glColor4f(color->r, color->g, color->b, alpha);
+	glBegin(GL_LINE_LOOP);
+	glVertex2f(0, 0);
+	glVertex2f(rect->w, 0);
+	glVertex2f(rect->w, rect->h);
+	glVertex2f(0, rect->h);
+	glEnd();
+
+	ResetDraw();
+}
+
+//
+// Draws an filled rectangle
+/// @param rect a SectionRect*
+/// @param color a Color3f*
+/// @param alpha a GLfloat
+/// @param thickness a GLfloat
+/// @param isStatic a Bool
+///
+void Graphic::DrawFilledRectangle(SectionRect *rect, Color3f *color,
+		GLfloat alpha, bool isStatic) {
+	InitialiseDraw(rect->x, rect->y, 1, isStatic);
+
+	glColor4f(color->r, color->g, color->b, alpha);
+	glBegin(GL_QUADS);
+	glVertex2f(0, 0);
+	glVertex2f(rect->w, 0);
+	glVertex2f(rect->w, rect->h);
+	glVertex2f(0, rect->h);
+	glEnd();
+
+	ResetDraw();
 }
 
 //
@@ -329,31 +397,25 @@ void Graphic::DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
 /// @param alpha a GLfloat
 ///
 void Graphic::DrawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
-		GLfloat height, GLfloat red, GLfloat green, GLfloat blue,
-		GLfloat alpha) {
+		GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha,
+		bool isStatic) {
 
-	cout << "drawing filled rect" << endl;
-//	glPushMatrix();
-//	glLoadIdentity();
-//	glTranslatef(0, 0, 0);
-
-	x = Camera::getInstance()->GetX() + x;
-	y = Camera::getInstance()->GetY() + y;
+	InitialiseDraw(x, y, 1, isStatic);
 
 	glColor4f(red, green, blue, alpha);
-//	glBegin(GL_QUADS);
-//	glVertex3f(x, y, 0);
-//	glVertex3f(x + width, y, 0);
-//	glVertex3f(x + width, y + height, 0);
-//	glVertex3f(x, y + height, 0);
+	//	glBegin(GL_QUADS);
+	//	glVertex3f(x, y, 0);
+	//	glVertex3f(x + width, y, 0);
+	//	glVertex3f(x + width, y + height, 0);
+	//	glVertex3f(x, y + height, 0);
 	glBegin(GL_POLYGON);
-	glVertex2f(x, y);
-	glVertex2f(x + width, y);
-	glVertex2f(x + width, y + height);
-	glVertex2f(x, y + height);
+	glVertex2f(0, 0);
+	glVertex2f(width, 0);
+	glVertex2f(width, height);
+	glVertex2f(0, height);
 	glEnd();
 
-	//glPopMatrix();
+	ResetDraw();
 }
 
 //
@@ -368,18 +430,28 @@ void Graphic::DrawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
 /// @param alpha a GLfloat
 ///
 void Graphic::DrawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2,
-		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
+		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha,
+		GLfloat thickness, bool isStatic) {
+	InitialiseDraw(x, y, 1, isStatic);
+
+	if (thickness > 0) {
+		glLineWidth(thickness);
+	}
+
 	glColor4f(red, green, blue, alpha);
 	glBegin(GL_LINES);
-	glVertex3f(x, y, 0);
-	glVertex3f(x2, y2, 0);
+	glVertex2f(0, 0);
+	glVertex2f(x2 - x, y2 - y);
 	glEnd();
+
+	ResetDraw();
 }
 
 //
 // Flips the screen from the backbuffer to the screen
 //
 void Graphic::FlipBuffers() {
+	//glFlush();
 	SDL_GL_SwapBuffers();
 }
 
@@ -387,7 +459,9 @@ void Graphic::FlipBuffers() {
 // clears the screen with a grey color
 //
 void Graphic::ClearScreen() {
+	SetCurrentTexture(-1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 }
 
 //
@@ -416,21 +490,18 @@ void Graphic::SetCurrentTexture(GLuint texture) {
 
 void Graphic::EnableClipping() {
 	glEnable(GL_SCISSOR_TEST);
-
 	//set scissor to the current area
 	Rectangle area;
-
 	if (mClippingArea.empty()) {
 		area.y1 = 0.0f;
-		area.y2 = (float) mHeightScreen;
+		area.y2 = (float) (mHeightScreen);
 		area.x1 = 0.0f;
-		area.x2 = (float) mWidthScreen;
+		area.x2 = (float) (mWidthScreen);
 	} else {
 		area = mClippingArea.top();
 	}
-
-	glScissor((GLsizei) area.x1, (GLsizei) area.y1, (GLint) area.x2,
-			(GLint) area.y2);
+	glScissor((GLsizei) (area.x1), (GLsizei) (area.y1), (GLint) (area.x2),
+			(GLint) (area.y2));
 }
 
 void Graphic::DisableClipping() {
@@ -444,17 +515,15 @@ void Graphic::DisableClipping() {
 void Graphic::PushClippingArea(Rectangle area) {
 	Rectangle newArea;
 	Rectangle currentArea;
-
 	//get the current clipping area
 	if (!mClippingArea.empty()) {
 		currentArea = mClippingArea.top();
 	} else {
 		currentArea.y1 = 0.0f;
-		currentArea.y2 = (float) mHeightScreen;
+		currentArea.y2 = (float) (mHeightScreen);
 		currentArea.x1 = 0.0f;
-		currentArea.x2 = (float) mWidthScreen;
+		currentArea.x2 = (float) (mWidthScreen);
 	}
-
 	//make the new clipping area from the rectangle intersection
 	//bottom
 	if (currentArea.y1 > area.y1) {
@@ -462,49 +531,41 @@ void Graphic::PushClippingArea(Rectangle area) {
 	} else {
 		newArea.y1 = area.y1;
 	}
-
 	//top
 	if ((currentArea.y1 + currentArea.y2) < (area.y1 + area.y2)) {
 		newArea.y2 = (currentArea.y1 + currentArea.y2) - newArea.y1;
 	} else {
 		newArea.y2 = (area.y1 + area.y2) - newArea.y1;
 	}
-
 	//left
 	if (currentArea.x1 > area.x1) {
 		newArea.x1 = currentArea.x1;
 	} else {
 		newArea.x1 = area.x1;
 	}
-
 	//right
 	if ((currentArea.x1 + currentArea.x2) < (area.x1 + area.x2)) {
 		newArea.x2 = (currentArea.x1 + currentArea.x2) - newArea.x1;
 	} else {
 		newArea.x2 = (area.x1 + area.x2) - newArea.x1;
 	}
-
 	mClippingArea.push(newArea);
-
-	glScissor((GLsizei) newArea.x1, (GLsizei) newArea.y1, (GLint) newArea.x2,
-			(GLint) newArea.y2);
+	glScissor((GLsizei) (newArea.x1), (GLsizei) (newArea.y1),
+			(GLint) (newArea.x2), (GLint) (newArea.y2));
 }
 
 void Graphic::PopClippingArea() {
 	Rectangle newArea;
-
 	mClippingArea.pop();
-
 	if (mClippingArea.empty()) {
 		newArea.y1 = 0.0f;
-		newArea.y2 = (float) mHeightScreen;
+		newArea.y2 = (float) (mHeightScreen);
 		newArea.x1 = 0.0f;
-		newArea.x2 = (float) mWidthScreen;
+		newArea.x2 = (float) (mWidthScreen);
 	} else {
 		newArea = mClippingArea.top();
 	}
-
-	glScissor((GLsizei) newArea.x1, (GLsizei) newArea.y1, (GLint) newArea.x2,
-			(GLint) newArea.y2);
+	glScissor((GLsizei) (newArea.x1), (GLsizei) (newArea.y1),
+			(GLint) (newArea.x2), (GLint) (newArea.y2));
 }
 }
