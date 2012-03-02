@@ -22,7 +22,7 @@
 
 namespace TileEngine {
 
-class Texture : public Ressource{
+class Texture: public Ressource {
 	friend class TextureManager;
 public:
 	/// Default Constructor
@@ -49,7 +49,7 @@ public:
 	}
 
 	// Set if it moves with the camera or not
-	void SetStatic(bool isBound){
+	void SetStatic(bool isBound) {
 		mIsStatic = isBound;
 	}
 
@@ -62,10 +62,12 @@ public:
 	/// Deletes the texture
 	void Kill();
 
+	void Test() {
+		InitializeDraw(1, 0, 0, 0, NULL);
+	}
 
 	/// Returns the pixel data
 	std::vector<std::vector<bool> >* GetPixels();
-
 
 	/// Draws the whole texture
 	void Draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0,
@@ -73,9 +75,9 @@ public:
 			GLfloat alpha = 1);
 
 	/// Draws a section of the texture
-	void DrawSection(GLfloat x, GLfloat y, SectionRect* box,
-			GLfloat scale = 1, GLfloat rotation = 0, GLfloat red = 1,
-			GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1);
+	void DrawSection(GLfloat x, GLfloat y, SectionRect* box, GLfloat scale = 1,
+			GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1,
+			GLfloat blue = 1, GLfloat alpha = 1);
 
 protected:
 	/// Internal function to setup drawing

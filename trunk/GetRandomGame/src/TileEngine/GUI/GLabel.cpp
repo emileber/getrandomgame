@@ -32,14 +32,14 @@ void GLabel::Init() {
 	mText = "";
 	mColor = new Color3f(0, 0, 0);
 	mAlpha = 1.0f;
-	mPointSize = 12;
+	mPointSize = 50;
 }
 
 void GLabel::Update() {
 }
 
 void GLabel::Draw(int x, int y) {
-	mFont->Draw(mText, mXoffset + x, mYoffset + y, mColor->r, mColor->g, mColor->b, mAlpha);
+	mFont->Draw(mText, mXoffset + x, mYoffset + y, (mPointSize/mFont->GetHeight()), mColor->r, mColor->g, mColor->b, mAlpha);
 }
 
 void GLabel::SetFont(std::string fontFileName) {

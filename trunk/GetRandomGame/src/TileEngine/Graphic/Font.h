@@ -37,7 +37,7 @@ public:
 	void Delete();
 
 	/// Draws a font
-	void Draw(std::string text, GLfloat x, GLfloat y, GLfloat red = 1,
+	void Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat red = 1,
 			GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1);
 	/// Sets the face size of the font
 	void SetSize(uint size);
@@ -51,6 +51,7 @@ public:
 
 private:
 	FTFont * mFont; /**< Stores the font				*/
+	//FTTextureFont* mFont;
 	bool mStatic; /**< Tells if the font moves with the camera 	*/
 	int mFaceSize; /**< Stores the size of the font		*/
 };

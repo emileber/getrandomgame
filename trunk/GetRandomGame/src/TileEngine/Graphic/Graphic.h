@@ -56,22 +56,31 @@ public:
 	/// Draws an empty Rectangle
 	void DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
 			GLfloat red = 0, GLfloat green = 0, GLfloat blue = 0,
-			GLfloat alpha = 1);
+			GLfloat alpha = 1, GLfloat thickness = 1, bool isStatic = false);
+
+	void DrawRectangle(SectionRect* rect, Color3f* color, GLfloat alpha = 1, GLfloat thickness = 1, bool isStatic = false);
 
 	/// Draws an filled rectangle
 	void DrawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
 			GLfloat height, GLfloat red = 0, GLfloat green = 0,
-			GLfloat blue = 0, GLfloat alpha = 1);
+			GLfloat blue = 0, GLfloat alpha = 1, bool isStatic = false);
+
+	void DrawFilledRectangle(SectionRect* rect, Color3f* color, GLfloat alpha = 1, bool isStatic = false);
+
+
 
 	/// Draws a line
 	void DrawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2, GLfloat red = 0,
-			GLfloat green = 0, GLfloat blue = 0, GLfloat alpha = 1);
+			GLfloat green = 0, GLfloat blue = 0, GLfloat alpha = 1,
+			GLfloat thickness = 1, bool isStatic = false);
 
 	/// returns the current texture in memory
 	GLuint GetCurrentTexture();
 
 	/// Set the current texture in memory
 	void SetCurrentTexture(GLuint texture);
+
+	void ResetDraw();
 
 	void SetCaption(std::string caption);
 
@@ -92,6 +101,7 @@ public:
 protected:
 	/// intializes opengl for 2d drawing
 	void InitGl();
+	void InitialiseDraw(GLfloat x, GLfloat y, GLfloat scale, bool isStatic);
 
 	bool mIsLoaded; /**< Tells if the graphics core was successfully loaded	*/
 	int mWidthScreen; /**< Stores the width of the drawing area		*/
@@ -105,6 +115,7 @@ protected:
 	Uint32 mSdlFlags; /**< Stores the drawing surface's capabilities		*/
 
 	GLuint mCurrentTexture; /**< contains the current texture that is in graphics memory	*/
+	GLuint mLastTexture;
 
 	std::stack<Rectangle> mClippingArea;
 

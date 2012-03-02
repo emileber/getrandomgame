@@ -71,12 +71,13 @@ void Font::Delete() {
 /// @param Text a std::string
 /// @param X a GLfloat
 /// @param Y a GLfloat
+/// @param scale a GLfloat
 /// @param Red a GLfloat
 /// @param Green a GLfloat
 /// @param Blue a GLfloat
 /// @param Alpha a GLfloat
 ///
-void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat red,
+void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale, GLfloat red,
 		GLfloat green, GLfloat blue, GLfloat alpha) {
 	//do nothing if the font isn't setup
 	if (mFont == NULL) {
@@ -87,6 +88,8 @@ void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat red,
 	glPushMatrix();
 
 	glLoadIdentity();
+
+	Graphic::getInstance()->SetCurrentTexture(0);
 
 	//move with the camera if needed
 	if (!mStatic) {
@@ -107,14 +110,14 @@ void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat red,
 
 	glRasterPos2i((int) x, (int) y); // for FTPixmapFont
 	glTranslatef(x, y, 0.0f); // for FTTextureFont
-	glScaled(0.5f, 0.5f, 0);
+	glScaled(scale, scale, 0);
 
 	mFont->Render(text.c_str());
 
+	glPopMatrix();
+
 	//reset the color
 	glColor3f(1.0f, 1.0f, 1.0f);
-
-	glPopMatrix();
 }
 
 //
