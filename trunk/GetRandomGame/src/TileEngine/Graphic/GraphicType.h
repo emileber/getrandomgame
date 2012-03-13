@@ -35,6 +35,7 @@ struct Color3f {
 	GLfloat g;
 	GLfloat b;
 	Color3f(GLfloat red, GLfloat green, GLfloat blue): r(red), g(green), b(blue){}
+	Color3f(){}
 };
 
 

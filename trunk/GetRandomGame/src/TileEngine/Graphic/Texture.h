@@ -62,10 +62,6 @@ public:
 	/// Deletes the texture
 	void Kill();
 
-	void Test() {
-		InitializeDraw(1, 0, 0, 0, NULL);
-	}
-
 	/// Returns the pixel data
 	std::vector<std::vector<bool> >* GetPixels();
 
@@ -78,6 +74,11 @@ public:
 	void DrawSection(GLfloat x, GLfloat y, SectionRect* box, GLfloat scale = 1,
 			GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1,
 			GLfloat blue = 1, GLfloat alpha = 1);
+
+	void DrawSection4Color(GLfloat x, GLfloat y, SectionRect* box,
+			Color3f * bottomLeftColor, Color3f * bottomRightColor,
+			Color3f * topRightColor, Color3f * topLeftColor, GLfloat scale = 1,
+			GLfloat rotation = 0, GLfloat alpha = 1);
 
 protected:
 	/// Internal function to setup drawing

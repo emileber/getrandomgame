@@ -105,12 +105,20 @@ bool Graphic::MakeWindow() {
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ACCUM_ALPHA_SIZE, 8);
-	// Anti-aliasing
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	// A-Alias x2 ou x4 ou etc
-	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2);
+
 	// Sets up OpenGL double buffering
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+	// Anti-aliasing
+	if (SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1) == -1) {
+		printf("Impossible d'initialiser SDL_GL_MULTISAMPLEBUFFERS à 1\n");
+	} else {
+		// A-Alias x2 ou x4 ou etc
+		if (SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 2) == -1) {
+			printf("Impossible d'initialiser SDL_GL_MULTISAMPLESAMPLES à 2\n");
+		}
+	}
+
 	//kill sdl on exiting
 	atexit(SDL_Quit);
 	//create the surface
@@ -159,6 +167,15 @@ void Graphic::InitGl() {
 	glDisable(GL_LIGHTING);
 	glEnable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
+
+	// Anti-Aliasing
+	glEnable(GL_MULTISAMPLE);
+//	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST );
+//	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+//
+//	glEnable(GL_LINE_SMOOTH);
+//	glEnable(GL_POLYGON_SMOOTH);
+
 	//glEnable(GL_SCISSOR_TEST);
 	// get view port values
 	GLint vPort[4];
@@ -191,11 +208,11 @@ void Graphic::ToggleFullScreen() {
 			//uint32_t flags = mSurface->flags; /* Save the current flags in case toggling fails */
 			mSdlFlags = mSdlFlags ^ SDL_FULLSCREEN;
 			if (mIsFullscreen) {
-				cout << "toggle Fullscreen: " << mIsFullscreen << endl;
+				cout << "toggle Fullscreen: mIsFullscreen = " << mIsFullscreen << endl;
 				mSurface = SDL_SetVideoMode(FULL_SCREEN_WIDTH,
 						FULL_SCREEN_HEIGHT, 0, mSdlFlags);
 			} else {
-				cout << "toggle Screen Mode: " << mIsFullscreen << endl;
+				cout << "toggle Screen Mode: mIsFullscreen = " << mIsFullscreen << endl;
 				mSurface = SDL_SetVideoMode(mWidthScreen, mHeightScreen, mBpp,
 						mSdlFlags); /*Toggles Screen Mode */
 			}
@@ -275,6 +292,7 @@ void Graphic::InitialiseDraw(GLfloat x, GLfloat y, GLfloat scale,
 //	}
 
 	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_MULTISAMPLE);
 
 	glLoadIdentity();
 

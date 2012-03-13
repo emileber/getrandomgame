@@ -20,6 +20,7 @@ public:
 	virtual bool MouseClick(int x, int y) = 0;
 	virtual bool MousePressed(int x, int y) = 0;
 	virtual bool MouseReleased(int x, int y) = 0;
+	virtual bool IsMouseIn(int x, int y) = 0;
 
 };
 

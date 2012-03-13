@@ -32,7 +32,8 @@ public:
 	virtual void PushMenu(GMenuItem *);
 
 protected:
-	std::vector<GMenuItem*> mMenuList;
+	std::vector<GMenuItem*> mActiveMenuList;
+
 };
 
 } /* namespace TileEngine */

@@ -34,25 +34,31 @@ public:
 	virtual void Load(std::string filename);
 
 	/// Deletes a font from memory
-	void Delete();
+	virtual void Delete();
 
 	/// Draws a font
-	void Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat red = 1,
+	virtual void Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat red = 1,
 			GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1);
 	/// Sets the face size of the font
-	void SetSize(uint size);
+	virtual void SetSize(uint size);
+
+
 	/// Sets if the font moves with the camera
-	void SetStatic(bool isStatic);
+	virtual void IsStatic(bool isStatic);
+
+	virtual bool IsStatic() const {
+		return mIsStatic;
+	}
 
 	/// returns the height of the font
 	GLfloat GetHeight();
 	/// returns the width of the string
 	GLfloat GetWidth(std::string text);
 
-private:
+protected:
 	FTFont * mFont; /**< Stores the font				*/
 	//FTTextureFont* mFont;
-	bool mStatic; /**< Tells if the font moves with the camera 	*/
+	bool mIsStatic; /**< Tells if the font moves with the camera 	*/
 	int mFaceSize; /**< Stores the size of the font		*/
 };
 } // namespace end

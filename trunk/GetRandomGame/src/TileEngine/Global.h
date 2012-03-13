@@ -45,7 +45,7 @@
   */
  const bool DEBUG = true;
  const int SCREEN_BPP = 32; // (bit per pixel)
- const int FRAMES_PER_SECOND = 200;  // Le nombre de frames par seconde
+ const int FRAMES_PER_SECOND = 999;  // Le nombre de frames par seconde
  const int MOVE_TIME = 12;
  const int MOVE_DISTANCE = 3;
 

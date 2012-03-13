@@ -11,10 +11,6 @@
 
 namespace TileEngine {
 
-GMenuItem::GMenuItem() {
-	Init();
-}
-
 GMenuItem::~GMenuItem() {
 	// TODO Auto-generated destructor stub
 }
@@ -22,7 +18,10 @@ GMenuItem::~GMenuItem() {
 void GMenuItem::Init() {
 	mXoffset = 0;
 	mYoffset = 0;
+	mWidth = 0;
+	mHeight = 0;
 	mIsActive = true;
+	mIsStatic = true;
 
 }
 

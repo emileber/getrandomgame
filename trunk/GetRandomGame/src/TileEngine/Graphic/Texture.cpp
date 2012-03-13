@@ -79,26 +79,20 @@ void Texture::Load(std::string filename) {
 // Internal function for loading a texture from a surface
 /// @param Surface a SDL_Surface pointer
 ///
-void Texture::MakeTexture(SDL_Surface* surface) {
+void Texture::MakeTexture(SDL_Surface *surface) {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-
 	glGenTextures(1, &mTexture);
 	glBindTexture(GL_TEXTURE_2D, mTexture);
-
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 	SDL_PixelFormat *fmt = surface->format;
-
 	//setup all the information
-	mWidth = (GLfloat) (surface->w);
-	mHeight = (GLfloat) (surface->h);
+	mWidth = (GLfloat) ((surface->w));
+	mHeight = (GLfloat) ((surface->h));
 	//setup the pixel data (used for collisions)
 //	if (LoadCollision) {
 //		SDL_LockSurface(Surface);
@@ -310,6 +304,50 @@ void Texture::DrawSection(GLfloat x, GLfloat y, SectionRect * box,
 	//reset the color
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glPopMatrix();
+}
+
+void Texture::DrawSection4Color(GLfloat x, GLfloat y, SectionRect* box,
+		Color3f * bottomLeftColor, Color3f * bottomRightColor,
+		Color3f * topRightColor, Color3f * topLeftColor, GLfloat scale,
+		GLfloat rotation, GLfloat alpha) {
+	glPushMatrix();
+	InitializeDraw(scale, rotation, x, y, box);
+	//width for drawing
+	GLfloat box_left = 1.0f * (box->x / mWidth);
+	GLfloat box_right = 1.0f * ((box->x + box->w) / mWidth);
+	GLfloat box_top = 1.0f - (1.0f * ((box->y + box->h) / mHeight));
+	GLfloat box_bottom = 1.0f - (1.0f * (box->y / mHeight));
+
+	glColor4f(1.0f, 1.0f, 1.0f, alpha);
+
+	//draw the quad
+	glBegin(GL_QUADS);
+	//bottom-left vertex (corner)
+	glColor3f(bottomLeftColor->r, bottomLeftColor->g, bottomLeftColor->b);
+	glTexCoord2f(box_left, box_bottom);
+	glVertex2f(0, 0);
+
+	//bottom-right vertex (corner)
+	glColor3f(bottomRightColor->r, bottomRightColor->g, bottomRightColor->b);
+	glTexCoord2f(box_right, box_bottom);
+	glVertex2f(box->w, 0);
+
+	//top-right vertex (corner)
+	glColor3f(topRightColor->r, topRightColor->g, topRightColor->b);
+	glTexCoord2f(box_right, box_top);
+	glVertex2f(box->w, box->h);
+
+	//top-left vertex (corner)
+	glColor3f(topLeftColor->r, topLeftColor->g, topLeftColor->b);
+	glTexCoord2f(box_left, box_top);
+	glVertex2f(0, box->h);
+
+	glEnd();
+
+	//reset the color
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glPopMatrix();
+
 }
 
 } // fin du namespace
