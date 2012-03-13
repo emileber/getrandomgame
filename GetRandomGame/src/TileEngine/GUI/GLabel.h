@@ -29,32 +29,46 @@ public:
 	virtual void Draw(int x, int y);
 
 	virtual void SetFont(std::string);
-	virtual void SetFont(Font* font) {
-		mFont = font;
+	virtual void SetFont(Font* font);
+
+	virtual Font *GetFont() {
+		return mFont;
 	}
 
-	virtual void SetText(std::string text = "") {
-		mText = text;
-	}
+	virtual void SetText(std::string text = "");
 
 	virtual void SetColor(Color3f* color) {
 		mColor = color;
 	}
 
-	virtual void SetColor(int r = 255, int g = 255, int b = 255);
+	virtual void SetColor(GLfloat r = 255, GLfloat g = 255, GLfloat b = 255);
 
 	virtual void SetAlpha(int alpha = 255);
 
-	virtual bool MouseHover(int x, int y){
+	virtual void SetSize(int size) {
+		mPointSize = size;
+		Height(size);
+	}
+
+	virtual void IsStatic(bool isStatic) {
+		GMenuItem::IsStatic(isStatic);
+		mFont->IsStatic(isStatic);
+	}
+
+	virtual bool IsMouseIn(int x, int y) {
 		return false;
 	}
-	virtual bool MouseClick(int x, int y){
+
+	virtual bool MouseHover(int x, int y) {
 		return false;
 	}
-	virtual bool MousePressed(int x, int y){
+	virtual bool MouseClick(int x, int y) {
 		return false;
 	}
-	virtual bool MouseReleased(int x, int y){
+	virtual bool MousePressed(int x, int y) {
+		return false;
+	}
+	virtual bool MouseReleased(int x, int y) {
 		return false;
 	}
 

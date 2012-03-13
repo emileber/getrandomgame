@@ -141,9 +141,6 @@ void Engine::FpsRegulator() {
 	//printf("fpsRegulator(_frame: %d, _fps: %d)\n", _frame, _fps);
 	mFrameCnt++; // incremente à chaque frame
 
-	// Render the FPS on screen
-	//_sdl->renderText(10, 5, DEBUG_LAYER, "FPS: " + _sdl->intToString(_fps));
-	mGraphic->SetCaption("FPS: " + mSdl->IntToString(mFps));
 
 	//Si une seconde est passee depuis la derniere mise à jour de la barre caption
 	if (mFpsTimer.GetTimerTicks() > 1000) {
@@ -152,7 +149,11 @@ void Engine::FpsRegulator() {
 		mFrameCnt = -1; // reset the frame counter
 
 		mFpsTimer.Start(); // restart the timer for each second
-		printf("frame/Time: %4d%10d\n", frameCount, mEnvironment->getTime());
+
+		// Render the FPS as the window title
+		mGraphic->SetCaption("FPS: " + mSdl->IntToString(mFps));
+
+		printf("%6d Frames, %10d ms, %5d fps;\n", frameCount, mEnvironment->getTime(), mFps);
 	}
 	//printf("fpsRegulator END\n");
 }

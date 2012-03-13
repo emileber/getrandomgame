@@ -20,7 +20,7 @@ namespace TileEngine {
 // Default constructor
 /// @params Filename a std::string
 Font::Font() {
-	mStatic = true;
+	mIsStatic = true;
 	mFont = NULL;
 }
 
@@ -52,7 +52,7 @@ void Font::Load(std::string filename) {
 			mIsLoaded = false;
 		} else {
 			//set a default size
-			mFont->FaceSize(100);
+			mFont->FaceSize(50);
 			mIsLoaded = true;
 		}
 
@@ -77,8 +77,8 @@ void Font::Delete() {
 /// @param Blue a GLfloat
 /// @param Alpha a GLfloat
 ///
-void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale, GLfloat red,
-		GLfloat green, GLfloat blue, GLfloat alpha) {
+void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale,
+		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
 	//do nothing if the font isn't setup
 	if (mFont == NULL) {
 		cout << "Font::Draw() error, font is NULL, can't draw..." << endl;
@@ -92,19 +92,20 @@ void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale, GLfloat r
 	Graphic::getInstance()->SetCurrentTexture(0);
 
 	//move with the camera if needed
-	if (!mStatic) {
+	if (!mIsStatic) {
 		x = Camera::getInstance()->GetX() + x;
 		y = Camera::getInstance()->GetY() + y;
 	}
 
 	std::string tempStr;
 
-	//fix bug in ftgl when part of the text is offscreen nothing draws
-	while ((x < 0) && (text.length() != 0)) {
-		tempStr = text[0];
-		x += GetWidth(tempStr);
-		text = text.substr(1, text.length());
-	}
+	//fix bug (WITH PIXMAPFONT) in ftgl when part of the text is offscreen nothing draws
+//	while ((x < 0) && (text.length() != 0)) {
+//		tempStr = text[0];
+//		x += scale * GetWidth(tempStr);
+//		text = text.substr(1, text.length());
+//	}
+	//glEnable(GL_MULTISAMPLE);
 
 	glColor4f(red, green, blue, alpha);
 
@@ -138,8 +139,8 @@ void Font::SetSize(uint size) {
 // Sets if the text moves with the camera or not, default is true
 /// @param Static a bool
 ///
-void Font::SetStatic(bool isStatic) {
-	mStatic = isStatic;
+void Font::IsStatic(bool isStatic) {
+	mIsStatic = isStatic;
 }
 
 //

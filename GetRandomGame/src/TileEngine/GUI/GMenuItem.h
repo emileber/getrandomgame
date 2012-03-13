@@ -18,7 +18,8 @@ namespace TileEngine {
  */
 class GMenuItem: public IClickable {
 public:
-	GMenuItem();
+	GMenuItem() {
+	}
 	virtual ~GMenuItem();
 
 	virtual void Init() = 0;
@@ -36,27 +37,52 @@ public:
 	 * ACCESSOR
 	 *
 	 */
-	virtual int X() {
+	virtual int X() const {
 		return mXoffset;
 	}
 	virtual void X(int x) {
 		mXoffset = x;
 	}
-	virtual int Y() {
+	virtual int Y() const {
 		return mYoffset;
 	}
 	virtual void Y(int y) {
 		mYoffset = y;
 	}
 
-	virtual void Toggle(){
+	virtual int Width() const {
+		return mWidth;
+	}
+	virtual void Width(int w) {
+		mWidth = w;
+	}
+
+	virtual int Height() const {
+		return mHeight;
+	}
+	virtual void Height(int h) {
+		mHeight = h;
+	}
+
+	virtual void Toggle() {
 		mIsActive = !mIsActive;
+	}
+
+	virtual void IsStatic(bool isStatic) {
+		mIsStatic = isStatic;
+	}
+
+	virtual bool IsStatic() const {
+		return mIsStatic;
 	}
 protected:
 	int mXoffset;
 	int mYoffset;
+	int mWidth;
+	int mHeight;
 	std::vector<GMenuItem*> mMenuItemList;
 	bool mIsActive;
+	bool mIsStatic;
 
 };
 

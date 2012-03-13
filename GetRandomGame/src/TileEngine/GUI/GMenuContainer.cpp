@@ -20,15 +20,15 @@ GMenuContainer::~GMenuContainer() {
 }
 
 void GMenuContainer::Update() {
-	for (unsigned int i = 0; i < mMenuList.size(); i++) {
-		mMenuList.at(i)->Update();
+	for (unsigned int i = 0; i < mActiveMenuList.size(); i++) {
+		mActiveMenuList.at(i)->Update();
 	}
 
 }
 
 void GMenuContainer::Draw() {
-	for (unsigned int i = 0; i < mMenuList.size(); i++) {
-		mMenuList.at(i)->Draw(0, 0);
+	for (unsigned int i = 0; i < mActiveMenuList.size(); i++) {
+		mActiveMenuList.at(i)->Draw(0, 0);
 	}
 
 }
@@ -41,7 +41,7 @@ void GMenuContainer::Draw() {
  */
 void GMenuContainer::PushMenu(GMenuItem* menuItem) {
 	if (menuItem != NULL) {
-		mMenuList.push_back(menuItem);
+		mActiveMenuList.push_back(menuItem);
 	}
 }
 

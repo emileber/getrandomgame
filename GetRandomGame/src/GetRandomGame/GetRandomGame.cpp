@@ -16,7 +16,8 @@
 #include "MapGenerator.h"
 #include "WorldMap.h"
 #include "Graphic/Font.h"
-#include "Graphic/Sprite.h"
+//#include "Graphic/Sprite.h"
+#include "Graphic/MultiTintedSprite.h"
 #include "GUI/GLabel.h"
 
 using namespace std;
@@ -24,14 +25,13 @@ using namespace std;
 /***************************
  * TEST DECLARATIONS
  */
-Texture * _background, *_pave, *_cat, *_grass;
-SDL_Surface * _semiTransSurf;
+Texture *_pave, *_grass;
 GLfloat testx = 0, testy = 0;
-Uint32 last = 0;
 SectionRect * tileTestRect;
 Font * _fontTest;
+MultiTintedSprite* _MultiTintedSpriteTest;
 Sprite* _spriteTest;
-GLabel* _testLabel;
+GLabel* _testLabel, *_testCoordLabel;
 /**
  * END OF TEST DECLARATIONS
  ***************************/
@@ -48,49 +48,53 @@ void GetRandomGame::Init(int w, int h) {
 	//srand((unsigned) time(0)); // seed the random gen
 	//srand(5);
 
-	uint32_t startTime = mGameTime.GetTimerTicks();
-	cout << "StarTime: " << startTime << " ms" << endl;
-
-	MapGenerator* generator = new MapGenerator();
-
-	//WorldMap* map = generator->GenerateANewWorld(65, 1.55,36,time(0));
-	WorldMap* map = generator->GenerateANewWorld(129, 1.55, 36, 64444);
-	map->DropXML();
-	map->Draw();
-
-	cout << "Map gen time: " << mGameTime.GetTimerTicks() - startTime << " ms"
-			<< endl;
+//	uint32_t startTime = mGameTime.GetTimerTicks();
+//	cout << "StarTime: " << startTime << " ms" << endl;
+//
+//	MapGenerator* generator = new MapGenerator();
+//
+//	//WorldMap* map = generator->GenerateANewWorld(65, 1.55,36,time(0));
+//	WorldMap* map = generator->GenerateANewWorld(129, 1.55, 36, 64444);
+//	map->DropXML();
+//	map->Draw();
+//
+//	cout << "Map gen time: " << mGameTime.GetTimerTicks() - startTime << " ms"
+//			<< endl;
 
 	/****************************************
 	 *
 	 * TEST INIT
 	 *
 	 */
-	Manager<Texture> * _textMan = Manager<Texture>::getInstance();
 
-	_pave = _textMan->LoadRessource("image/pave.png");
-	_grass = _textMan->LoadRessource("image/grass.png");
-	_spriteTest = new Sprite("image/gui_icons.png",
-			new SectionRect(208, 0, 55, 54));
-	_spriteTest->GetTexture()->SetStatic(true);
+	_pave = mTextureManager->LoadRessource("image/pave.png");
+	_grass = NULL;
+	_grass = mTextureManager->LoadRessource("image/grass.png");
+	if (_grass == NULL) {
+		cout << "grass est NULL" << endl;
+	}
+	_MultiTintedSpriteTest = new MultiTintedSprite(_grass,
+			new SectionRect(0, 0, 40, 40));
+	//_spriteTest->GetTexture()->SetStatic(true);
 
 	//_testLabel = new GLabel("Bayvania Crossing", "font/Ellianarelle_Path.ttf");
+	//_testLabel = new GLabel("Bayvania Crossing", "font/CaslonBold.ttf");
 	_testLabel = new GLabel("Bayvania Crossing",
 			"font/Jellyka_Delicious_Cake.ttf");
+	_testLabel->SetSize(17);
+	_testLabel->SetColor(255, 255, 255);
+	_testLabel->IsStatic(false);
+
+	_testCoordLabel = new GLabel("Bayvania Crossing", "font/CaslonBold.ttf");
 
 	tileTestRect = new SectionRect(0, 0, 40, 40);
 
 	_fontTest = new Font();
 	_fontTest = Manager<Font>::getInstance()->LoadRessource(
 			"font/Jellyka_Delicious_Cake.ttf");
-	//_fontTest->SetSize(20);
 
-	Manager<Font>::getInstance()->ListAllRessourceKey();
-	Manager<Texture>::getInstance()->ListAllRessourceKey();
-
-//	Uint32 start = _gameTime.get_ticks();
-//
-//	cout << "Map Generation: " << (_gameTime.get_ticks() - start) << " ms" << endl;
+	_spriteTest = new Sprite("image/gui_icons.png",
+			new SectionRect(311, 0, 48, 54));
 
 	/*
 	 * END OF TEST INIT
@@ -129,54 +133,82 @@ void GetRandomGame::Draw() {
 	}
 
 	/**
-	 * Font test
-	 */
-	int xFont = mGraphic->GetWidth() - _fontTest->GetWidth("Bayvania Crossing");
-	int yFont = mGraphic->GetHeight() - _fontTest->GetHeight() / 2 - 10;
-	//mGraphic->DrawFilledRectangle(xFont, yFont,
-	//		_fontTest->GetWidth("Bayvania Crossing"), _fontTest->GetHeight(),
-	//		0.5, 1, 1, 1);
-
-	//int size = 12;
-	//for (int i = 0; i < 100; i++) {
-	//_fontTest->SetSize(size++);
-	_fontTest->Draw("Bayvania Crossing", 100 + xFont, yFont, 1, 0, 0, 0, 1);
-	_fontTest->Draw(
-			SdlInterface::getInstance()->IntToString(_fontTest->GetHeight()),
-			100, yFont, 1, 0, 0, 0, 1);
-	//}
-
-	/**
-	 * RECT test
-	 */
-	SectionRect* rectTest = new SectionRect(500, 500, 20, 20);
-	Color3f* rectColor = new Color3f(0.5f, 0.5f, 1);
-	mGraphic->DrawFilledRectangle(rectTest, rectColor, 1, true);
-	mGraphic->DrawRectangle(rectTest, rectColor, 1, 2, true);
-	mGraphic->DrawRectangle(20, 200, 42, 42, 1, 0, 0, 1, 3, true);
-	mGraphic->DrawFilledRectangle(20, 100, 40, 40, 1, 1, 0, 1, true);
-
-	/**
 	 * GRASS tile test
 	 */
-	tileTestRect->x = 0;
-	GLfloat red = testx / 100;
-	mGraphic->DrawRectangle(xFullScreenOffset + 49, yFullScreenOffset + 49, 42,
-			42, 1, 0, 0, 1, 2);
-	_grass->DrawSection(xFullScreenOffset + 50, yFullScreenOffset + 50,
-			tileTestRect, 1, 0, red, 1.0f, 0.0f);
+	GLfloat red = 1.0f;
+	GLfloat green = 1.0f;
+	for (int x = 15; x < 30; x++) {
+		red = 1 - ((float) x / 30);
 
+		for (int y = 7; y >= 0; y--) {
+			green = ((float) y / 14);
+			_MultiTintedSpriteTest->SetColor(0, 0, red, green, 0.0f);
+			_MultiTintedSpriteTest->SetColor(0, 1, red, green, 0.0f);
+			_MultiTintedSpriteTest->SetColor(1, 0, red, green, 0.0f);
+			_MultiTintedSpriteTest->SetColor(1, 1, red, green, 0.0f);
+
+			_MultiTintedSpriteTest->Draw(xFullScreenOffset + x * 40,
+					yFullScreenOffset + y * 40);
+			//_testLabel->SetText(
+			//		"(" + SdlInterface::getInstance()->IntToString(x) + ","
+					//		+ SdlInterface::getInstance()->IntToString(y)
+					//		+ ")");
+			//mGraphic->DrawFilledRectangle(xFullScreenOffset + x * 40,
+			//		yFullScreenOffset + y * 40 - 1, 40, 17, 0, 0, 0);
+			//_testLabel->Draw(xFullScreenOffset + x * 40,
+			//		yFullScreenOffset + y * 40 + 1);
+
+		}
+
+	}
 	/**
 	 * Menu tests
 	 */
-	_spriteTest->Draw(200, 200);
-	_testLabel->Draw(303, 200);
+	//_spriteTest->Draw(200, 200);
+
+	/**
+	 * Test coord screen output
+	 */
+	_testCoordLabel->Draw(10, mScreenHeight - 10 - _testCoordLabel->Height());
+
+	/**
+	 * font bug test
+	 *
+	 */
+
+	/*
+	Si j'enlève tout output/draw et que je draw uniquement du text:
+	4000 lines = 12 fps (unplayable fps limit)
+	3000 lines = 16 fps
+	2000 lines = 24 fps (Dramatic fps limit)
+	1500 lines = 32 fps
+	1150 lines = 43 fps
+	1000 lines = 48 fps
+	700 lines = 69 fps
+	600 lines = 80 fps
+	500 lines = 95 fps
+	400 lines = 118 fps
+	300 lines = 153 fps
+	221 lines = 199 fps (premier changement)
+	200 lines = 220 fps
+	100 lines = 394 fps
+	1 line = 593 fps
+	*/
+
+
+
+//	for (GLfloat x = 0; x < testx; x++) {
+//		_testLabel->Draw(100, 100);
+//	}
+
+	//mGraphic->DrawLine(100, 100, 40, 40, 1, 1, 1, 1, 3, false);
 }
 
 void GetRandomGame::testFunction(int xMod, int yMod) {
 	testx += xMod;
 	testy += yMod;
 	Camera::getInstance()->move(-xMod, -yMod);
+	_testCoordLabel->SetText("("+mSdlInterface->IntToString(testx)+", "+mSdlInterface->IntToString(testy)+")");
 }
 
 void GetRandomGame::Close() {
