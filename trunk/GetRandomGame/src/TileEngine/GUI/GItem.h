@@ -9,29 +9,24 @@
 #define GMENUITEM_H_
 
 #include "IClickable.h"
-
+#include "Global.h"
 #include <vector>
 namespace TileEngine {
 
 /*
  *
  */
-class GMenuItem: public IClickable {
+class GItem: public IClickable {
 public:
-	GMenuItem() {
+	GItem() {
 	}
-	virtual ~GMenuItem();
+	virtual ~GItem();
 
 	virtual void Init() = 0;
 	virtual void Update() = 0;
 	virtual void Draw(int x = 0, int y = 0) = 0;
 
-	virtual bool MouseHover(int x, int y) = 0;
-	virtual bool MouseClick(int x, int y) = 0;
-	virtual bool MousePressed(int x, int y) = 0;
-	virtual bool MouseReleased(int x, int y) = 0;
-
-	virtual void PushMenuItem(GMenuItem*);
+	virtual void PushItem(GItem*);
 
 	/**
 	 * ACCESSOR
@@ -50,6 +45,11 @@ public:
 		mYoffset = y;
 	}
 
+	virtual void SetOffset(int x, int y) {
+		mXoffset = x;
+		mYoffset = y;
+	}
+
 	virtual int Width() const {
 		return mWidth;
 	}
@@ -64,6 +64,11 @@ public:
 		mHeight = h;
 	}
 
+	virtual void SetSize(int w, int h) {
+		mWidth = w;
+		mHeight = h;
+	}
+
 	virtual void Toggle() {
 		mIsActive = !mIsActive;
 	}
@@ -75,14 +80,31 @@ public:
 	virtual bool IsStatic() const {
 		return mIsStatic;
 	}
+	virtual void IsActive(bool isActive) {
+		mIsActive = isActive;
+	}
+
+	virtual bool IsActive() const {
+		return mIsActive;
+	}
+
+	virtual void Alpha(GLfloat alpha);
+	virtual GLfloat Alpha() const {
+		return mAlpha;
+	}
+
 protected:
+
+	//virtual void InitialiseDraw();
+
 	int mXoffset;
 	int mYoffset;
 	int mWidth;
 	int mHeight;
-	std::vector<GMenuItem*> mMenuItemList;
+	std::vector<GItem*> mItemVector;
 	bool mIsActive;
 	bool mIsStatic;
+	GLfloat mAlpha;
 
 };
 

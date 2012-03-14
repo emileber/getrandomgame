@@ -8,7 +8,7 @@
 #ifndef GBUTTON_H_
 #define GBUTTON_H_
 
-#include "GMenuItem.h"
+#include "GItem.h"
 #include "GLabel.h"
 #include "Graphic/Sprite.h"
 
@@ -17,7 +17,7 @@ namespace TileEngine {
 /*
  *
  */
-class GButton: public GMenuItem {
+class GButton: public GItem {
 public:
 	GButton();
 	virtual ~GButton();

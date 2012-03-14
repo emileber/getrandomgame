@@ -5,37 +5,36 @@
  *      Author: Emile
  */
 
-#include "GMenu.h"
+#include "GWindow.h"
+#include <set>
 
 namespace TileEngine {
 
-GMenu::GMenu() {
+GWindow::GWindow() {
 	// TODO Auto-generated constructor stub
 
 }
-GMenu::GMenu(Sprite* sprite) {
+GWindow::GWindow(Sprite* sprite) {
 	if (sprite != NULL) {
 		mBackground = sprite;
 	}
 }
-GMenu::~GMenu() {
+GWindow::~GWindow() {
 	// TODO Auto-generated destructor stub
 }
 
-void GMenu::Init(){
-	GMenuItem::Init();
+void GWindow::Init() {
+	GItem::Init();
 }
 
-void GMenu::Update() {
-	GMenuItem::Update();
+void GWindow::Update() {
+	GItem::Update();
 }
 
-void GMenu::Draw(int x, int y) {
+void GWindow::Draw(int x, int y) {
 	mBackground->Draw(mXoffset + x, mYoffset + y);
 
-	for (unsigned int i = 0; i < mMenuItemList.size(); i++) {
-		mMenuItemList.at(i)->Draw(mXoffset + x, mYoffset + y);
-	}
+	GItem::Draw(mXoffset + x, mYoffset + y);
 
 }
 

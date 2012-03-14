@@ -9,6 +9,8 @@
 #define SDLINTERFACE_H_
 
 #include "Global.h"
+#include <iostream>
+#include <sstream>
 
 namespace TileEngine {
 
@@ -23,14 +25,35 @@ private:
 public:
 	//bool init(int, int, int, std::string, int = 1);
 	SDL_Surface * LoadImage(std::string);
-	SDL_Surface * CreateTextSurface(TTF_Font * font, std::string text, uint r, uint g, uint b);
+	SDL_Surface * CreateTextSurface(TTF_Font * font, std::string text, uint r,
+			uint g, uint b);
 	SDL_Surface* CreateSurface(int, int, SDL_Surface* = NULL);
 
 	void SetTransparentColor(int, int, int);
 
-	std::string IntToString(Uint32);
+	/**
+	 * NumberToString
+	 *  cast any Number base type to string...
+	 */
+	template<typename T>
+	std::string NumberToString(T number) {
+		std::stringstream ss; //create a stringstream
+		ss << number; //add number to the stream
+		return ss.str(); //return a string with the contents of the stream
+	}
 	std::string FormatTime(Uint32); // format milisec in a readable time format
 };
+
+/**
+ * intToString
+ *  cast int to string...
+ */
+//template<typename T>
+//string SdlInterface::NumberToString(T number) {
+//	stringstream ss; //create a stringstream
+//	ss << number; //add number to the stream
+//	return ss.str(); //return a string with the contents of the stream
+//}
 
 }
 #endif /* SDLINTERFACE_H_ */

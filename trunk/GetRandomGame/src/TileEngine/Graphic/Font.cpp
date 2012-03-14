@@ -20,7 +20,7 @@ namespace TileEngine {
 // Default constructor
 /// @params Filename a std::string
 Font::Font() {
-	mIsStatic = true;
+	//mIsStatic = true;
 	mFont = NULL;
 }
 
@@ -52,7 +52,7 @@ void Font::Load(std::string filename) {
 			mIsLoaded = false;
 		} else {
 			//set a default size
-			mFont->FaceSize(50);
+			mFont->FaceSize(40);
 			mIsLoaded = true;
 		}
 
@@ -78,7 +78,7 @@ void Font::Delete() {
 /// @param Alpha a GLfloat
 ///
 void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale,
-		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
+		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) const {
 	//do nothing if the font isn't setup
 	if (mFont == NULL) {
 		cout << "Font::Draw() error, font is NULL, can't draw..." << endl;
@@ -92,10 +92,15 @@ void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale,
 	Graphic::getInstance()->SetCurrentTexture(0);
 
 	//move with the camera if needed
-	if (!mIsStatic) {
-		x = Camera::getInstance()->GetX() + x;
-		y = Camera::getInstance()->GetY() + y;
-	}
+//	if (!mIsStatic) {
+//		x = Camera::getInstance()->GetX() + x;
+//		y = Camera::getInstance()->GetY() + y;
+//	}
+
+	// Correct the Y position so letter
+	// like p,y,g,q and j don't get below
+	// their belonging Y position.
+	y -= (mFont->Descender() * scale);
 
 	std::string tempStr;
 
@@ -139,15 +144,15 @@ void Font::SetSize(uint size) {
 // Sets if the text moves with the camera or not, default is true
 /// @param Static a bool
 ///
-void Font::IsStatic(bool isStatic) {
-	mIsStatic = isStatic;
-}
+//void Font::IsStatic(bool isStatic) {
+//	mIsStatic = isStatic;
+//}
 
 //
 // returns the height of the font
 /// @return Width of the string
 ///
-GLfloat Font::GetHeight() {
+GLfloat Font::GetHeight() const {
 	return (GLfloat) mFont->LineHeight();
 }
 
@@ -156,7 +161,7 @@ GLfloat Font::GetHeight() {
 /// @param text a std::string
 /// @return width of the string
 ///
-GLfloat Font::GetWidth(std::string text) {
+GLfloat Font::GetWidth(const std::string & text) const {
 	return (GLfloat) mFont->Advance(text.c_str());
 }
 

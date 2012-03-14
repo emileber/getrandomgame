@@ -28,17 +28,5 @@ void Environment::Init(int w, int h) {
 	mGameTime.Start();
 }
 
-void Environment::Update() {
-//	_world->update();
-	//cout << "Environment::update()" << endl;
-}
-
-void Environment::Draw(){
-	mWorld->Draw();
-}
-
-void Environment::Close() {
-	cout << "Environment::close()" << endl;
-}
 
 }
