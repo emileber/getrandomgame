@@ -19,7 +19,7 @@ GButton::~GButton() {
 }
 
 void GButton::Init() {
-	GMenuItem::Init();
+	GItem::Init();
 	mLabel = NULL;
 	mBackground = NULL;
 }

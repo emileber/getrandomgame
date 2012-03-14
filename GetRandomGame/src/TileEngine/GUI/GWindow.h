@@ -11,18 +11,18 @@
 #define GMENU_H_
 
 #include "Graphic/Sprite.h" // for background image and other stuff;
-#include "GMenuItem.h"
+#include "GItem.h"
 
 namespace TileEngine {
 
 /*
  *
  */
-class GMenu : public GMenuItem{
+class GWindow : public GItem{
 public:
-	GMenu();
-	GMenu(Sprite* sprite);
-	virtual ~GMenu();
+	GWindow();
+	GWindow(Sprite* sprite);
+	virtual ~GWindow();
 
 	virtual void Init();
 	virtual void Update();

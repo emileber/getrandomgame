@@ -6,6 +6,7 @@
  */
 
 #include "GLabel.h"
+#include "Graphic/Camera.h"
 #include <string>
 
 namespace TileEngine {
@@ -17,13 +18,23 @@ GLabel::GLabel() {
 
 GLabel::GLabel(std::string text, std::string fontFileName) {
 	Init();
-	mText = text;
 	SetFont(fontFileName);
+	SetText(text);
+	SetFontSize(50);
 
 }
 
 GLabel::~GLabel() {
 	// TODO Auto-generated destructor stub
+}
+
+void GLabel::Init() {
+	GItem::Init();
+	mFont = NULL;
+	mText = "";
+	mColor = new Color3f(0, 0, 0);
+	mAlpha = 1.0f;
+	mPointSize = 50;
 }
 
 /**
@@ -36,18 +47,8 @@ void GLabel::SetFont(std::string fontFileName) {
 	SetFont(Manager<Font>::getInstance()->LoadRessource(fontFileName));
 }
 
-void GLabel::SetFont(Font* font){
+void GLabel::SetFont(const Font* font) {
 	mFont = font;
-}
-
-/**
- * Takes a value between 0 and 255
- * Then convert the value in a %
- * as a Float
- * @param alpha value (0 to 255) as an Integer
- */
-void GLabel::SetAlpha(int alpha) {
-	mAlpha = (GLfloat) (alpha / 255);
 }
 
 /**
@@ -68,28 +69,24 @@ void GLabel::SetColor(GLfloat r, GLfloat g, GLfloat b) {
  * will take and that this operation may be a little
  * consumming over time.
  */
-void GLabel::SetText(std::string text){
+void GLabel::SetText(std::string text) {
 	mText = text;
-	Width(mFont->GetWidth(mText));
-}
-
-
-void GLabel::Init() {
-	GMenuItem::Init();
-	mFont = NULL;
-	mText = "";
-	mColor = new Color3f(0, 0, 0);
-	mAlpha = 1.0f;
-	SetSize(50);
+	Width(mFont->GetWidth(mText) * (mPointSize / mFont->GetHeight()));
 }
 
 void GLabel::Update() {
 }
 
 void GLabel::Draw(int x, int y) {
-	mFont->Draw(mText, mXoffset + x, mYoffset + y, (mPointSize/mFont->GetHeight()), mColor->r, mColor->g, mColor->b, mAlpha);
+
+	if (!mIsStatic) {
+		x = Camera::getInstance()->GetX() + x;
+		y = Camera::getInstance()->GetY() + y;
+	}
+
+	mFont->Draw(mText, mXoffset + x, mYoffset + y,
+			(mPointSize / mFont->GetHeight()), mColor->r, mColor->g, mColor->b,
+			mAlpha);
 }
-
-
 
 } /* namespace TileEngine */

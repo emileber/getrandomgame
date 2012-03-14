@@ -16,6 +16,7 @@
 #include "Timer.h"
 #include "Graphic/Graphic.h"
 #include "Graphic/Texture.h"
+#include "GUI/GuiContainer.h"
 #include "Global.h"
 
 namespace TileEngine {
@@ -37,13 +38,15 @@ public:
 
 protected:
 
+	int mScreenWidth, mScreenHeight;
+	Timer mGameTime;
+	Uint32 mFrameCount;
+
 	World * mWorld;
 	SdlInterface * mSdlInterface;
 	Graphic * mGraphic;
 	Manager<Texture> * mTextureManager;
-	Timer mGameTime;
-	int mScreenWidth, mScreenHeight;
-	Uint32 mFrameCount;
+	GuiContainer* mGuiContainer;
 
 };
 }

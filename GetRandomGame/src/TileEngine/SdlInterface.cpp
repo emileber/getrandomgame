@@ -72,11 +72,12 @@ SdlInterface::SdlInterface() {
  * intToString
  *  cast int to string...
  */
-string SdlInterface::IntToString(Uint32 number) {
-	stringstream ss; //create a stringstream
-	ss << number; //add number to the stream
-	return ss.str(); //return a string with the contents of the stream
-}
+//template <typename T>
+//string SdlInterface::NumberToString(T number) {
+//	stringstream ss; //create a stringstream
+//	ss << number; //add number to the stream
+//	return ss.str(); //return a string with the contents of the stream
+//}
 
 /**
  * formatTime
@@ -88,8 +89,8 @@ string SdlInterface::FormatTime(Uint32 total) {
 	Uint32 second = abs((total % 60000) / 1000);
 	Uint32 milisec = abs((total % 60000) - (second * 1000));
 
-	return IntToString(minute) + ":" + IntToString(second) + "."
-			+ IntToString(milisec);
+	return NumberToString(minute) + ":" + NumberToString(second) + "."
+			+ NumberToString(milisec);
 	//string timeString = "Time: " + intToString(total);
 	//_sdl->renderText(10, 20, 3, timeString, 200);
 }

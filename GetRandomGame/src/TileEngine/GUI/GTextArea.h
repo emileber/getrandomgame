@@ -1,28 +1,28 @@
 /*
- * GLabel.h
+ * GTextArea.h
  *
- *  Created on: 2012-02-29
+ *  Created on: 2012-03-13
  *      Author: Emile
  */
 
-#ifndef GLABEL_H_
-#define GLABEL_H_
+#ifndef GTEXTAREA_H_
+#define GTEXTAREA_H_
 
 #include "GItem.h"
 #include "Graphic/Font.h"
 #include "Graphic/GraphicType.h"
-#include <string>
+#include "GText.h"
+#include <vector>
 
 namespace TileEngine {
 
 /*
  *
  */
-class GLabel: public GItem {
+class GTextArea: public GItem {
 public:
-	GLabel();
-	GLabel(std::string text, std::string fontFileName);
-	virtual ~GLabel();
+	GTextArea();
+	virtual ~GTextArea();
 
 	virtual void Init();
 	virtual void Update();
@@ -35,13 +35,10 @@ public:
 		return mFont;
 	}
 
-	virtual void SetText(std::string text = "");
-
-	virtual void SetColor(Color3f* color) {
-		mColor = color;
-	}
-
-	virtual void SetColor(GLfloat r = 255, GLfloat g = 255, GLfloat b = 255);
+//	virtual void IsStatic(bool isStatic) {
+//		GItem::IsStatic(isStatic);
+//		//mFont->IsStatic(isStatic);
+//	}
 
 	/**
 	 * SetFontSize
@@ -52,13 +49,13 @@ public:
 	virtual void SetFontSize(int size) {
 		mPointSize = size;
 		Height(size);
-		Width(mWidth * (mPointSize / mFont->GetHeight()));
 	}
 
-	virtual void IsStatic(bool isStatic) {
-		GItem::IsStatic(isStatic);
-		//mFont->IsStatic(isStatic);
+	virtual void PrintLine() {
+
 	}
+	virtual void PrintLine(std::string text, Color3f *color = NULL);
+	//virtual void AppendLine(std::string text, Color3f *color = NULL);
 
 	virtual bool IsMouseIn(int x, int y) {
 		return false;
@@ -77,12 +74,15 @@ public:
 		return false;
 	}
 
-protected:
+private:
 	const Font* mFont;
-	std::string mText;
-	Color3f* mColor;
+	std::vector<GTextLine*> mTextVector;
+	GTextLine* mCurrentLine;
+	Color3f *mColorDefault;
+	int mSpaceWidth;
 	int mPointSize;
+
 };
 
 } /* namespace TileEngine */
-#endif /* GLABEL_H_ */
+#endif /* GTEXTAREA_H_ */

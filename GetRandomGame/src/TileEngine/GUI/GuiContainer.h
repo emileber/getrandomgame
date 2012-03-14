@@ -13,26 +13,28 @@
 #ifndef GMENUCONTAINER_H_
 #define GMENUCONTAINER_H_
 
-#include "GMenuItem.h"
+#include "GItem.h"
+#include <list>
 
 namespace TileEngine {
 
 /*
  *
  */
-class GMenuContainer {
+class GuiContainer {
 public:
-	GMenuContainer();
-	virtual ~GMenuContainer();
+	GuiContainer();
+	virtual ~GuiContainer();
 
 	virtual void Init() = 0;
 	virtual void Update();
 	virtual void Draw();
 
-	virtual void PushMenu(GMenuItem *);
+	virtual void PushMenu(GItem *);
 
 protected:
-	std::vector<GMenuItem*> mActiveMenuList;
+
+	std::list<GItem*> mItemList;
 
 };
 
