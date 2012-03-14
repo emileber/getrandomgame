@@ -7,7 +7,53 @@
 Table Of Content:
 <wiki:toc max_depth="2" />
 ----
-= Useful Function =
+= Project related rules =
+== Const use ==
+Les Font en particulier ne devraient jamais être modifiés puisqu'ils sont partagés par plusieurs objets. Donc chaque variable Font utilisé dans un objet devrait idéalement être comme ça:
+
+{{{
+// Reçoit un pointeur non-constant vers une variable "font" constante (read-only)
+void SetFont(const Font * font){
+    mFont = font;
+}
+
+// return un pointeur non constant vers une variable de Type Font constante
+// a noté le const après la function, cela promet de ne pas modifier l'objet
+// à qui appartient la function "GetFont()"
+const Font * GetFont() const {
+    return mFont;
+}
+
+/* ... */
+
+protected:
+    const Font * mFont; // le pointeur peut changer, mais pas la valeur pointée
+
+}}}
+
+
+= Useful Functions =
+
+== Number to string ==
+
+Can be found in SdlInterface right now as a Template function.
+
+{{{
+         /**
+	 * NumberToString
+	 *  cast any Number base type to string...
+	 */
+	template<typename T>
+	std::string NumberToString(T number) {
+
+		std::stringstream ss; //create a stringstream
+		ss << number; //add number to the stream
+
+		return ss.str(); //return a string with the contents of the stream
+	}
+
+}}}
+
 == Split a String with a Custom delimiter ==
 
 [http://stackoverflow.com/a/236803/1218980 Source]
