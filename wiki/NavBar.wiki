@@ -3,6 +3,7 @@
   * [Setup How to run it]
   * [GettingStarted How it works]
     * [Standard README]
+    * [Guideline Guidelines]
   * [World How far can I walk?]
   * [Crafting Can I make potions?]
   * [SpellSystem Where is the magic?]
