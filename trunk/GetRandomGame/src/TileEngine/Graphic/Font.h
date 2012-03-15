@@ -37,9 +37,9 @@ public:
 	virtual void Delete();
 
 	/// Draws a font
-	virtual void Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale = 1,
-			GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1,
-			GLfloat alpha = 1) const;
+	virtual void Draw(std::string text, float x, float y, float scale = 1,
+			float red = 1, float green = 1, float blue = 1,
+			float alpha = 1) const;
 
 	/**
 	 * Set the face size
@@ -55,9 +55,9 @@ public:
 //	}
 
 /// returns the height of the font
-	GLfloat GetHeight() const;
+	float GetHeight() const;
 	/// returns the width of the string
-	GLfloat GetWidth(const std::string & text) const;
+	float GetWidth(const std::string & text) const;
 
 protected:
 	FTFont * mFont; /**< Stores the font				*/

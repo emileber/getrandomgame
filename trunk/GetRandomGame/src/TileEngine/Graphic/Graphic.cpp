@@ -281,7 +281,7 @@ void Graphic::Reload() {
 	Manager<Font>::getInstance()->ReloadAllRessource();
 }
 
-void Graphic::InitialiseDraw(GLfloat x, GLfloat y, GLfloat scale,
+void Graphic::InitialiseDraw(float x, float y, float scale,
 		bool isStatic) {
 
 	glPushMatrix();
@@ -325,9 +325,9 @@ void Graphic::ResetDraw() {
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Graphic::DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
-		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha,
-		GLfloat thickness, bool isStatic) {
+void Graphic::DrawRectangle(float x, float y, float width, float height,
+		float red, float green, float blue, float alpha,
+		float thickness, bool isStatic) {
 //
 
 	InitialiseDraw(x, y, 1, isStatic);
@@ -360,8 +360,8 @@ void Graphic::DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
 /// @param thickness a GLfloat
 /// @param isStatic a Bool
 ///
-void Graphic::DrawRectangle(SectionRect *rect, Color3f *color, GLfloat alpha,
-		GLfloat thickness, bool isStatic) {
+void Graphic::DrawRectangle(SectionRect *rect, Color3f *color, float alpha,
+		float thickness, bool isStatic) {
 
 	InitialiseDraw(rect->x, rect->y, 1, isStatic);
 
@@ -389,7 +389,7 @@ void Graphic::DrawRectangle(SectionRect *rect, Color3f *color, GLfloat alpha,
 /// @param isStatic a Bool
 ///
 void Graphic::DrawFilledRectangle(SectionRect *rect, Color3f *color,
-		GLfloat alpha, bool isStatic) {
+		float alpha, bool isStatic) {
 	InitialiseDraw(rect->x, rect->y, 1, isStatic);
 
 	glColor4f(color->r, color->g, color->b, alpha);
@@ -414,8 +414,8 @@ void Graphic::DrawFilledRectangle(SectionRect *rect, Color3f *color,
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Graphic::DrawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
-		GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha,
+void Graphic::DrawFilledRectangle(float x, float y, float width,
+		float height, float red, float green, float blue, float alpha,
 		bool isStatic) {
 
 	InitialiseDraw(x, y, 1, isStatic);
@@ -447,9 +447,9 @@ void Graphic::DrawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Graphic::DrawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2,
-		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha,
-		GLfloat thickness, bool isStatic) {
+void Graphic::DrawLine(float x, float y, float x2, float y2,
+		float red, float green, float blue, float alpha,
+		float thickness, bool isStatic) {
 	InitialiseDraw(x, y, 1, isStatic);
 
 	if (thickness > 0) {

@@ -22,28 +22,42 @@ class Sprite {
 public:
 	Sprite();
 	Sprite(std::string, SectionRect*);
-	Sprite(Texture* texture, SectionRect* rect){
+	Sprite(Texture* texture, SectionRect* rect) {
 		SetTexture(texture);
 		SetRect(rect);
 	}
 	virtual ~Sprite();
 
 	virtual void SetTexture(std::string);
-	virtual void SetTexture(Texture* texture){
+	virtual void SetTexture(Texture* texture) {
 		mTexture = texture;
 	}
 
-	virtual void SetRect(SectionRect* rect){
+	virtual void SetRect(SectionRect* rect) {
 		mRect = rect;
 	}
 
-	virtual Texture* GetTexture(){
+	virtual Texture* GetTexture() {
 		return mTexture;
 	}
 
-	virtual void Draw(GLfloat x, GLfloat y, GLfloat scale = 1,
-			GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1,
-			GLfloat blue = 1, GLfloat alpha = 1);
+	virtual int Width() const {
+		return mRect->w;
+	}
+	virtual void Width(float w) {
+		mRect->w = w;
+	}
+
+	virtual int Height() const {
+		return mRect->h;
+	}
+	virtual void Height(float h) {
+		mRect->h = h;
+	}
+
+//	virtual void Draw(float x, float y, float scale = 1, float rotation = 0,
+//			float red = 1, float green = 1, float blue = 1, float alpha = 1);
+	virtual void Draw(float x, float y, float scale = 1, float rotation = 0, const Color3f * color = NULL, float alpha = 1);
 protected:
 	Texture* mTexture;
 	SectionRect* mRect;

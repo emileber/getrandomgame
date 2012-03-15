@@ -54,25 +54,25 @@ public:
 	int GetHeight();
 
 	/// Draws an empty Rectangle
-	void DrawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height,
-			GLfloat red = 0, GLfloat green = 0, GLfloat blue = 0,
-			GLfloat alpha = 1, GLfloat thickness = 1, bool isStatic = false);
+	void DrawRectangle(float x, float y, float width, float height,
+			float red = 0, float green = 0, float blue = 0,
+			float alpha = 1, float thickness = 1, bool isStatic = false);
 
-	void DrawRectangle(SectionRect* rect, Color3f* color, GLfloat alpha = 1, GLfloat thickness = 1, bool isStatic = false);
+	void DrawRectangle(SectionRect* rect, Color3f* color, float alpha = 1, float thickness = 1, bool isStatic = false);
 
 	/// Draws an filled rectangle
-	void DrawFilledRectangle(GLfloat x, GLfloat y, GLfloat width,
-			GLfloat height, GLfloat red = 0, GLfloat green = 0,
-			GLfloat blue = 0, GLfloat alpha = 1, bool isStatic = false);
+	void DrawFilledRectangle(float x, float y, float width,
+			float height, float red = 0, float green = 0,
+			float blue = 0, float alpha = 1, bool isStatic = false);
 
-	void DrawFilledRectangle(SectionRect* rect, Color3f* color, GLfloat alpha = 1, bool isStatic = false);
+	void DrawFilledRectangle(SectionRect* rect, Color3f* color, float alpha = 1, bool isStatic = false);
 
 
 
 	/// Draws a line
-	void DrawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2, GLfloat red = 0,
-			GLfloat green = 0, GLfloat blue = 0, GLfloat alpha = 1,
-			GLfloat thickness = 1, bool isStatic = false);
+	void DrawLine(float x, float y, float x2, float y2, float red = 0,
+			float green = 0, float blue = 0, float alpha = 1,
+			float thickness = 1, bool isStatic = false);
 
 	/// returns the current texture in memory
 	GLuint GetCurrentTexture();
@@ -101,7 +101,7 @@ public:
 protected:
 	/// intializes opengl for 2d drawing
 	void InitGl();
-	void InitialiseDraw(GLfloat x, GLfloat y, GLfloat scale, bool isStatic);
+	void InitialiseDraw(float x, float y, float scale, bool isStatic);
 
 	bool mIsLoaded; /**< Tells if the graphics core was successfully loaded	*/
 	int mWidthScreen; /**< Stores the width of the drawing area		*/

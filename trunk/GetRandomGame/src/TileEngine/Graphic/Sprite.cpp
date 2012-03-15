@@ -29,13 +29,23 @@ void Sprite::SetTexture(std::string filename) {
 	SetTexture(Manager<Texture>::getInstance()->LoadRessource(filename));
 }
 
-void Sprite::Draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
-		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
-	if (mRect != NULL) {
-		mTexture->DrawSection(x, y, mRect, scale, rotation, red, green, blue,
-				alpha);
+//void Sprite::Draw(float x, float y, float scale, float rotation, float red,
+//		float green, float blue, float alpha) {
+//	if (mRect != NULL) {
+//		mTexture->DrawSection(x, y, mRect, scale, rotation, red, green, blue,
+//				alpha);
+//	} else {
+//		mTexture->Draw(x, y, scale, rotation, red, green, blue, alpha);
+//	}
+//}
+
+void Sprite::Draw(float x, float y, float scale, float rotation,
+		const Color3f *color, float alpha) {
+	if (color != NULL) {
+		mTexture->DrawSection(x, y, mRect, scale, rotation, color->r, color->g,
+				color->b, alpha);
 	} else {
-		mTexture->Draw(x, y, scale, rotation, red, green, blue, alpha);
+		mTexture->DrawSection(x, y, mRect, scale, rotation, 1, 1, 1, alpha);
 	}
 }
 

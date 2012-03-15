@@ -88,8 +88,8 @@ public:
 		return mIsActive;
 	}
 
-	virtual void Alpha(GLfloat alpha);
-	virtual GLfloat Alpha() const {
+	virtual void Alpha(float alpha);
+	virtual float Alpha() const {
 		return mAlpha;
 	}
 
@@ -104,7 +104,7 @@ protected:
 	std::vector<GItem*> mItemVector;
 	bool mIsActive;
 	bool mIsStatic;
-	GLfloat mAlpha;
+	float mAlpha;
 
 };
 

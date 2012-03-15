@@ -27,17 +27,17 @@ public:
 	~Camera();
 
 	/// Moves the camera by x and y units
-	void move(GLfloat x, GLfloat y);
+	void move(float x, float y);
 	/// Sets the absolute position of the camera
-	void setPosition(GLfloat x, GLfloat y);
+	void setPosition(float x, float y);
 
 	/// Returns the x cooridinate of the camera
-	GLfloat GetX();
+	float GetX();
 	/// Returns the y  cooridinate of the camera
-	GLfloat GetY();
+	float GetY();
 private:
-	GLfloat m_Xpos; /**< The x position of the camera 	*/
-	GLfloat m_Ypos; /**< The y position of the camera 	*/
+	float m_Xpos; /**< The x position of the camera 	*/
+	float m_Ypos; /**< The y position of the camera 	*/
 };
 }
 

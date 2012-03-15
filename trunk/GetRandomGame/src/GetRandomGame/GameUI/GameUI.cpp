@@ -30,7 +30,7 @@ void GameUI::Init() {
 	_testLabel->SetFontSize(100);
 	_testLabel->X(Graphic::getInstance()->GetWidth() - _testLabel->Width());
 	_testLabel->Y(Graphic::getInstance()->GetHeight() - _testLabel->Height());
-	PushMenu(_testLabel);
+	//PushMenu(_testLabel);
 
 }
 

@@ -40,7 +40,7 @@ public:
 		return mWidth;
 	}
 
-	virtual void Draw(const Font* font, GLfloat x, GLfloat y, GLfloat scale, GLfloat alpha = 1.0f) const;
+	virtual void Draw(const Font* font, float x, float y, float scale, float alpha = 1.0f) const;
 protected:
 	std::string mWord;
 	int mWidth;
@@ -66,7 +66,7 @@ public:
 
 	virtual void PushWord(const GWord * word, int width);
 
-	virtual void Draw(const Font* font, GLfloat x, GLfloat y, GLfloat scale, GLfloat alpha = 1.0f) const;
+	virtual void Draw(const Font* font, float x, float y, float scale, float alpha = 1.0f) const;
 
 protected:
 	std::vector<const GWord*> mTextLine;

@@ -77,8 +77,8 @@ void Font::Delete() {
 /// @param Blue a GLfloat
 /// @param Alpha a GLfloat
 ///
-void Font::Draw(std::string text, GLfloat x, GLfloat y, GLfloat scale,
-		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) const {
+void Font::Draw(std::string text, float x, float y, float scale,
+		float red, float green, float blue, float alpha) const {
 	//do nothing if the font isn't setup
 	if (mFont == NULL) {
 		cout << "Font::Draw() error, font is NULL, can't draw..." << endl;
@@ -152,8 +152,8 @@ void Font::SetSize(uint size) {
 // returns the height of the font
 /// @return Width of the string
 ///
-GLfloat Font::GetHeight() const {
-	return (GLfloat) mFont->LineHeight();
+float Font::GetHeight() const {
+	return (float) mFont->LineHeight();
 }
 
 //
@@ -161,8 +161,8 @@ GLfloat Font::GetHeight() const {
 /// @param text a std::string
 /// @return width of the string
 ///
-GLfloat Font::GetWidth(const std::string & text) const {
-	return (GLfloat) mFont->Advance(text.c_str());
+float Font::GetWidth(const std::string & text) const {
+	return (float) mFont->Advance(text.c_str());
 }
 
 }
