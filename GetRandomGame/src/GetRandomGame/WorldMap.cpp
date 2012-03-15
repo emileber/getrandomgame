@@ -9,148 +9,163 @@
 #include <iostream>
 #include <fstream>
 #include "Graphic/MultiTintedSprite.h"
+#include "Graphic/Graphic.h" // accès à Graphic::getInstance(); (pour les dimensions d'écran à jour)
+
+using namespace TileEngine;
+// *************OUBLI MOI PAS!
 
 using namespace std;
 
 WorldMap::WorldMap(int size) {
 
 	mapSize = size;
+	mScale = 1.0f;
 }
 
 WorldMap::~WorldMap() {
 	// TODO Auto-generated destructor stub
 }
 
+void WorldMap::Scale(float ratio) {
+	if (ratio > 0) {
+		mScale = ratio;
+	}
+}
+
 void WorldMap::Update() {
 }
 
-void WorldMap::Draw(int xFullScreenOffset, int yFullScreenOffset, TileEngine::Texture* _grass) {
-    //c'est sale mais c'est comme ca...
+void WorldMap::Draw() {
+	//c'est sale mais c'est comme ca...
+	// Emile dit: Je vais t'arranger ça, prend des notes :P
 
-       TileEngine::MultiTintedSprite* _MultiTintedSpriteTest = new TileEngine::MultiTintedSprite(_grass,new TileEngine::SectionRect(0, 0, 5, 5));
+	// vue que c'est des test, on va pas changer la signature de la function pour rien
+	// donc on aura plus besoin de caster comme ça: ((WorldMap*) mWorld)
 
-    float blue =0;
-    float red=0;
-    float green=0;
+	// Tu as pas besoin d'un multiTintedSprite ici puisque tu donne la même couleur aux quatres coins.
+	// Utilise simplement une sprite et envoi lui une Color3f comme teinte
+	// EDIT: j'ai finalement standardisé les fonction Draw de Sprite et MultiTintedSprite et les 2 font
+	// la job, j'ai remis MultiTintedSprite pour plus de flexibilité
+	Sprite * _grassSprite = new MultiTintedSprite("image/grass.png",
+			new SectionRect(0, 0, 40, 40));
 
-    for (int i = 0; i < mapSize; i++) {
+	// Plus besoin de passer par 3 float, c'est déjà encapsulé dans Color3f (GraphicType.h)
+//	float blue = 0;
+//	float red = 0;
+//	float green = 0;
 
+	for (int i = 0; i < mapSize; i++) {
+
+		// Évitte de dessiner à l'extérieur de l'écran en bas
+		if ((Graphic::getInstance()->GetHeight()
+				- i * _grassSprite->Height() * mScale)
+				< -_grassSprite->Height()) {
+			break;
+		}
+
+		// Draw ligne par ligne
 		for (int j = 0; j < mapSize; j++) {
-            getTint(j, i, &blue, &red, &green);
 
-            _MultiTintedSpriteTest->SetColor(0, 0, red, green, blue);
-			_MultiTintedSpriteTest->SetColor(0, 1, red, green, blue);
-			_MultiTintedSpriteTest->SetColor(1, 0, red, green, blue);
-			_MultiTintedSpriteTest->SetColor(1, 1, red, green, blue);
+			// Évitte de dessiner à l'extérieur de l'écran à droite
+			// Break le loop et va à la prochaine ligne.
+			if ((j * _grassSprite->Width() * mScale)
+					> Graphic::getInstance()->GetWidth()) {
+				break;
+			}
 
+			// Get la teinte, c'est mieux que d'envoyer des variables
+			// les pointeurs se détruisent eux-même en sortant du scope
+			Color3f * tint = getTint(j, i);
 
-            _MultiTintedSpriteTest->Draw(xFullScreenOffset+300 + j * 5,yFullScreenOffset + i * 5);
+			_grassSprite->Draw(
+					j * _grassSprite->Width() * mScale,
+					Graphic::getInstance()->GetHeight()
+							- i * _grassSprite->Height() * mScale, mScale, 0,
+					tint);
 		}
 
 	}
 }
 
-void WorldMap::getTint(int x, int y, float* blue, float* red, float*green)
-{
-    switch(biomesMap[x][y])
-    {
+Color3f * WorldMap::getTint(int x, int y) {
+	Color3f * thatColor;
+	switch (biomesMap[x][y]) {
 
+	case 'e':
+		thatColor = new Color3f(0.3f, 0, 1);
+		break;
+	case 'H':
+		thatColor = new Color3f(0.6f, 0.8f, 1.0f);
+		break;
+	case 'A':
+		thatColor = new Color3f(0.4f, 0.4f, 0.4f);
+		break;
+	case 'M':
+		thatColor = new Color3f(-1, -1, -1);
+		break;
+	case 'W':
+		thatColor = new Color3f(0, 0.25f, 0);
+		break;
+	case 'J':
+		thatColor = new Color3f(0, 0.5f, 0);
+		break;
+	case 'R':
+		thatColor = new Color3f(0, 0.7f, 0.25f);
+		break;
+	case 's':
+		thatColor = new Color3f(0.5f, 0.9f, 0.4f);
+		break;
+	case 'S':
+		thatColor = new Color3f(0.6f, 0.7f, 0.2f);
+		break;
+	case 'd':
+		thatColor = new Color3f(1.0f, 1.0f, 0.25f);
+		break;
+	case 'D':
+		thatColor = new Color3f(1.0f, 0.75f, 0);
+		break;
+	case 'G':
+		thatColor = new Color3f(0.5f, 0.75f, 0);
+		break;
+	case 'P':
+		thatColor = new Color3f(0.4f, 0.1f, 0.4f);
+		break;
+	case 'h':
+		thatColor = new Color3f(0.6f, 0.3f, 0.6f);
+		break;
+	case 'F':
+		thatColor = new Color3f(0.2f, 0.5f, 0.2f);
+		break;
+	case 'B':
+		thatColor = new Color3f(0.5f, 0.8f, 0.5f);
+		break;
+	case 'C':
+		thatColor = new Color3f(0.2f, 0.5f, 0.4f);
+		break;
+	case 'b':
+		thatColor = new Color3f(0.1f, 1.0f, 0.5f);
+		break;
+	case 'Z':
+		thatColor = new Color3f(0, 1, 0.8f);
+		break;
+	case 'I':
+		thatColor = new Color3f(0.7f, 1, 1);
+		break;
+	case 'Y':
+		thatColor = new Color3f(0.25f, 0, 0.25f);
+		break;
+	case 'U':
+		thatColor = new Color3f(0, 0, 0.2f);
+		break;
+	case 'k':
+		thatColor = new Color3f(0.7f, 0.5f, 0.2f);
+		break;
+	default:
+		thatColor = new Color3f(0, 0, 0);
+		break;
+	}
+	return thatColor;
 
-        case 'e' :  *red = 0.3f;
-                    *green = 0.0f;
-                    *blue=1.0f;
-                    break;
-        case 'H' : *red = 0.6f;
-                    *green = 0.8f;
-                    *blue=1.0f;
-                    break;
-        case 'A' : *red = 0.4f;
-                    *green = 0.4f;
-                    *blue=0.4f;
-                    break;
-        case 'M' : *red = -1.0f;
-                    *green = -1.0f;
-                    *blue=-1.0f;
-                    break;
-        case 'W' : *red = 0.0f;
-                    *green = 0.25f;
-                    *blue=0.0f;
-                    break;
-        case 'J' : *red = 0.0f;
-                    *green = 0.5f;
-                    *blue=0.0f;
-                    break;
-        case 'R' : *red = 0.0f;
-                    *green = 0.7f;
-                    *blue=0.25f;
-                    break;
-        case 's' : *red = 0.5f;
-                    *green = 0.9f;
-                    *blue=0.4f;
-                    break;
-        case 'S' : *red = 0.6f;
-                    *green = 0.7f;
-                    *blue=0.20f;
-                    break;
-
-        case 'd' : *red = 1.0f;
-                    *green = 1.0f;
-                    *blue=0.25f;
-                    break;
-        case 'D' : *red = 1.0f;
-                    *green = 0.75f;
-                    *blue=0.0f;
-                    break;
-        case 'G' : *red = 0.5f;
-                    *green = 0.75f;
-                    *blue=0.0f;
-                    break;
-
-        case 'P' : *red = 0.4f;
-                    *green = 0.1f;
-                    *blue=0.4f;
-                    break;
-        case 'h' : *red = 0.6f;
-                    *green = 0.3f;
-                    *blue=0.6f;
-                    break;
-        case 'F' : *red = 0.2f;
-                    *green = 0.5f;
-                    *blue=0.2f;
-                    break;
-        case 'B' : *red = 0.5f;
-                    *green = 0.8f;
-                    *blue=0.5f;
-                    break;
-        case 'C' : *red = 0.2f;
-                    *green = 0.5f;
-                    *blue=0.4f;
-                    break;
-        case 'b' : *red = 0.1f;
-                    *green = 1.0f;
-                    *blue=0.5f;
-                    break;
-        case 'Z' : *red = 0.0f;
-                    *green = 1.0f;
-                    *blue=0.8f;
-                    break;
-        case 'I' : *red = 7.0f;
-                    *green = 1.0f;
-                    *blue=1.0f;
-                    break;
-        case 'Y' : *red = 0.25f;
-                    *green = 0.0f;
-                    *blue=0.25f;
-                    break;
-        case 'U' : *red = 0.0f;
-                    *green = 0.0f;
-                    *blue=0.2f;
-                    break;
-        case 'k' : *red = 0.7f;
-                    *green = 0.5f;
-                    *blue=0.2f;
-                    break;
-    }
 }
 
 void WorldMap::DropXML() {
@@ -203,13 +218,13 @@ void WorldMap::DropXML() {
 			<< "<Style ss:ID=\"I\">\n<Interior ss:Color=\"#CCFFCC\" ss:Pattern=\"Solid\"/>\n</Style>\n";
 	xmldump
 			<< "<Style ss:ID=\"E\">\n<Interior ss:Color=\"#E7fdfd\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-    xmldump
+	xmldump
 			<< "<Style ss:ID=\"Q\">\n<Interior ss:Color=\"#CCCCFF\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-    xmldump
+	xmldump
 			<< "<Style ss:ID=\"k\">\n<Interior ss:Color=\"#CCCCFF\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-    xmldump
+	xmldump
 			<< "<Style ss:ID=\"U\">\n<Interior ss:Color=\"#000055\" ss:Pattern=\"Solid\"/>\n</Style>\n";
-    xmldump
+	xmldump
 			<< "<Style ss:ID=\"Y\">\n<Interior ss:Color=\"#800000\" ss:Pattern=\"Solid\"/>\n</Style>\n";
 
 	int maps = mapSize - 1;
@@ -236,3 +251,4 @@ void WorldMap::DropXML() {
 
 	xmldump.close();
 }
+

@@ -59,7 +59,7 @@ void GLabel::SetFont(const Font* font) {
  * @param g as gree value between 0 and 255 (int)
  * @param b as blue value between 0 and 255 (int)
  */
-void GLabel::SetColor(GLfloat r, GLfloat g, GLfloat b) {
+void GLabel::SetColor(float r, float g, float b) {
 	mColor = new Color3f((r / 255), (g / 255), (b / 255));
 }
 

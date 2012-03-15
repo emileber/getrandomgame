@@ -91,8 +91,8 @@ void Texture::MakeTexture(SDL_Surface *surface) {
 	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	SDL_PixelFormat *fmt = surface->format;
 	//setup all the information
-	mWidth = (GLfloat) ((surface->w));
-	mHeight = (GLfloat) ((surface->h));
+	mWidth = (float) ((surface->w));
+	mHeight = (float) ((surface->h));
 	//setup the pixel data (used for collisions)
 //	if (LoadCollision) {
 //		SDL_LockSurface(Surface);
@@ -175,8 +175,8 @@ void Texture::Kill() {
 /// @param X a GLfloat
 /// @param Y a GLfloat
 ///
-void Texture::InitializeDraw(GLfloat scale, GLfloat rotation, GLfloat x,
-		GLfloat y, SectionRect *rect) {
+void Texture::InitializeDraw(float scale, float rotation, float x, float y,
+		const SectionRect *rect) {
 	Graphic *graphics = Graphic::getInstance();
 	//check if the right texture is bound
 	if (graphics->GetCurrentTexture() != mTexture) {
@@ -225,8 +225,8 @@ std::vector<std::vector<bool> > *Texture::GetPixels() {
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Texture::Draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
-		GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha) {
+void Texture::Draw(float x, float y, float scale, float rotation, float red,
+		float green, float blue, float alpha) {
 	glPushMatrix();
 //	RectStruct rect;
 //	rect.bottom = 0.0f;
@@ -272,16 +272,21 @@ void Texture::Draw(GLfloat x, GLfloat y, GLfloat scale, GLfloat rotation,
 /// @param blue a GLfloat
 /// @param alpha a GLfloat
 ///
-void Texture::DrawSection(GLfloat x, GLfloat y, SectionRect * box,
-		GLfloat scale, GLfloat rotation, GLfloat red, GLfloat green,
-		GLfloat blue, GLfloat alpha) {
+void Texture::DrawSection(float x, float y, const SectionRect * box,
+		float scale, float rotation, float red, float green, float blue,
+		float alpha) {
+
+	if (box == NULL) {
+		Draw(x, y, scale, rotation, red, green, blue, alpha);
+	}
+
 	glPushMatrix();
 	InitializeDraw(scale, rotation, x, y, box);
 	//width for drawing
-	GLfloat box_left = 1.0f * (box->x / mWidth);
-	GLfloat box_right = 1.0f * ((box->x + box->w) / mWidth);
-	GLfloat box_top = 1.0f - (1.0f * ((box->y + box->h) / mHeight));
-	GLfloat box_bottom = 1.0f - (1.0f * (box->y / mHeight));
+	float box_left = 1.0f * (box->x / mWidth);
+	float box_right = 1.0f * ((box->x + box->w) / mWidth);
+	float box_top = 1.0f - (1.0f * ((box->y + box->h) / mHeight));
+	float box_bottom = 1.0f - (1.0f * (box->y / mHeight));
 
 	glColor4f(red, green, blue, alpha);
 
@@ -306,17 +311,17 @@ void Texture::DrawSection(GLfloat x, GLfloat y, SectionRect * box,
 	glPopMatrix();
 }
 
-void Texture::DrawSection4Color(GLfloat x, GLfloat y, SectionRect* box,
+void Texture::DrawSection4Color(float x, float y, const SectionRect* box,
 		Color3f * bottomLeftColor, Color3f * bottomRightColor,
-		Color3f * topRightColor, Color3f * topLeftColor, GLfloat scale,
-		GLfloat rotation, GLfloat alpha) {
+		Color3f * topRightColor, Color3f * topLeftColor, float scale,
+		float rotation, float alpha) {
 	glPushMatrix();
 	InitializeDraw(scale, rotation, x, y, box);
 	//width for drawing
-	GLfloat box_left = 1.0f * (box->x / mWidth);
-	GLfloat box_right = 1.0f * ((box->x + box->w) / mWidth);
-	GLfloat box_top = 1.0f - (1.0f * ((box->y + box->h) / mHeight));
-	GLfloat box_bottom = 1.0f - (1.0f * (box->y / mHeight));
+	float box_left = 1.0f * (box->x / mWidth);
+	float box_right = 1.0f * ((box->x + box->w) / mWidth);
+	float box_top = 1.0f - (1.0f * ((box->y + box->h) / mHeight));
+	float box_bottom = 1.0f - (1.0f * (box->y / mHeight));
 
 	glColor4f(1.0f, 1.0f, 1.0f, alpha);
 

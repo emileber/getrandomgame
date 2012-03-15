@@ -15,8 +15,8 @@ namespace TileEngine {
  *
  */
 
-void GWord::Draw(const Font *font, GLfloat x, GLfloat y, GLfloat scale,
-		GLfloat alpha) const {
+void GWord::Draw(const Font *font, float x, float y, float scale,
+		float alpha) const {
 
 	font->Draw(mWord, x, y, scale, mColor->r, mColor->g, mColor->b, alpha);
 }
@@ -42,10 +42,10 @@ void GTextLine::PushWord(const GWord* word, int width) {
 
 }
 
-void GTextLine::Draw(const Font *font, GLfloat x, GLfloat y, GLfloat scale,
-		GLfloat alpha) const {
+void GTextLine::Draw(const Font *font, float x, float y, float scale,
+		float alpha) const {
 	int spaceWidth = font->GetWidth(" ") * scale;
-	GLfloat currentX = x;
+	float currentX = x;
 
 	// Draw each word
 	for (int i = 0; i < GetWordCount(); i++) {

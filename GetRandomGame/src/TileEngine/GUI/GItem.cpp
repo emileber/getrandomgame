@@ -25,8 +25,8 @@ void GItem::Init() {
 
 }
 
-void GItem::Alpha(GLfloat alpha) {
-	GLfloat changedRatio = alpha / mAlpha;
+void GItem::Alpha(float alpha) {
+	float changedRatio = alpha / mAlpha;
 	mAlpha = alpha;
 	for (unsigned int i = 0; i < mItemVector.size(); i++) {
 		mItemVector.at(i)->Alpha(changedRatio * mItemVector.at(i)->Alpha());

@@ -35,16 +35,16 @@ public:
 	void Init();
 
 	/// Returns the texture width
-	GLfloat GetWidth() const {
+	float GetWidth() const {
 		return mWidth;
 	}
 	/// Returns the texture height
-	GLfloat GetHeight() const {
+	float GetHeight() const {
 		return mHeight;
 	}
 
 	// return the OpenGL id for that texture
-	GLfloat GetId() const {
+	float GetId() const {
 		return mTexture;
 	}
 
@@ -66,24 +66,23 @@ public:
 	std::vector<std::vector<bool> >* GetPixels();
 
 	/// Draws the whole texture
-	void Draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0,
-			GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1,
-			GLfloat alpha = 1);
+	void Draw(float x, float y, float scale = 1, float rotation = 0, float red =
+			1, float green = 1, float blue = 1, float alpha = 1);
 
 	/// Draws a section of the texture
-	void DrawSection(GLfloat x, GLfloat y, SectionRect* box, GLfloat scale = 1,
-			GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1,
-			GLfloat blue = 1, GLfloat alpha = 1);
+	void DrawSection(float x, float y, const SectionRect* box, float scale = 1,
+			float rotation = 0, float red = 1, float green = 1, float blue = 1,
+			float alpha = 1);
 
-	void DrawSection4Color(GLfloat x, GLfloat y, SectionRect* box,
+	void DrawSection4Color(float x, float y, const SectionRect* box,
 			Color3f * bottomLeftColor, Color3f * bottomRightColor,
-			Color3f * topRightColor, Color3f * topLeftColor, GLfloat scale = 1,
-			GLfloat rotation = 0, GLfloat alpha = 1);
+			Color3f * topRightColor, Color3f * topLeftColor, float scale = 1,
+			float rotation = 0, float alpha = 1);
 
 protected:
 	/// Internal function to setup drawing
-	void InitializeDraw(GLfloat scale, GLfloat rotation, GLfloat x, GLfloat y,
-			SectionRect* rect);
+	void InitializeDraw(float scale, float rotation, float x, float y,
+			const SectionRect* rect);
 
 	/// Internal function for loading a texture from a surface
 	void MakeTexture(SDL_Surface* surface);
@@ -91,8 +90,8 @@ protected:
 	GLuint mTexture; /**< Holds the texture data */
 	SDL_Surface * mSurface;
 	std::vector<std::vector<bool> > mPixelOn; /**< Holds the pixel data, if a pixel is not transparent it is on */
-	GLfloat mWidth; /**< Stores the width of the texture */
-	GLfloat mHeight; /**< Stores the height of the texture	*/
+	float mWidth; /**< Stores the width of the texture */
+	float mHeight; /**< Stores the height of the texture	*/
 	bool mIsStatic; // if it moves with the camera
 };
 

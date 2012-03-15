@@ -36,14 +36,13 @@ public:
 
 	virtual void SetColor(int cornerX, int cornerY, Color3f *color);
 
-	virtual void SetColor(int cornerX, int cornerY, GLfloat red, GLfloat green,
-			GLfloat blue);
+	virtual void SetColor(int cornerX, int cornerY, float red, float green,
+			float blue);
 
 	virtual Color3f *GetColor(int cornerX, int cornerY) const;
 
-	virtual void Draw(GLfloat x, GLfloat y, GLfloat scale = 1,
-			GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1,
-			GLfloat blue = 1, GLfloat alpha = 1);
+	virtual void Draw(float x, float y, float scale = 1, float rotation = 0,
+			const Color3f * color = NULL, float alpha = 1);
 protected:
 	//Color3f *mBottomLeftColor, *mBottomRightColor, *mTopRightColor, *mTopLeftColor;
 	Color3f *mColorArray[2][2];

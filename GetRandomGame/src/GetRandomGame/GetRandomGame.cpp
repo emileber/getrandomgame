@@ -7,14 +7,7 @@
 
 /**
  * Last Update:
- * - Changed IntToString to NumberToString template function
- * - GTextArea en construction
- * - GameUI est implementer et gere correctement les UI(Menu)
- * - Correction de Font (p,y,g,q and j getting below their belonging place)
- * - Ajout de const pour securiser les donnees (Font particulierement)
- * - Word wrap fonctionne dans le GTextArea
- * - Creation de GText qui gere des mots et des lignes pour le word wrap
- * - GText gere aussi une couleur par mot au besoin
+ * -
  */
 
 #include "GetRandomGame.h"
@@ -40,7 +33,7 @@ using namespace std;
  * TEST DECLARATIONS
  */
 Texture *_pave, *_grass;
-GLfloat testx = 0, testy = 0;
+float testx = 0, testy = 0;
 SectionRect * tileTestRect;
 MultiTintedSprite* _MultiTintedSpriteTest;
 Sprite* _spriteTest;
@@ -73,7 +66,7 @@ void GetRandomGame::Init(int w, int h) {
 	//WorldMap* map = generator->GenerateANewWorld(129, 1.55, 36, 64444);
 	mWorld = generator->GenerateANewWorld(129, 1.55, 36, 666666);
 
-	mWorld->Draw();
+	//mWorld->Draw();
 
 	cout << "Map gen time: " << mGameTime.GetTimerTicks() - startTime << " ms"
 			<< endl;
@@ -107,10 +100,10 @@ void GetRandomGame::Init(int w, int h) {
 			new SectionRect(311, 0, 48, 54));
 
 	cout << "init" << endl;
-	_testCoordLabel = new GLabel("(0, 0)",
-			"font/Ellianarelle_Path.ttf");
-	_testCoordLabel->SetOffset(10,
-			mScreenHeight - 10 - _testCoordLabel->Height());
+	_testCoordLabel = new GLabel("(0, 0)", "font/Ellianarelle_Path.ttf");
+//	_testCoordLabel->SetOffset(10,
+//			mScreenHeight - 10 - _testCoordLabel->Height());
+	_testCoordLabel->SetOffset(10, 10);
 	_testCoordLabel->SetColor(255, 255, 255);
 	//_testCoordLabel->Y(mScreenHeight - 10 - _testCoordLabel->Height());
 	mGuiContainer->PushMenu(_testCoordLabel);
@@ -119,14 +112,16 @@ void GetRandomGame::Init(int w, int h) {
 	_console->SetFont("font/CaslonBold.ttf");
 	_console->SetOffset(3, 3);
 	_console->SetSize(450, 190);
-	mGuiContainer->PushMenu(_console);
+	//mGuiContainer->PushMenu(_console);
 
 	_console->PrintLine("Test line in the CONSOLE!");
-	_console->PrintLine("abcdefghijklmnopqrstuvwxyz gsfgsfgs f sfg sfg sg sg srsgrserg sg s gs fgs efawefas fghsdf gafaw efsfsdgdfg");
+	_console->PrintLine(
+			"abcdefghijklmnopqrstuvwxyz gsfgsfgs f sfg sfg sg sg srsgrserg sg s gs fgs efawefas fghsdf gafaw efsfsdgdfg");
 	for (int i = 0; i <= 20; i++) {
 		_console->PrintLine("Test line " + mSdlInterface->NumberToString(i));
 	}
-	_console->PrintLine("Salut, ca va, je viens de terminer les premiers tests de word wrapping dans le tout nouveau log de texte que j'ai fait. Note: j'ai remarque (<-justement) que les accents ne fonctionne pas :/");
+	_console->PrintLine(
+			"Salut, ca va, je viens de terminer les premiers tests de word wrapping dans le tout nouveau log de texte que j'ai fait. Note: j'ai remarque (<-justement) que les accents ne fonctionne pas :/");
 
 	/*
 	 * END OF TEST INIT
@@ -166,30 +161,33 @@ void GetRandomGame::Draw() {
 	 * GRASS tile test
 	 */
 	/*GLfloat red = 1.0f;
-	GLfloat green = 1.0f;
-	for (int x = 15; x < 30; x++) {
-		red = 1 - ((float) x / 30);
+	 GLfloat green = 1.0f;
+	 for (int x = 15; x < 30; x++) {
+	 red = 1 - ((float) x / 30);
 
-		for (int y = 7; y >= 0; y--) {
-			green = ((float) y / 14);
-			_MultiTintedSpriteTest->SetColor(0, 0, red, green, 0.0f);
-			_MultiTintedSpriteTest->SetColor(0, 1, red, green, 0.0f);
-			_MultiTintedSpriteTest->SetColor(1, 0, red, green, 0.0f);
-			_MultiTintedSpriteTest->SetColor(1, 1, red, green, 0.0f);
+	 for (int y = 7; y >= 0; y--) {
+	 green = ((float) y / 14);
+	 _MultiTintedSpriteTest->SetColor(0, 0, red, green, 0.0f);
+	 _MultiTintedSpriteTest->SetColor(0, 1, red, green, 0.0f);
+	 _MultiTintedSpriteTest->SetColor(1, 0, red, green, 0.0f);
+	 _MultiTintedSpriteTest->SetColor(1, 1, red, green, 0.0f);
 
-			_MultiTintedSpriteTest->Draw(xFullScreenOffset + x * 40,
-					yFullScreenOffset + y * 40);
+	 _MultiTintedSpriteTest->Draw(xFullScreenOffset + x * 40,
+	 yFullScreenOffset + y * 40);
 
-		}
+	 }
 
-	}*/
-	((WorldMap*) mWorld)->Draw( xFullScreenOffset, yFullScreenOffset, _grass);
+	 }*/
 
 	//mGraphic->DrawLine(100, 100, 40, 40, 1, 1, 1, 1, 3, false);
-
 	/*
 	 * FIN TEST ZONE
 	 ***************************************************************************/
+
+	/*****
+	 * Game World Draw
+	 */
+	mWorld->Draw();
 
 	/*****
 	 * Graphical User Interface Rendering
@@ -201,10 +199,12 @@ void GetRandomGame::Draw() {
 void GetRandomGame::testFunction(int xMod, int yMod) {
 	testx += xMod;
 	testy += yMod;
-	Camera::getInstance()->move(-xMod, -yMod);
+	//Camera::getInstance()->move(-xMod, -yMod);
 	_testCoordLabel->SetText(
 			"(" + mSdlInterface->NumberToString(testx) + ", "
 					+ mSdlInterface->NumberToString(testy) + ")");
+
+	((WorldMap*) mWorld)->Scale( 1.0f - (testx / (40 * 129)) );
 }
 
 void GetRandomGame::Close() {

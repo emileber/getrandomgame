@@ -48,7 +48,7 @@ void GTextArea::PrintLine(std::string text, Color3f *color) {
 		color = mColorDefault;
 	}
 
-	GLfloat scale = (mPointSize / mFont->GetHeight());
+	float scale = (mPointSize / mFont->GetHeight());
 
 	std::stringstream ss(text);
 	std::string word;
@@ -59,9 +59,10 @@ void GTextArea::PrintLine(std::string text, Color3f *color) {
 
 		GWord* newWord = new GWord(word, mFont->GetWidth(word) * scale, color);
 
-		if ((currentWidth + mSpaceWidth + newWord->Width()) <= mWidth) {
+		if ((currentWidth + mSpaceWidth + newWord->Width()) < mWidth) {
 			// append to the current line.
 			mCurrentLine->PushWord(newWord, newWord->Width());
+			// update the current width
 			currentWidth +=  mSpaceWidth + newWord->Width();
 		} else {
 			// the line can't take that last word
@@ -69,6 +70,7 @@ void GTextArea::PrintLine(std::string text, Color3f *color) {
 			mTextVector.push_back(mCurrentLine);
 			mCurrentLine = new GTextLine();
 			mCurrentLine->PushWord(newWord, newWord->Width());
+			// update the current width
 			currentWidth = newWord->Width();
 		}
 
@@ -101,7 +103,7 @@ void GTextArea::Draw(int x, int y) {
 	Graphic::getInstance()->DrawFilledRectangle(x + mXoffset, y + mYoffset,
 			mWidth, mHeight, 0, 0, 0, 0.75f, true);
 
-	GLfloat scale = (mPointSize / mFont->GetHeight());
+	float scale = (mPointSize / mFont->GetHeight());
 	//GLfloat scale = 1.0f;
 
 	// Number of line to draw

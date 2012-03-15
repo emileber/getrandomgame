@@ -31,7 +31,7 @@ Camera::~Camera() {
 /// @param x a GLfloat
 /// @param y a GLfloat
 ///
-void Camera::move(GLfloat x, GLfloat y) {
+void Camera::move(float x, float y) {
 	m_Xpos -= x;
 	m_Ypos -= y;
 }
@@ -41,7 +41,7 @@ void Camera::move(GLfloat x, GLfloat y) {
 /// @param x a GLfloat
 /// @param y a GLfloat
 ///
-void Camera::setPosition(GLfloat x, GLfloat y) {
+void Camera::setPosition(float x, float y) {
 	m_Xpos = -x;
 	m_Ypos = -y;
 }
@@ -50,7 +50,7 @@ void Camera::setPosition(GLfloat x, GLfloat y) {
 // Returns the x cooridinate of the camera
 /// @return X position of the camera
 ///
-GLfloat Camera::GetX() {
+float Camera::GetX() {
 	return m_Xpos;
 }
 
@@ -58,7 +58,7 @@ GLfloat Camera::GetX() {
 // Returns the y cooridinate of the camera
 /// @return Y position of the camera
 ///
-GLfloat Camera::GetY() {
+float Camera::GetY() {
 	return m_Ypos;
 }
 }

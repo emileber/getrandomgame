@@ -9,7 +9,6 @@
 
 namespace TileEngine {
 
-
 MultiTintedSprite::~MultiTintedSprite() {
 	// TODO Auto-generated destructor stub
 }
@@ -31,8 +30,8 @@ void MultiTintedSprite::SetColor(int cornerX, int cornerY, Color3f *color) {
 
 }
 
-void MultiTintedSprite::SetColor(int cornerX, int cornerY, GLfloat red,
-		GLfloat green, GLfloat blue) {
+void MultiTintedSprite::SetColor(int cornerX, int cornerY, float red,
+		float green, float blue) {
 	if ((cornerX < 0) && (cornerX >= 2) && (cornerY < 0) && (cornerY >= 2)) {
 		return;
 	}
@@ -48,9 +47,8 @@ Color3f * MultiTintedSprite::GetColor(int cornerX, int cornerY) const {
 
 }
 
-void MultiTintedSprite::Draw(GLfloat x, GLfloat y, GLfloat scale,
-		GLfloat rotation, GLfloat red, GLfloat green, GLfloat blue,
-		GLfloat alpha) {
+void MultiTintedSprite::Draw(float x, float y, float scale, float rotation,
+		const Color3f * color, float alpha) {
 //	printf("MultiTintedSprite colors:\n");
 //	for (int xi = 0; xi < 2; xi++) {
 //		for (int yi = 0; yi < 2; yi++) {
@@ -60,9 +58,14 @@ void MultiTintedSprite::Draw(GLfloat x, GLfloat y, GLfloat scale,
 //		}
 //	}
 
-	mTexture->DrawSection4Color(x, y, mRect, mColorArray[0][0],
-			mColorArray[1][0], mColorArray[1][1], mColorArray[0][1], scale,
-			rotation, alpha);
+	if (color == NULL) {
+		mTexture->DrawSection4Color(x, y, mRect, mColorArray[0][0],
+				mColorArray[1][0], mColorArray[1][1], mColorArray[0][1], scale,
+				rotation, alpha);
+	} else {
+		mTexture->DrawSection(x, y, mRect, scale, rotation, color->r, color->g,
+				color->b, alpha);
+	}
 }
 
 } /* namespace TileEngine */

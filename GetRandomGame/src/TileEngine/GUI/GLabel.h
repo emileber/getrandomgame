@@ -41,7 +41,7 @@ public:
 		mColor = color;
 	}
 
-	virtual void SetColor(GLfloat r = 255, GLfloat g = 255, GLfloat b = 255);
+	virtual void SetColor(float r = 255, float g = 255, float b = 255);
 
 	/**
 	 * SetFontSize
