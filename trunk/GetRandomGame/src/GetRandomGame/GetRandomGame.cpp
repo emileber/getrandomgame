@@ -71,8 +71,8 @@ void GetRandomGame::Init(int w, int h) {
 
 	//WorldMap* map = generator->GenerateANewWorld(65, 1.55,36,time(0));
 	//WorldMap* map = generator->GenerateANewWorld(129, 1.55, 36, 64444);
-	mWorld = generator->GenerateANewWorld(129, 1.55, 36, 64444);
-	((WorldMap*) mWorld)->DropXML();
+	mWorld = generator->GenerateANewWorld(129, 1.55, 36, 666666);
+
 	mWorld->Draw();
 
 	cout << "Map gen time: " << mGameTime.GetTimerTicks() - startTime << " ms"
@@ -165,7 +165,7 @@ void GetRandomGame::Draw() {
 	/**
 	 * GRASS tile test
 	 */
-	GLfloat red = 1.0f;
+	/*GLfloat red = 1.0f;
 	GLfloat green = 1.0f;
 	for (int x = 15; x < 30; x++) {
 		red = 1 - ((float) x / 30);
@@ -182,7 +182,8 @@ void GetRandomGame::Draw() {
 
 		}
 
-	}
+	}*/
+	((WorldMap*) mWorld)->Draw( xFullScreenOffset, yFullScreenOffset, _grass);
 
 	//mGraphic->DrawLine(100, 100, 40, 40, 1, 1, 1, 1, 3, false);
 

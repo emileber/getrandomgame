@@ -8,6 +8,7 @@
 #ifndef WORLDMAP_H_
 #define WORLDMAP_H_
 #include "World.h"
+#include "Graphic/Texture.h"
 
 /*
  *
@@ -26,7 +27,7 @@ public:
 	WorldMap(int size);
 	virtual ~WorldMap();
 	virtual void Update();
-	virtual void Draw();
+	virtual void Draw(int xFullScreenOffset, int yFullScreenOffset, TileEngine::Texture* _grass);
 	void DropXML();
 
 	int** getHMap(){return hMap;}
@@ -34,6 +35,7 @@ public:
 	int** getVMap(){return vMap;}
 	int** getTMap(){return tMap;}
 	char** getBiomesMap(){return biomesMap;}
+	void getTint(int x, int y, float* blue, float* red, float*green);
 
 	void setBiomesMap(char** map){biomesMap=map;}
 	void setHMap(int** map){hMap=map;}

@@ -8,6 +8,7 @@
 #include "WorldMap.h"
 #include <iostream>
 #include <fstream>
+#include "Graphic/MultiTintedSprite.h"
 
 using namespace std;
 
@@ -23,28 +24,133 @@ WorldMap::~WorldMap() {
 void WorldMap::Update() {
 }
 
-void WorldMap::Draw() {
+void WorldMap::Draw(int xFullScreenOffset, int yFullScreenOffset, TileEngine::Texture* _grass) {
+    //c'est sale mais c'est comme ca...
 
-	for (int i = 0; i < mapSize; i++) {
+       TileEngine::MultiTintedSprite* _MultiTintedSpriteTest = new TileEngine::MultiTintedSprite(_grass,new TileEngine::SectionRect(0, 0, 5, 5));
+
+    float blue =0;
+    float red=0;
+    float green=0;
+
+    for (int i = 0; i < mapSize; i++) {
+
 		for (int j = 0; j < mapSize; j++) {
-			cout << biomesMap[j][i] << '\t';
+            getTint(j, i, &blue, &red, &green);
+
+            _MultiTintedSpriteTest->SetColor(0, 0, red, green, blue);
+			_MultiTintedSpriteTest->SetColor(0, 1, red, green, blue);
+			_MultiTintedSpriteTest->SetColor(1, 0, red, green, blue);
+			_MultiTintedSpriteTest->SetColor(1, 1, red, green, blue);
+
+
+            _MultiTintedSpriteTest->Draw(xFullScreenOffset+300 + j * 5,yFullScreenOffset + i * 5);
 		}
-		cout << endl;
+
 	}
-	cout << "Height map" << endl;
-	for (int i = 0; i < mapSize; i++) {
-		for (int j = 0; j < mapSize; j++) {
-			cout << hMap[j][i] << '\t';
-		}
-		cout << endl;
-	}
-	cout << "Humidity map" << endl;
-	for (int i = 0; i < mapSize; i++) {
-		for (int j = 0; j < mapSize; j++) {
-			cout << huMap[j][i] << '\t';
-		}
-		cout << endl;
-	}
+}
+
+void WorldMap::getTint(int x, int y, float* blue, float* red, float*green)
+{
+    switch(biomesMap[x][y])
+    {
+
+
+        case 'e' :  *red = 0.3f;
+                    *green = 0.0f;
+                    *blue=1.0f;
+                    break;
+        case 'H' : *red = 0.6f;
+                    *green = 0.8f;
+                    *blue=1.0f;
+                    break;
+        case 'A' : *red = 0.4f;
+                    *green = 0.4f;
+                    *blue=0.4f;
+                    break;
+        case 'M' : *red = -1.0f;
+                    *green = -1.0f;
+                    *blue=-1.0f;
+                    break;
+        case 'W' : *red = 0.0f;
+                    *green = 0.25f;
+                    *blue=0.0f;
+                    break;
+        case 'J' : *red = 0.0f;
+                    *green = 0.5f;
+                    *blue=0.0f;
+                    break;
+        case 'R' : *red = 0.0f;
+                    *green = 0.7f;
+                    *blue=0.25f;
+                    break;
+        case 's' : *red = 0.5f;
+                    *green = 0.9f;
+                    *blue=0.4f;
+                    break;
+        case 'S' : *red = 0.6f;
+                    *green = 0.7f;
+                    *blue=0.20f;
+                    break;
+
+        case 'd' : *red = 1.0f;
+                    *green = 1.0f;
+                    *blue=0.25f;
+                    break;
+        case 'D' : *red = 1.0f;
+                    *green = 0.75f;
+                    *blue=0.0f;
+                    break;
+        case 'G' : *red = 0.5f;
+                    *green = 0.75f;
+                    *blue=0.0f;
+                    break;
+
+        case 'P' : *red = 0.4f;
+                    *green = 0.1f;
+                    *blue=0.4f;
+                    break;
+        case 'h' : *red = 0.6f;
+                    *green = 0.3f;
+                    *blue=0.6f;
+                    break;
+        case 'F' : *red = 0.2f;
+                    *green = 0.5f;
+                    *blue=0.2f;
+                    break;
+        case 'B' : *red = 0.5f;
+                    *green = 0.8f;
+                    *blue=0.5f;
+                    break;
+        case 'C' : *red = 0.2f;
+                    *green = 0.5f;
+                    *blue=0.4f;
+                    break;
+        case 'b' : *red = 0.1f;
+                    *green = 1.0f;
+                    *blue=0.5f;
+                    break;
+        case 'Z' : *red = 0.0f;
+                    *green = 1.0f;
+                    *blue=0.8f;
+                    break;
+        case 'I' : *red = 7.0f;
+                    *green = 1.0f;
+                    *blue=1.0f;
+                    break;
+        case 'Y' : *red = 0.25f;
+                    *green = 0.0f;
+                    *blue=0.25f;
+                    break;
+        case 'U' : *red = 0.0f;
+                    *green = 0.0f;
+                    *blue=0.2f;
+                    break;
+        case 'k' : *red = 0.7f;
+                    *green = 0.5f;
+                    *blue=0.2f;
+                    break;
+    }
 }
 
 void WorldMap::DropXML() {
