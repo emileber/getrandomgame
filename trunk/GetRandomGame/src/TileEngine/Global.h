@@ -13,10 +13,11 @@
 #include "Manager.h"
 
 
+
 #include "SDL/SDL.h"
-#include "SDL/SDL_image.h"
-//#include "SDL/SDL_mixer.h"
-#include "SDL/SDL_ttf.h"
+#include "SDL_image.h"
+//#include "SDL/SDL_mixer.h" (to be implemented)
+//#include "SDL/SDL_ttf.h" (deprecated) no more included
 #include "SDL/SDL_video.h"
 #include <GL/gl.h>
 #include <GL/glu.h>

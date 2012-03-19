@@ -25,8 +25,8 @@ private:
 public:
 	//bool init(int, int, int, std::string, int = 1);
 	SDL_Surface * LoadImage(std::string);
-	SDL_Surface * CreateTextSurface(TTF_Font * font, std::string text, uint r,
-			uint g, uint b);
+	//SDL_Surface * CreateTextSurface(TTF_Font * font, std::string text, uint r,
+	//		uint g, uint b);
 	SDL_Surface* CreateSurface(int, int, SDL_Surface* = NULL);
 
 	void SetTransparentColor(int, int, int);

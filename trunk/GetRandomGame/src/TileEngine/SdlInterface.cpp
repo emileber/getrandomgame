@@ -193,11 +193,12 @@ SDL_Surface * SdlInterface::LoadImage(string filename) {
 /**
  * createTextSurface
  * Return an SDL_Surface out of a text
+ * (Deprecated) see Graphic/Font that uses FTGL for OpenGL
  */
-SDL_Surface * SdlInterface::CreateTextSurface(TTF_Font * font, string text,
-		uint r, uint g, uint b) {
-	SDL_Color fontColor = { r, g, b };
-	return TTF_RenderText_Solid(font, text.c_str(), fontColor);
-}
+//SDL_Surface * SdlInterface::CreateTextSurface(TTF_Font * font, string text,
+//		uint r, uint g, uint b) {
+//	SDL_Color fontColor = { r, g, b };
+//	return TTF_RenderText_Solid(font, text.c_str(), fontColor);
+//}
 
 }
