@@ -17,7 +17,6 @@ You need:
     * [http://subclipse.tigris.org/servlets/ProjectProcess;jsessionid=BBB7E188C6378470662EDE0875D5CAAA?pageID=p4wYuA Subversion pluggin]
   # SDL (SDL-devel-1.2.14-mingw32.tar.gz)
     * SDL_image (SDL_image-devel-1.2.10-VC.zip)
-    * SDL_ttf (SDL_ttf-devel-2.0.10-VC.zip)
   # OpenGL
     * dossier include/GL/ je crois qu'il est déjà avec MinGW.
     * [http://getrandomgame.googlecode.com/files/freetype-2.3.5-1-lib.zip FreeType2]
@@ -27,26 +26,15 @@ Voir la [http://code.google.com/p/getrandomgame/downloads/list Download List] po
 
 
 == MinGW ==
+
+see the [http://code.google.com/p/getrandomgame/downloads/list Download list]
+
 F*ck, all you need is to click next!
 
 <font color="red">Ajouter C:\MinGW\bin à la variable système PATH et restart pc</font>
 
 == Eclipse CDT ==
-[http://eclipse.org/cdt/downloads.php clicking here is all you need to know]
-
-== SDL ==
-
-Téléchargez la version de SDL spécialement compilé pour Mingw. (Voir onglet Download)
-(SDL-devel-1.2.14-mingw32.tar.gz)
-
-  # Comme pour toute installation de SDL, copiez bin\SDL.dll vers C:\WINDOWS ou le dossier de l'éxecutable (DEBUG ou RELEASE)
-  # Copiez le contenu de SDL-version\lib (libSDL.dll.a, libSDL.la, libSDLmain.a) vers C:\MinGW\lib ou ajoutez simplement le dossier lib aux Library Path.
-  # Copiez le contenu de SDL-version\include (copiez le dossier SDL) vers C:\MinGW\include\ ou ajoutez simplement le dossier include aux Include du projet.
-
-----
-= Partie Eclipse =
-
-Dans les propriétés du projet
+[http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers-includes-incubating-components/indigosr2 clicking here is all you need to know]
 
 C/C++ General > Paths and Symbols > Languages GNU C++:
   * "C:\MinGW\lib\gcc\mingw32\4.6.1\include\c++"
@@ -57,6 +45,14 @@ C/C++ General > Paths and Symbols > Languages GNU C++:
   * "C:\MinGW\lib\gcc\mingw32\4.6.1\include-fixed"
   * "C:\MinGW\include"
 
+Avant de continuer, essaye de créer un projet Hello World en c++
+
+
+
+----
+= Partie Eclipse =
+
+Dans les propriétés du projet
 
 C/C++ Build > settings > GCC C++ Compiler:
 
@@ -73,7 +69,7 @@ MinGW C++ Linker > Libraries
 add the folowing libraries (Libraries -l)
 
   * mingw32
-  * SDL_ttf
+  * (no more needed) ~~SDL_ttf~~
   * SDL_image
   * SDLmain
   * SDL
@@ -94,9 +90,18 @@ Chaque bibliothèque SDL possède trois parties essentielles :
   * Le fichier lib
   * Le(s) fichier(s) dll
 
-==== [http://www.libsdl.org/projects/SDL_image/ SDL image] ====
+== SDL ==
 
-#include "SDL/SDL_image.h"
+Téléchargez la version de SDL spécialement compilé pour Mingw. (Voir onglet Download)
+(SDL-devel-1.2.14-mingw32.tar.gz)
+
+  # Comme pour toute installation de SDL, copiez bin\SDL.dll vers C:\WINDOWS ou le dossier de l'éxecutable (DEBUG ou RELEASE)
+  # Copiez le contenu de SDL-version\lib (libSDL.dll.a, libSDL.la, libSDLmain.a) vers C:\MinGW\lib ou ajoutez simplement le dossier lib aux Library Path.
+  # Copiez le contenu de SDL-version\include (copiez le dossier SDL) vers C:\MinGW\include\ ou ajoutez simplement le dossier include aux Include du projet.
+
+==== [http://getrandomgame.googlecode.com/files/SDL_image-devel-1.2.10-VC.zip SDL image] ====
+
+#include "SDL/SDL_image.h" (not needed)
 
 [http://loka.developpez.com/tutoriel/sdl/bibliotheques/bib_codeblocks/images/SDL_image_CodeBlocks.png]
 
