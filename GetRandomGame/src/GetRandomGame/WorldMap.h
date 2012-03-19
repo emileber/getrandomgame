@@ -17,6 +17,7 @@
  */
 class WorldMap: public TileEngine::World {
 
+
 private :
     int** hMap;
     int** vMap;
