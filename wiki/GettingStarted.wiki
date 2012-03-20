@@ -8,9 +8,11 @@ Table Of Content:
 <wiki:toc max_depth="2" />
 ----
 = IMPORTANT =
-<font color="red">if you don't have your development environment ready, [Setup see this].</font>
+<font color="red">if you don't have your development environment ready:</font>
 
-And read the [Standard]
+  # [Setup see this];
+  # And read the [Standard] and prepare to follow it;
+  # Then take a quick look at the [Guideline].
 
 ----
 = OMG there's a lot of files =
@@ -19,15 +21,16 @@ Ne vous perdez pas, je suis la!
 
 Donc, jusqu'à maintenant, le projet est divisé en 2 parties distinctes, soit le Tile Engine et le Jeu (notre but).
 
-Le jeu utilise le Tile Engine qui lui est générique et ne devrait pas contenir de code spécifique au jeu évidement.
-
-En gros, le Tile Engine comprend la base dans le Dossier TileEngine et le Jeu contient ses fichiers, qui héritent du Tile Engine, dans le dossier GetRandomGame. Chaque classe de l'Engine est dans le namespace TileEngine.
+Le jeu utilise le Tile Engine qui lui est générique et ne devrait pas contenir de code spécifique au jeu évidement. En gros, le Tile Engine comprend la base dans le Dossier TileEngine et le Jeu contient ses fichiers, qui héritent du Tile Engine, dans le dossier GetRandomGame. Chaque classe de l'Engine est dans le namespace TileEngine. Le dossier Util contient des classes génériques n'étant pas spécifique au moteur ni au jeu.
 
 Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r75:
-  * ====GetRandomGame====
-    * ====Biomes====
+=== Le dossier src ===
+_Le dossier src contient toutes les classes qui doivent être compilées._
+  * *GetRandomGame* _est le dossier racine du projet de jeu_
+    * *Biomes*
       * WaterBiome (la mer)
-    * ====ZoneType====
+      * _...et les autres biomes._
+    * *ZoneType* _Contient les types de zone._
       * DockQuarter
       * Dock
       * SunkenCity
@@ -37,37 +40,49 @@ Voici une ébauche rapide de ce qu'il contiennent présentement en date de la r7
     * DiamondSquare (relié à l'algo du même nom)
     * GetRandomGame (Sous-classe Environement, big mama du jeu)
     * GRGInputHandler
-    * Launcher
+    * Launcher *(MAIN)*
     * MapGenerator (Génère un monde)
     * WorldMap (un monde de notre jeu)
-  * ==== TileEngine (namespace) ====
-    * ==== Graphic ====
-      * Font : Ressource (Font est déclaré dedans)  - pas encore implémenté
+  * *TileEngine* _Dossier racine du moteur et est aussi un namespace_
+    * *Graphic* _Les classes reliées à l'affichage avec OpenGL_
       * Texture : Ressource (draw itself on Draw calls)
+      * Sprite (contient un pointeur de texture et de rect pour faciliter la création d'image)
+      * MultiTintedSprite : Sprite (permet de recolorer chaque coin indépendamment)
       * (1)Camera (the view point)
-      * (1)Graphic (Interface Singleton
+      * (1)Graphic (Interface Singleton)
       * Animation : Ressource - pas encore implémenté
-      * GraphicType (défini les structures du type rect et section et point)
+      * GraphicType (défini les structures du type rect, section et couleur)
       * Font : Ressource (pour l'affichage de text TrueType font .ttf)
-    * config.h (relié a FTGL mais sera probablement retiré)
-    * Global (constante et include)
+    * Global.h (Fichier ENTETE contenant constante et include relié à l'engine)
     * Environment (Environment générique, redéfini par GetRandomGame)
     * InputHandler (générique, contient pratiquement rien)
-    * (1)SdlInterface (Encapsulation de fonction relié à SDL)
+    * _(Deprecated) (1)SdlInterface (Encapsulation de fonction relié à SDL)_ Maintenant voir Graphic
     * (1)Engine (la boucle de jeu)
     * Timer (donne du temps en milisec avec le tick SDL)
     * World (monde de jeu générique, presque vide aussi, c'est a redéfinir dans le jeu)
-  * ==== Util ====
+  * *Util* _contient les classes utilitaires génériques n'ayant pas de lien direct avec le projet_
     * Singleton (Template pour créer des singleton sans avoir a implémenter le code dans chaque classe)
     * (1)Manager (Template class, sert de genre de Factory)
     * Ressource (Classe Abstraite Pure pour les ressources du manager)
     * Point
     * Rectangle
 (1) = Singleton, class Specific : class Parent
+=== Le dossier docs ===
+Contient les fichiers relatifs à la documentation du projet.
+  * evolution _contient des images du projet à travers le dévelopement._
+  * issue _contient les images relatives aux erreurs rencontrées dans le projet._
+=== Le dossier font ===
+Il parle de lui-même, il contient les polices de caractère.
+=== Le dossier image ===
+contient les images que le projet utilise.
+=== Le dossier lib ===
+<font color="red">Important, ce dossier doit être exclu du Build autant pour le Debug que la Release (si ce n'est pas déjà fait) voir [Setup].</font> Puisqu'il contient des sources, les IDE tendent à essayer de les compiler par défaut.
+
+Il contient les sources, bibliothèques et dll des Libraries utilisées dans le projet. Le projet "link" vers c'est fichiers.
 
 == Global.h WTF? ==
 
-Je vais faire référence souvent à ce fichier, c'est le fichier de constante de jeu et des Enumerations (comme les Layer présentement). Il est peut-être mauvais de passer les constantes comme ça, ça reste à revérifier et c'est pas définitif.
+Je vais faire référence souvent à ce fichier, c'est le fichier de constante du moteur et des Enumerations (comme les Layer présentement). Il est peut-être mauvais de passer les constantes comme ça, ça reste à revérifier et c'est pas définitif.
 
 ----
 = Le Tile Engine =
@@ -140,9 +155,9 @@ On voit dans la ligne:
 while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
 			;
 }}}
-que la boucle est géré par FPS. Elle attend seulement le temps restant pour garder sont taux de FPS. (Par contre, présentement le cap est a 200 je crois, c'est a confirmer dans le fichier Global.h mais évidement, elle attend pas vraiment)
+que la boucle est géré par FPS. Elle attend seulement le temps restant pour garder sont taux de FPS.
 
-Le cap de FPS présentement tourne autour de 60 fps.
+Le cap de FPS devrait tournee autour de 60 fps idéalement. Si votre code le fais descendre en bas de ce cap, optimisez! Lorsque le jeu sera terminé, le FPS ne devra idéalement *jamais descendre en dessous de 24* qui est la limite pour garder une fluidité.
 
 == La classe Environment ==
 
@@ -156,13 +171,13 @@ L’environnement crée un monde et s'occupe d'updater les objets actifs dont no
 Bon alors j'ai encapsulé le boute chiant donc vous n'aurai pas a jouer avec des trucs d'affichage.
 
 Lorsque terminé, l'interface permettra les choses suivantes:
-  * afficher des images (même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire, bien que l'on ne le voit pas)
-  * afficher du [GettingStarted#le_texte texte]
-  * Sur x Layer différentes (et c'est ajustable à volonter)
-  * transparence
+  * afficher des images (done)(même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire, bien que l'on ne le voit pas, serait idéalement à éviter coté d'optimiser)
+  * afficher du [GettingStarted#le_texte texte] (done)
+  * Sur x Layer différentes (et ajustable à volonter)
+  * transparence (done)
   * Rotation
-  * Resize
-  * Teinte (couleur ajusté, comme les biomes dans Minecraft, les textures seront en grayscale)
+  * Resize (done)
+  * Teinte et multi-teinte (done) (couleur ajusté, comme les biomes dans Minecraft, les textures seront en grayscale)
   * Éventuellement, un éclairage dynamique.
 
 == Son contenu ==
@@ -175,33 +190,39 @@ Graphic::getInstance()->drawRectangle(GLfloat x, GLfloat y, GLfloat width, GLflo
  // drawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
 
 }}}
-La plupart des fonctions sont auto-explicatives.
+La plupart des fonctions sont auto-explicatives. *PAR CONTRE*, elles sont quand même lente et ne devraient être utilisées à la légère.
 
 == Comment afficher une image? ==
 
-  # Crée une Texture ou une Animation
+  # Crée une Sprite, MultiTintedSprite ou une Animation
   # À chaque iteration, appeler la fonction "draw" de cet objet. (soit dans le draw de l'environnement ou de la classe parente)
 
 {{{
-// Load une texture
-Texture * textureTest = Manager<Texture>::getInstance()->loadRessource(filename);
 
-// dessine une texture
-textureTest->draw(GLfloat x, GLfloat y, GLfloat scale = 1, GLfloat rotation = 0, GLfloat red = 1, GLfloat green = 1, GLfloat blue = 1, GLfloat alpha = 1);
+// Load une Sprite
+// NOTE: tonImage.png doit avoir des dimensions d'une puissance de 2 (obligatoire) et idéalement carré (mais pas obligatoire)
+// @param string filename
+// @param SectionRect section de la texture à dessiner, NULL pour tout dessiner
+Sprite * imageTest = new Sprite("image/tonImage.png", new Section(x, y, width, height));
 
-// aussi, il y a drawSection qui est importante
+// dessine une image
+imageTest->draw(float x, float y, float scale = 1, float rotation = 0, const Color3f * color = NULL, float alpha = 1);
+
 }}}
 
 == Le texte ==
 
+Pour un affichage directe
   # Load un Font
   # À chaque itération, appel la fonction Draw du Font avec ton texte en parametre.
+Sinon, pour un affichage de texte dans une Interface (relativement tout le texte), utiliser un GLabel.
 
 {{{
-_fontTest = new Font(); // Nouvelle variable
 
 // passe par le Manager pour éviter d'ouvrir plusieurs fois un fichier
-_fontTest = Manager<Font>::getInstance()->LoadRessource("font/FontFile.ttf");
+// NOTE: un font devrait toujours être chargé dans un pointeur de constante Font, comme ça,
+//       il est possible de pointer vers un autre Font, mais il est impossible de modifier le font.
+const Font * _fontTest = Manager<Font>::getInstance()->LoadRessource("font/FontFile.ttf");
 
 // puis appel draw
 _fontTest->Draw("Bayvania Crossing", x, y, red, green, blue, alpha);
@@ -246,56 +267,143 @@ De façon à limiter l'ouverture d'un fichier et de son chargement à une unique
 Le Manager est une classe Template, donc elle s'ajuste au contenu qu'elle gère mais pour s'assurer du bon fonctionnement de la classe et de l'implémentation des bonnes fonctions, chaque classe que le manager devra géré DOIT IMPÉRATIVEMENT hériter de la classe abstraite Ressource.
 
 Son utilisation:
-  # `Manager<TaClasse_a_Manager>::getInstance()`;
-  # Ensuite, utiliser la fonction loadRessource(string filename)
-  # Retourne à tous coup une instance de TaClasse_a_Manager et automatiquement l'ajoute aux ressources chargées
+  # `Manager<TaSousClasseRessource>::getInstance()`;
+  # Ensuite, utiliser la fonction LoadRessource(string filename)
+  # Retourne à tout coup une instance de TaSousClasseRessource et automatiquement l'ajoute aux ressources chargées
     * Si la ressource est déjà chargé, il retourne l'instance déjà chargé.
 
 *IMPORTANT* Le Manager se sert du nom de fichier (string filename) pour classer et donc savoir ce qui est déjà chargé.
+{{{
+// Load une texture qui est une sous classe de Ressource
+Texture * textureTest = Manager<Texture>::getInstance()->loadRessource(filename);
+}}}
 
 === la classe Manager ===
 {{{
+/*
+ * Manager.h
+ *
+ *  Created on: 2012-02-13
+ *      Author: Emile
+ *
+ *      Generic Template to manage Ressource sub-class.
+ *      It protects you from loading a file/ressource twice.
+ *
+ *      Note: NO NEED TO CREATE, IT'S A SINGLETON
+ *      (view the design pattern singleton for more info)
+ *
+ *      To have access to it:
+ *      Manager<YourRessourceSubClass>::getInstance();
+ *
+ *      To get a ressource:
+ *      Manager<YourRessourceSubClass>::getInstance()->LoadRessource("yourFilePath");
+ *
+ *      The file path serves as a key, if you use LoadRessource with
+ *      a file that has already been loaded, you'll get the pointer to
+ *      that Ressource.
+ *
+ *
+ */
+
+#ifndef MANAGER_H_
+#define MANAGER_H_
+
+#include "Singleton.h"
+#include <iostream>
+#include <map>
+#include "Ressource.h"
+
 template<typename T>
-class Manager: public Singleton<Manager<T> > {
+class Manager: public Singleton<Manager<T> >{
 	friend class Singleton<Manager<T> > ;
 public:
-	T * loadRessource(std::string filename) {
-		if (!isLoaded(filename)) {
+
+	/**
+	 * Load the ressource only if not already register
+	 *  string filename is the key
+	 *  T * is a pointer to the ressource itself
+	 */
+	T * LoadRessource(std::string filename) {
+		if (!IsLoaded(filename)) {
 			T * newRessource = new T();
-			newRessource->load(filename);
-			registerRessource(newRessource);
+			newRessource->Load(filename);
+			RegisterRessource(newRessource);
 			return newRessource;
 		}
-		return _ressourceMap[filename];
+		return mRessourceMap[filename];
 	}
 
-	void deleteAllRessource(); // pas encore implémenté
-	void reloadAllRessource() {} // pas encore implémenté
+	/**
+	 * Clear the map
+	 */
+	void DeleteAllRessource() {
+		typename std::map<std::string, T*>::iterator pos =
+				mRessourceMap.begin();
+		while (pos != mRessourceMap.end()) {
+			delete (*pos).second;
+			pos++;
+		}
+		mRessourceMap.clear();
+	}
 
-	bool isLoaded(std::string filename) {
-		if (_ressourceMap.find(filename) != _ressourceMap.end()) {
+	/**
+	 * Reload all the ressource in the map
+	 */
+	void ReloadAllRessource() {
+		typename std::map<std::string, T*>::iterator pos =
+				mRessourceMap.begin();
+		while (pos != mRessourceMap.end()) {
+			(*pos).second->Reload();
+			pos++;
+		}
+	}
+
+	/**
+	 * Return true if filename is already loaded
+	 */
+	bool IsLoaded(std::string filename) {
+		if (mRessourceMap.find(filename) != mRessourceMap.end()) {
 			return true;
 		}
 		return false;
 	}
-        /// Add a ressource to manage
-	void registerRessource(T * ressource) {
-		if (!isLoaded(ressource->getFilename())) {
-			_ressourceMap[ressource->getFilename()] = ressource;
+
+	/// Add a ressource to manage
+	void RegisterRessource(T * ressource) {
+		if (!IsLoaded(ressource->GetFilename())) {
+			mRessourceMap[ressource->GetFilename()] = ressource;
 		}
 	}
-	/// Removes a Ressource from management
-	void unRegisterRessource(T * ressource) {
-		if (isLoaded(ressource->getFilename())) {
-			_ressourceMap.erase(ressource->getFilename());
+	/// Removes a texture from management
+	void UnRegisterRessource(T * ressource) {
+		if (IsLoaded(ressource->GetFilename())) {
+			mRessourceMap.erase(ressource->GetFilename());
 		}
+	}
+
+	void ListAllRessourceKey() {
+		typename std::map<std::string, T*>::iterator pos =
+				mRessourceMap.begin();
+		std::cout << "Ressource Map contain:" << std::endl;
+		while (pos != mRessourceMap.end()) {
+			std::cout << (*pos).first << std::endl;
+			pos++;
+		}
+		std::cout << "_ressourceMap::END" << std::endl;
+	}
+
+protected:
+	Manager() {
+	}
+	virtual ~Manager() {
+		DeleteAllRessource();
 	}
 private:
-        // Constructor et destructor PRIVATE parce que Singleton
-	Manager() {}
-	virtual ~Manager() {}
-	std::map<std::string, T *> _ressourceMap; // Map qui gere les ressources
+	std::map<std::string, T *> mRessourceMap;
 };
+
+#endif /* MANAGER_H_ */
+
 }}}
 
 === Ressource ===
@@ -332,6 +440,11 @@ protected:
 	bool _isLoaded;
 };
 }}}
+
+----
+= Les menus aka L'interface Graphique =
+
+== Explication ==
 
 ----
 = Les modules à développer =
