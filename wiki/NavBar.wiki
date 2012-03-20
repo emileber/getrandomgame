@@ -4,7 +4,7 @@
   * [GettingStarted How it works]
     * [Standard README]
     * [Guideline Guidelines]
+    * [SystemeInteraction Interaction System]
   * [World How far can I walk?]
   * [Crafting Can I make potions?]
   * [SpellSystem Where is the magic?]
-  * [SystemeInteraction Interaction system?]
