@@ -10,7 +10,11 @@
 namespace TileEngine {
 
 MultiTintedSprite::~MultiTintedSprite() {
-	// TODO Auto-generated destructor stub
+	delete mColorArray[0][0];
+	delete mColorArray[0][1];
+	delete mColorArray[1][0];
+	delete mColorArray[1][1];
+	delete [] mColorArray;
 }
 
 void MultiTintedSprite::Init() {
@@ -48,7 +52,7 @@ Color3f * MultiTintedSprite::GetColor(int cornerX, int cornerY) const {
 }
 
 void MultiTintedSprite::Draw(float x, float y, float scale, float rotation,
-		const Color3f * color, float alpha) {
+		const Color3f * color, float alpha) const {
 //	printf("MultiTintedSprite colors:\n");
 //	for (int xi = 0; xi < 2; xi++) {
 //		for (int yi = 0; yi < 2; yi++) {
