@@ -67,22 +67,22 @@ public:
 
 	/// Draws the whole texture
 	void Draw(float x, float y, float scale = 1, float rotation = 0, float red =
-			1, float green = 1, float blue = 1, float alpha = 1);
+			1, float green = 1, float blue = 1, float alpha = 1) const;
 
 	/// Draws a section of the texture
 	void DrawSection(float x, float y, const SectionRect* box, float scale = 1,
 			float rotation = 0, float red = 1, float green = 1, float blue = 1,
-			float alpha = 1);
+			float alpha = 1) const;
 
 	void DrawSection4Color(float x, float y, const SectionRect* box,
-			Color3f * bottomLeftColor, Color3f * bottomRightColor,
-			Color3f * topRightColor, Color3f * topLeftColor, float scale = 1,
-			float rotation = 0, float alpha = 1);
+			const Color3f * bottomLeftColor, const Color3f * bottomRightColor,
+			const Color3f * topRightColor, const Color3f * topLeftColor, float scale = 1,
+			float rotation = 0, float alpha = 1) const;
 
 protected:
 	/// Internal function to setup drawing
 	void InitializeDraw(float scale, float rotation, float x, float y,
-			const SectionRect* rect);
+			const SectionRect* rect) const;
 
 	/// Internal function for loading a texture from a surface
 	void MakeTexture(SDL_Surface* surface);

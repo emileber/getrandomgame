@@ -29,7 +29,7 @@ public:
 	virtual ~Sprite();
 
 	virtual void SetTexture(std::string);
-	virtual void SetTexture(Texture* texture) {
+	virtual void SetTexture(const Texture* texture) {
 		mTexture = texture;
 	}
 
@@ -37,7 +37,7 @@ public:
 		mRect = rect;
 	}
 
-	virtual Texture* GetTexture() {
+	virtual const Texture* GetTexture() const {
 		return mTexture;
 	}
 
@@ -57,9 +57,9 @@ public:
 
 //	virtual void Draw(float x, float y, float scale = 1, float rotation = 0,
 //			float red = 1, float green = 1, float blue = 1, float alpha = 1);
-	virtual void Draw(float x, float y, float scale = 1, float rotation = 0, const Color3f * color = NULL, float alpha = 1);
+	virtual void Draw(float x, float y, float scale = 1, float rotation = 0, const Color3f * color = NULL, float alpha = 1) const;
 protected:
-	Texture* mTexture;
+	const Texture* mTexture;
 	SectionRect* mRect;
 
 };

@@ -10,7 +10,6 @@
 #include <fstream>
 #include "Graphic/MultiTintedSprite.h"
 #include "Graphic/Graphic.h" // accès à Graphic::getInstance(); (pour les dimensions d'écran à jour)
-
 using namespace TileEngine;
 // *************OUBLI MOI PAS!
 
@@ -82,9 +81,14 @@ void WorldMap::Draw() {
 					Graphic::getInstance()->GetHeight()
 							- i * _grassSprite->Height() * mScale, mScale, 0,
 					tint);
+
+			// Prevent a memory leak
+			delete tint;
 		}
 
 	}
+
+	delete _grassSprite;
 }
 
 Color3f * WorldMap::getTint(int x, int y) {

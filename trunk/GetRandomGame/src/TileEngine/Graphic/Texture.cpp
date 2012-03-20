@@ -176,7 +176,7 @@ void Texture::Kill() {
 /// @param Y a GLfloat
 ///
 void Texture::InitializeDraw(float scale, float rotation, float x, float y,
-		const SectionRect *rect) {
+		const SectionRect *rect) const {
 	Graphic *graphics = Graphic::getInstance();
 	//check if the right texture is bound
 	if (graphics->GetCurrentTexture() != mTexture) {
@@ -226,7 +226,7 @@ std::vector<std::vector<bool> > *Texture::GetPixels() {
 /// @param alpha a GLfloat
 ///
 void Texture::Draw(float x, float y, float scale, float rotation, float red,
-		float green, float blue, float alpha) {
+		float green, float blue, float alpha) const {
 	glPushMatrix();
 //	RectStruct rect;
 //	rect.bottom = 0.0f;
@@ -274,7 +274,7 @@ void Texture::Draw(float x, float y, float scale, float rotation, float red,
 ///
 void Texture::DrawSection(float x, float y, const SectionRect * box,
 		float scale, float rotation, float red, float green, float blue,
-		float alpha) {
+		float alpha) const {
 
 	if (box == NULL) {
 		Draw(x, y, scale, rotation, red, green, blue, alpha);
@@ -312,9 +312,9 @@ void Texture::DrawSection(float x, float y, const SectionRect * box,
 }
 
 void Texture::DrawSection4Color(float x, float y, const SectionRect* box,
-		Color3f * bottomLeftColor, Color3f * bottomRightColor,
-		Color3f * topRightColor, Color3f * topLeftColor, float scale,
-		float rotation, float alpha) {
+		const Color3f * bottomLeftColor, const Color3f * bottomRightColor,
+		const Color3f * topRightColor, const Color3f * topLeftColor, float scale,
+		float rotation, float alpha) const {
 	glPushMatrix();
 	InitializeDraw(scale, rotation, x, y, box);
 	//width for drawing

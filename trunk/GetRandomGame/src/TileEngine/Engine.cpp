@@ -43,7 +43,8 @@ Engine::Engine() {
  *  Call that first, then call start();
  *
  */
-void Engine::Init(int screenW, int screenH, string caption, Environment * environment, InputHandler * inputHandler) {
+void Engine::Init(int screenW, int screenH, string caption,
+		Environment * environment, InputHandler * inputHandler) {
 	cout << "Engine init" << endl;
 
 	mEnvironment = environment;
@@ -62,7 +63,6 @@ void Engine::Init(int screenW, int screenH, string caption, Environment * enviro
 	mEnvironment->Init(mScreenWidth, mScreenHeight);
 
 	mIsInit = true;
-
 
 	cout << "Engine init::End" << endl;
 }
@@ -88,7 +88,7 @@ void Engine::Start() {
 void Engine::Run() {
 	cout << "Engine run" << endl;
 	if (DEBUG) {
-		mFpsTimer.Start();
+		mFpsTimer.Start(); // Serve to calculate FPS (1 second)
 		printf("Time taken for init: %d ms\n", initTimer.GetTimerTicks());
 		initTimer.Stop();
 	}
@@ -103,6 +103,15 @@ void Engine::Run() {
 
 		mFrameTimer.Start(); //Calcul le temps d'execution de l'iteration
 
+		mGraphic->ClearScreen(); // clear the screen
+
+		// Do all the draw OPs FIRST
+		mEnvironment->Draw();
+
+		// then send the data to the Graphic Device (video card)
+		// while the input and update are processing
+		mGraphic->FlushBuffers();
+
 		// Collect and handle inputs informations (return false on exit)
 		mIsExit = mInputHandler->HandleInput(mEnvironment);
 
@@ -111,11 +120,6 @@ void Engine::Run() {
 		if (DEBUG) {
 			FpsRegulator(); // show FPS information
 		}
-
-		mGraphic->ClearScreen(); // clear the screen
-
-		// all the draw OPs
-		mEnvironment->Draw();
 
 		mGraphic->FlipBuffers(); // flip the screen
 
@@ -141,7 +145,6 @@ void Engine::FpsRegulator() {
 	//printf("fpsRegulator(_frame: %d, _fps: %d)\n", _frame, _fps);
 	mFrameCnt++; // incremente à chaque frame
 
-
 	//Si une seconde est passee depuis la derniere mise à jour de la barre caption
 	if (mFpsTimer.GetTimerTicks() > 1000) {
 		mFps = mFrameCnt; // get the current fps
@@ -153,7 +156,8 @@ void Engine::FpsRegulator() {
 		// Render the FPS as the window title
 		mGraphic->SetCaption("FPS: " + mSdl->NumberToString(mFps));
 
-		printf("%6d Frames, %10d ms, %5d fps;\n", frameCount, mEnvironment->getTime(), mFps);
+		printf("%6d Frames, %10d ms, %5d fps;\n", frameCount,
+				mEnvironment->getTime(), mFps);
 	}
 	//printf("fpsRegulator END\n");
 }

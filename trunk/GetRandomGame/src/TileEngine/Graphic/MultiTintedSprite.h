@@ -42,9 +42,8 @@ public:
 	virtual Color3f *GetColor(int cornerX, int cornerY) const;
 
 	virtual void Draw(float x, float y, float scale = 1, float rotation = 0,
-			const Color3f * color = NULL, float alpha = 1);
+			const Color3f * color = NULL, float alpha = 1) const;
 protected:
-	//Color3f *mBottomLeftColor, *mBottomRightColor, *mTopRightColor, *mTopLeftColor;
 	Color3f *mColorArray[2][2];
 
 };

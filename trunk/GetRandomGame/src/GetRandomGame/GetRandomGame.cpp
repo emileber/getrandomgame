@@ -33,7 +33,7 @@ using namespace std;
  * TEST DECLARATIONS
  */
 Texture *_pave, *_grass;
-float testx = 0, testy = 0;
+float testx = 4556, testy = 0;
 SectionRect * tileTestRect;
 MultiTintedSprite* _MultiTintedSpriteTest;
 Sprite* _spriteTest;
@@ -122,6 +122,9 @@ void GetRandomGame::Init(int w, int h) {
 	}
 	_console->PrintLine(
 			"Salut, ca va, je viens de terminer les premiers tests de word wrapping dans le tout nouveau log de texte que j'ai fait. Note: j'ai remarque (<-justement) que les accents ne fonctionne pas :/");
+
+
+	((WorldMap*) mWorld)->Scale( 1.0f - (testx / (40 * 129)) );
 
 	/*
 	 * END OF TEST INIT

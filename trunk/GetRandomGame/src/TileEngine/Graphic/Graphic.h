@@ -33,6 +33,8 @@ public:
 
 	/// Clears the screen with a grey color
 	void ClearScreen();
+	/// Clear the buffers (send all the data to the graphic device)
+	void FlushBuffers();
 	/// Flips backbuffer to the screen
 	void FlipBuffers();
 
@@ -80,7 +82,7 @@ public:
 	/// Set the current texture in memory
 	void SetCurrentTexture(GLuint texture);
 
-	void ResetDraw();
+
 
 	void SetCaption(std::string caption);
 
@@ -101,6 +103,7 @@ public:
 protected:
 	/// intializes opengl for 2d drawing
 	void InitGl();
+	void ResetDraw();
 	void InitialiseDraw(float x, float y, float scale, bool isStatic);
 
 	bool mIsLoaded; /**< Tells if the graphics core was successfully loaded	*/

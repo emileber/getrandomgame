@@ -21,7 +21,6 @@ Sprite::Sprite(std::string filename, SectionRect *rect) {
 }
 
 Sprite::~Sprite() {
-	delete mTexture;
 	delete mRect;
 }
 
@@ -40,7 +39,7 @@ void Sprite::SetTexture(std::string filename) {
 //}
 
 void Sprite::Draw(float x, float y, float scale, float rotation,
-		const Color3f *color, float alpha) {
+		const Color3f *color, float alpha) const{
 	if (color != NULL) {
 		mTexture->DrawSection(x, y, mRect, scale, rotation, color->r, color->g,
 				color->b, alpha);
