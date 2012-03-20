@@ -11,32 +11,30 @@ Table Of Content:
 Get started!
 
 = Requirements =
-You need:
+All You need:
   # MinGW
-  # Eclipse CDT
+  # [http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers-includes-incubating-components/indigosr2 Eclipse CDT]
     * [http://subclipse.tigris.org/servlets/ProjectProcess;jsessionid=BBB7E188C6378470662EDE0875D5CAAA?pageID=p4wYuA Subversion pluggin]
-  # SDL (SDL-devel-1.2.14-mingw32.tar.gz)
-    * SDL_image (SDL_image-devel-1.2.10-VC.zip)
-  # OpenGL
-    * dossier include/GL/ je crois qu'il est déjà avec MinGW.
-    * [http://getrandomgame.googlecode.com/files/freetype-2.3.5-1-lib.zip FreeType2]
-      * [http://getrandomgame.googlecode.com/files/freetype6.dll freetype6.dll]
-    * [http://getrandomgame.googlecode.com/files/ftgl-2.1.3-rc5.tar.gz FTGL] (for font rendering)
 Voir la [http://code.google.com/p/getrandomgame/downloads/list Download List] pour trouver certains fichier facilement.
 
-
-== MinGW ==
+----
+= MinGW =
 
 see the [http://code.google.com/p/getrandomgame/downloads/list Download list]
+
+Installe TOUTES les choix pour être sur.
 
 F*ck, all you need is to click next!
 
 <font color="red">Ajouter C:\MinGW\bin à la variable système PATH et restart pc</font>
 
-== Eclipse CDT ==
+----
+= Eclipse =
 [http://www.eclipse.org/downloads/packages/eclipse-ide-cc-developers-includes-incubating-components/indigosr2 clicking here is all you need to know]
 
-C/C++ General > Paths and Symbols > Languages GNU C++:
+<font color="red">Pour chacun des paths suivant, COCHEZ "Add to all configurations"</font>
+
+C/C++ General > Paths and Symbols > Languages GNU C++ > onglet Includes:
   * "C:\MinGW\lib\gcc\mingw32\4.6.1\include\c++"
   * "C:\MinGW\lib"
   * "C:\MinGW\lib\gcc\mingw32\4.6.1\include\c++\backward"
@@ -45,105 +43,109 @@ C/C++ General > Paths and Symbols > Languages GNU C++:
   * "C:\MinGW\lib\gcc\mingw32\4.6.1\include-fixed"
   * "C:\MinGW\include"
 
-Avant de continuer, essaye de créer un projet Hello World en c++
+Avant de continuer, essaye de créer un projet Hello World en c++ *en choisissant le compilateur MinGW*
+
+== Subclipse ==
+
+  # dans Help > Install New Software, coller l'url "http://subclipse.tigris.org/update_1.8.x"
+  # Cocher Subversion (et aussi SVNkit mais je suis pas sur, anyway, prend pas de risque)
+  # click next... next... etc. installe ça comme d'habitude.
 
 
 
 ----
-= Partie Eclipse =
+= Project's Specific Settings =
 
-Dans les propriétés du projet
+== Creer le projet ==
+
+  # Clique droit dans le _Project Explorer_ puis cliquer Import
+  # Choisir _SVN > Checkout project from SVN_
+  # Use/create the svn url of the trunk, use HTTPS
+  # Sélectionner le dossier de projet dans le trunk (soit GetRandomGame)
+  # Checkout as a project configured using the New Project Wizard
+  # Empty c++ Project
+  # Nommer le projet par le nom du projet que vous allez utiliser (soit _GetRandomGame_ présentement)
+  # Choisir pour project type: _Executable > Empty Project_ avec la *Toolchain > MinGW GCC, (IMPORTANT)*
+
+== Configurer le projet ==
+
+*Il est possible de COPIER/COLLER tous les path et flags suivant dans les boites respectives.*
+
+*<font color="red">IMPORTANTE 1ere étape: Clique droit sur le dossier _lib_ et choisir _Ressource Configurations > Exclude from Build_ et choisir DEBUG et RELEASE.</font>*
+
+=== Dans les Project > Properties ===
+
+C/C++ General > Paths and Symbols > Languages GNU C++ > onglet Source Location:
+  * Ajouter le dossier: _src_ (en utilisant le bouton Add Folder à droite et le bouton Workspace)
 
 C/C++ Build > settings > GCC C++ Compiler:
 
 Preprocessor > Defined symbols (-D)
   * main=SDL_main
+
+*Pour les paths suivants, il est possible d'utiliser le bouton workspace*
+
 Includes > Include paths (-I)
-  * Dossier..de...\ftgl-2.1.3~rc5\src
-  * Dossier..de...\freetype2-3-5\include
-  * "${workspace_loc:/${ProjName}/src/GetRandomGame}"
-  * "${workspace_loc:/${ProjName}/src/TileEngine}"
-  * "${workspace_loc:/${ProjName}/src/Util}"
+{{{
+"${workspace_loc:/${ProjName}/lib/SDL/include}"
+"${workspace_loc:/${ProjName}/lib/SDL_image/include}"
+"${workspace_loc:/${ProjName}/lib/FreeType/include}"
+"${workspace_loc:/${ProjName}/lib/FTGL/src}"
+"${workspace_loc:/${ProjName}/src/GetRandomGame}"
+"${workspace_loc:/${ProjName}/src/TileEngine}"
+"${workspace_loc:/${ProjName}/src/Util}"
+}}}
 
 MinGW C++ Linker > Libraries
 add the folowing libraries (Libraries -l)
 
-  * mingw32
-  * (no more needed) ~~SDL_ttf~~
-  * SDL_image
-  * SDLmain
-  * SDL
-  * opengl32
-  * glu32
-  * freetype (ou libfreetype, les deux marchent)
-  * ftgl
+{{{
+mingw32
+SDL_image
+SDLmain
+SDL
+opengl32
+glu32
+freetype
+ftgl
+}}}
+
+and add the folowing library Search Path (Libraries -L) juste en dessous
+{{{
+"${workspace_loc:/${ProjName}/lib/SDL/lib}"
+"${workspace_loc:/${ProjName}/lib/SDL_image/lib}"
+"${workspace_loc:/${ProjName}/lib/FreeType/lib}"
+"${workspace_loc:/${ProjName}/lib/FTGL/lib}"
+}}}
 
 MinGW C++ Linker > Miscellaneous
 Linker flags: -mwindows
 
-----
-= SDL Extension Libraries =
+_Note: Pas besoin d'ajouter le dossier de jeu comme include puisqu'il est considéré par défaut comme le dossier de développement._
 
-Chaque bibliothèque SDL possède trois parties essentielles :
+== Build le projet ==
 
-  * Les fichiers d'entête (*.h)
-  * Le fichier lib
-  * Le(s) fichier(s) dll
+  # Clique sur le bouton avec un Marteau qui veut dire: Build "DEBUG" for the project "GetRandomGame"
+    * S'il y a une erreur, voir la FAQ en bas, ou bien ouvrir une Issue, Merci.
+  # Voila le projet devrait être presque prêt pour être utilisé.
 
-== SDL ==
+== Ajouter les DLL ==
 
-Téléchargez la version de SDL spécialement compilé pour Mingw. (Voir onglet Download)
-(SDL-devel-1.2.14-mingw32.tar.gz)
+Prend les DLL suivant qui se trouve dans les dossiers Bin ou Lib de chaque sous-dossier du dossier Lib du projet et les placer à coter du GetRandomGame.exe
 
-  # Comme pour toute installation de SDL, copiez bin\SDL.dll vers C:\WINDOWS ou le dossier de l'éxecutable (DEBUG ou RELEASE)
-  # Copiez le contenu de SDL-version\lib (libSDL.dll.a, libSDL.la, libSDLmain.a) vers C:\MinGW\lib ou ajoutez simplement le dossier lib aux Library Path.
-  # Copiez le contenu de SDL-version\include (copiez le dossier SDL) vers C:\MinGW\include\ ou ajoutez simplement le dossier include aux Include du projet.
+  * SDL.dll
+  * SDL_image.dll
+  * ftgl.dll
+  * freetype6.dll
 
-==== [http://getrandomgame.googlecode.com/files/SDL_image-devel-1.2.10-VC.zip SDL image] ====
-
-#include "SDL/SDL_image.h" (not needed)
-
-[http://loka.developpez.com/tutoriel/sdl/bibliotheques/bib_codeblocks/images/SDL_image_CodeBlocks.png]
-
-----
-= OpenGL =
-ça c'est déjà inclu dans Global, mais au cas ou, les voici:
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
-
-MinGW C++ Linker > Libraries
-  * opengl32
-  * glu32
-
-== Free Type 2 ==
-
-  # Unzip wherever you want <font color="red">(not in the project workspace)</font>
-  # Follow its Download page instructions.
-  # Add the linker flag: "libfreetype" (or the name of the lib you've got)
-
-== FTGL ==
-
-*It needs a working copy of FreeType2, so you need to have FreeType2 first*
-
-  # Unzip wherever you want (not in the project workspace)
-  # Compile the lib with MinGW (you can import the MS visual C++ or visual studio project in code::block, link the right directories and it does it all for you)
-  # Make the project link to the include and lib folder.
-  # add ftgl.dll to the debug/release folder beside the Executable file.
-  # Add the linker flag: "libftgl" (or the name of the lib you've got)
-
-[http://devcry.heiho.net/2012/01/opengl-font-rendering-with-ftgl.html FTGL pitfalls]
-
-----
-= Project's Specific Settings =
-
-Pas besoin d'ajouter le dossier de jeu comme include puisqu'il est considéré par défaut comme le dossier de développement.
 
 == Linker flags ==
 
+*NOTHING TO DO HERE*
+
 You should have something like that:
 {{{
--lmingw32 -lSDL_ttf -lSDL_image -lSDLmain -lSDL -lopengl32 -lglu32 -lfreetype -lftgl
+-lmingw32 -lSDL_image -lSDLmain -lSDL -lopengl32 -lglu32 -lfreetype -lftgl
 }}}
 
 The names may change but <font color="red">*the order shouldn't be changed*</font>!
@@ -197,3 +199,56 @@ During startup program exited with code 0xc0000135.
 }}}
 
 Une fenêtre d'erreur devrait apparaître et indiquer un nom de fichier manquant.
+
+----
+= Information sur les lib, mais rien a faire =
+== SDL Extension Libraries ==
+
+Chaque bibliothèque SDL possède trois parties essentielles :
+
+  * Les fichiers d'entête (*.h)
+  * Le fichier lib
+  * Le(s) fichier(s) dll
+
+=== SDL ===
+
+Téléchargez la version de SDL spécialement compilé pour Mingw. (Voir onglet Download)
+(SDL-devel-1.2.14-mingw32.tar.gz)
+
+  # Comme pour toute installation de SDL, copiez bin\SDL.dll vers C:\WINDOWS ou le dossier de l'éxecutable (DEBUG ou RELEASE)
+  # Copiez le contenu de SDL-version\lib (libSDL.dll.a, libSDL.la, libSDLmain.a) vers C:\MinGW\lib ou ajoutez simplement le dossier lib aux Library Path.
+  # Copiez le contenu de SDL-version\include (copiez le dossier SDL) vers C:\MinGW\include\ ou ajoutez simplement le dossier include aux Include du projet.
+
+===== [http://getrandomgame.googlecode.com/files/SDL_image-devel-1.2.10-VC.zip SDL image] =====
+
+#include "SDL/SDL_image.h" (not needed)
+
+[http://loka.developpez.com/tutoriel/sdl/bibliotheques/bib_codeblocks/images/SDL_image_CodeBlocks.png]
+
+== OpenGL ==
+ça c'est déjà inclu dans Global, mais au cas ou, les voici:
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+
+MinGW C++ Linker > Libraries
+  * opengl32
+  * glu32
+
+=== Free Type 2 ===
+
+  # Unzip wherever you want <font color="red">(not in the project workspace)</font>
+  # Follow its Download page instructions.
+  # Add the linker flag: "libfreetype" (or the name of the lib you've got)
+
+=== FTGL ===
+
+*It needs a working copy of FreeType2, so you need to have FreeType2 first*
+
+  # Unzip wherever you want (not in the project workspace)
+  # Compile the lib with MinGW (you can import the MS visual C++ or visual studio project in code::block, link the right directories and it does it all for you)
+  # Make the project link to the include and lib folder.
+  # add ftgl.dll to the debug/release folder beside the Executable file.
+  # Add the linker flag: "libftgl" (or the name of the lib you've got)
+
+[http://devcry.heiho.net/2012/01/opengl-font-rendering-with-ftgl.html FTGL pitfalls]
