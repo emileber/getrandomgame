@@ -13,6 +13,10 @@ Table Of Content:
   # [Setup see this];
   # And read the [Standard] and prepare to follow it;
   # Then take a quick look at the [Guideline].
+Also, before starting to code:
+  # Update the sources
+  # Build
+  # and RUN it to be sure it's fully fonctionnal before adding your stuff.
 
 ----
 = OMG there's a lot of files =
@@ -53,6 +57,8 @@ _Le dossier src contient toutes les classes qui doivent être compilées._
       * Animation : Ressource - pas encore implémenté
       * GraphicType (défini les structures du type rect, section et couleur)
       * Font : Ressource (pour l'affichage de text TrueType font .ttf)
+    * *GUI*
+      * _contient les classes pour fabriquer des menus._
     * Global.h (Fichier ENTETE contenant constante et include relié à l'engine)
     * Environment (Environment générique, redéfini par GetRandomGame)
     * InputHandler (générique, contient pratiquement rien)
@@ -157,7 +163,10 @@ while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
 }}}
 que la boucle est géré par FPS. Elle attend seulement le temps restant pour garder sont taux de FPS.
 
-Le cap de FPS devrait tournee autour de 60 fps idéalement. Si votre code le fais descendre en bas de ce cap, optimisez! Lorsque le jeu sera terminé, le FPS ne devra idéalement *jamais descendre en dessous de 24* qui est la limite pour garder une fluidité.
+Le cap de FPS devrait tourner autour de 60 fps idéalement. Si votre code le fais descendre en bas de ce cap, optimisez! Lorsque le jeu sera terminé, le FPS ne devra idéalement *jamais descendre en dessous de 24* qui est la limite pour garder une fluidité.
+
+===Ton app bloque a 60 fps?===
+Désactive le vertical sync de ta carte graphique pour voir le maximum de FPS que ta machine atteint.
 
 == La classe Environment ==
 
@@ -210,7 +219,7 @@ imageTest->draw(float x, float y, float scale = 1, float rotation = 0, const Col
 
 }}}
 
-== Le texte ==
+== Comment afficher du texte ==
 
 Pour un affichage directe
   # Load un Font
@@ -445,6 +454,41 @@ protected:
 = Les menus aka L'interface Graphique =
 
 == Explication ==
+Les menus sont composé de plusieurs objets de contrôle simple comme un bouton, du texte, une fenêtre, etc. Tous ces objets sont gérés par la classe GuiContainer.
+
+Présentement, j'ai pensé que chaque projet devrait redéfinir GuiContainer pour ainsi redéfinir Init et créer sa propre interface.
+
+en code:
+{{{
+
+// on se crée un nouveau pointeur (une seule fois)
+GuiContainer * mGuiContainer = new GameUI();
+
+// ************************
+// Partie utile
+//*************************
+// on crée une Label de texte
+_testCoordLabel = new GLabel("test a afficher", "font/file.ttf");
+
+// Offset de possition
+_testCoordLabel->SetOffset(10, 10);
+
+// couleur, ici blanc
+_testCoordLabel->SetColor(255, 255, 255);
+
+// et on ajoute le contrôle
+mGuiContainer->PushMenu(_testCoordLabel);
+
+//on en ajoute autant que nécessaire
+
+// ************************
+// fin de la Partie utile
+//*************************
+
+// puis on draw
+mGuiContainer->Draw();
+
+}}}
 
 ----
 = Les modules à développer =
@@ -459,14 +503,17 @@ protected:
 
 Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à prendre le module suivant qui vous intéresse:
   * <font size="3" color="blue">Paufiner le Tile Engine (Emile)</font>
-    * Ajout d'openGL (voir aussi pour dynamic lighting) EN COURS
-    * Gestion de l'affichage
+    * _Ajout d'openGL (done)_
+    * _Gestion de l'affichage (done)_
+    * Les menu/interface (inventaire, stats, hotbar, healt/xp/mana bar, etc) EN COURS
+      * ça implique faire des classes générique genre Button et Labels et Menu, voir Class Diagram et Maquette
     * Gestion des contrôles
-    * Peut-être ajouter un aspect réseau
+    * Peut-être Aspect Réseau
+    * Game State
+      * Menu principal
+      * Login au serveur et loading screen (si réseau)
   * <font size="3" color="blue">Créer le Monde [World (voir la page)] (Alexandre DT est pas mal la dessus)</font>
     * une fois une tile map affichée, il faut le coté RANDOM de la map
-  * Les menu/interface (inventaire, stats, hotbar, healt/xp/mana bar, etc)
-    * ça implique faire des classes générique genre Button et Labels et Menu, voir Class Diagram et Maquette
   * Les Tokens
     * Ainsi que des états comme (en feu, gelé, électrifiant, etc, voir [Features features])
   * Le système de génération d'item
@@ -480,7 +527,6 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
   * <font size="3" color="blue">Le système d'interaction (bebleu)</font>
     * Mouvement dans les tuiles
     * interaction de combat autant qu'avec des objets (classe générique Interaction)
-
     * Les interactions Magiques (spells)
     * Interactions sociales
   * Le pathfinding
@@ -488,9 +534,7 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
     * Pour les NPC (A`*` probablement)
   * L’intelligence Artificiel
     * Passive/agressive directe ou indirect etc
-  * Game State
-    * Menu principal
-    * Login au serveur et loading screen (si réseau)
+
 
 Finalement
   * Définir les règles de jeu précises
