@@ -5,8 +5,10 @@
  *      Author: Emile
  */
 
-#include "Engine.h"
 #include <iostream>
+
+#include "Engine.h"
+#include "Global.h"
 
 using namespace std;
 
@@ -154,7 +156,7 @@ void Engine::FpsRegulator() {
 		mFpsTimer.Start(); // restart the timer for each second
 
 		// Render the FPS as the window title
-		mGraphic->SetCaption("FPS: " + mSdl->NumberToString(mFps));
+		mGraphic->SetCaption("FPS: " + mGraphic->NumberToString(mFps));
 
 		printf("%6d Frames, %10d ms, %5d fps;\n", frameCount,
 				mEnvironment->getTime(), mFps);

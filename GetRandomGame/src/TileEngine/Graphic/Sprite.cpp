@@ -5,6 +5,8 @@
  *      Author: Emile
  */
 
+#include "Manager.h"
+
 #include "Sprite.h"
 
 namespace TileEngine {

@@ -3,6 +3,9 @@
  *
  *  Created on: 2011-12-26
  *      Author: Emile
+ *
+ *
+ *      DEPRACATED, its use should be avoided at all cost!
  */
 
 #include "SDLInterface.h"

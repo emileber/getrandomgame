@@ -10,12 +10,12 @@
 namespace TileEngine {
 
 Animation::Animation() {
-	// TODO Auto-generated constructor stub
+
 
 }
 
 Animation::~Animation() {
-	// TODO Auto-generated destructor stub
+
 }
 
 void Animation::Load(std::string filename) {

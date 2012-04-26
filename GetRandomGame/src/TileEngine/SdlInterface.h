@@ -3,6 +3,8 @@
  *
  *  Created on: 2011-12-26
  *      Author: Emile
+ *
+ *      DEPRACATED, its use should be avoided at all cost!
  */
 
 #ifndef SDLINTERFACE_H_

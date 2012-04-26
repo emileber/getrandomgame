@@ -13,12 +13,9 @@ using namespace std;
 namespace TileEngine {
 
 InputHandler::InputHandler() {
-	// TODO Auto-generated constructor stub
-
 }
 
 InputHandler::~InputHandler() {
-	// TODO Auto-generated destructor stub
 }
 
 bool InputHandler::HandleInput(Environment * environment) {

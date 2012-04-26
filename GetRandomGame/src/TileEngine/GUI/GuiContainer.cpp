@@ -15,7 +15,6 @@ GuiContainer::GuiContainer() {
 }
 
 GuiContainer::~GuiContainer() {
-	// TODO Auto-generated destructor stub
 }
 
 void GuiContainer::Update() {

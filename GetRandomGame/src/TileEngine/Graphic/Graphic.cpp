@@ -10,14 +10,17 @@
  *
  */
 
-#include "Global.h"
-#include "Graphic.h"
-//#include "Singleton.h"
+#include "math.h" // sin cos whatever
+#include "Manager.h"
 #include "Texture.h"
 #include "Font.h"
 #include "Camera.h"
 
+#include "Graphic.h"
+
 using namespace std;
+
+const double PI = 4.0 * atan(1.0);
 
 namespace TileEngine {
 //
@@ -28,10 +31,17 @@ Graphic::Graphic() {
 	mWindowTitle = "";
 	mSdlFlags = 0;
 	mIsFullscreen = false;
+	mIsBlendingOverLightmap = false;
+
 	mWidthCurrent = 0;
 	mWidthScreen = 0;
 	mHeightCurrent = 0;
 	mHeightScreen = 0;
+
+	_transColor.r = 0;
+	_transColor.g = 255;
+	_transColor.b = 255;
+
 }
 
 //
@@ -131,22 +141,6 @@ bool Graphic::MakeWindow() {
 	return true;
 }
 
-//
-// Returns the width of the drawing area
-/// @return Width of the drawing area
-///
-int Graphic::GetWidth() {
-	return mWidthCurrent;
-}
-
-//
-// Returns the height of the drawing area
-/// @return Height of the drawing area
-///
-int Graphic::GetHeight() {
-	return mHeightCurrent;
-}
-
 void Graphic::SetCaption(string caption) {
 	SDL_WM_SetCaption(caption.c_str(), NULL);
 }
@@ -158,12 +152,15 @@ void Graphic::InitGl() {
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 1.0f, 1.0f, 1.0f); // cyan in the background by default
 	glClearDepth(0.0f);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_ALWAYS);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glDisable(GL_LIGHTING);
+
 	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 	glEnable(GL_TEXTURE_2D);
 	// Anti-Aliasing
 	glEnable(GL_MULTISAMPLE);
@@ -185,6 +182,49 @@ void Graphic::InitGl() {
 	glMatrixMode(GL_MODELVIEW);
 	glPushMatrix();
 	glLoadIdentity();
+}
+
+void Graphic::ToggleBlendMode() {
+	if (mIsBlendingOverLightmap) {
+		glBlendFunc(GL_DST_COLOR, GL_ZERO);
+		mIsBlendingOverLightmap = false;
+	} else {
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		mIsBlendingOverLightmap = true;
+	}
+}
+
+void Graphic::SetTransparentColor(int r, int g, int b) {
+	if (abs(r) <= 255) {
+		_transColor.r = abs(r);
+	}
+	if (abs(g) <= 255) {
+		_transColor.g = abs(g);
+	}
+	if (abs(b) <= 255) {
+		_transColor.b = abs(b);
+	}
+}
+
+SDL_Surface * Graphic::LoadImage(string filename) {
+	//L'image qui est chargée
+	SDL_Surface* loadedImage = NULL;
+
+	//Chargement de l'image
+	loadedImage = IMG_Load(filename.c_str());
+	//printf("IMG_Load OK\n");
+	//Si l'image est chargée correctement
+	if (loadedImage != NULL) {
+		//transparence
+		SDL_SetColorKey(
+				loadedImage,
+				SDL_RLEACCEL | SDL_SRCCOLORKEY,
+				SDL_MapRGB(loadedImage->format, _transColor.r, _transColor.g,
+						_transColor.b));
+
+	}
+	//on retourne l'image optimisé
+	return loadedImage;
 }
 
 //
@@ -301,6 +341,30 @@ void Graphic::ResetDraw() {
 	glPopMatrix();
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glEnable(GL_TEXTURE_2D);
+}
+
+/**
+ * DrawLight
+ *  draws an artificial light
+ *
+ */
+void Graphic::DrawLight(float x, float y, float rad, float red, float green,
+		float blue, float alpha, bool isStatic) {
+
+	InitialiseDraw(x, y, 1, isStatic);
+
+	float nx, ny;
+	glBegin(GL_TRIANGLE_FAN);
+	glColor4f(red, green, blue, alpha);
+	glVertex2f(0, 0);
+	glColor4f(red, green, blue, 0);
+	for (float ang = (2 * PI) + (PI / 24); ang >= 0; ang -= PI / 24) {
+		nx = (rad * sin(ang));
+		ny = (rad * cos(ang));
+		glVertex2f(nx, ny);
+	}
+	glEnd();
+	ResetDraw();
 }
 
 //
@@ -470,100 +534,85 @@ void Graphic::Shutdown() {
 	SDL_Quit();
 }
 
+//void Graphic::EnableClipping() {
+//	glEnable(GL_SCISSOR_TEST);
+//	//set scissor to the current area
+//	Rectangle area;
+//	if (mClippingArea.empty()) {
+//		area.y1 = 0.0f;
+//		area.y2 = (float) ((mHeightScreen));
+//		area.x1 = 0.0f;
+//		area.x2 = (float) ((mWidthScreen));
+//	} else {
+//		area = mClippingArea.top();
+//	}
+//	glScissor((GLsizei) ((area.x1)), (GLsizei) ((area.y1)), (GLint) ((area.x2)),
+//			(GLint) ((area.y2)));
+//}
 //
-// returns the current texture in memory
-/// @return the current texture
-///
-GLuint Graphic::GetCurrentTexture() {
-	return mCurrentTexture;
-}
+//void Graphic::DisableClipping() {
+//	glDisable(GL_SCISSOR_TEST);
+//}
 
+////
+//// Pushes a clipping area on the stack for drawing
+///// @param area a sRect
+/////
+//void Graphic::PushClippingArea(Rectangle area) {
+//	Rectangle newArea;
+//	Rectangle currentArea;
+//	//get the current clipping area
+//	if (!mClippingArea.empty()) {
+//		currentArea = mClippingArea.top();
+//	} else {
+//		currentArea.y1 = 0.0f;
+//		currentArea.y2 = (float) ((mHeightScreen));
+//		currentArea.x1 = 0.0f;
+//		currentArea.x2 = (float) ((mWidthScreen));
+//	}
+//	//make the new clipping area from the rectangle intersection
+//	//bottom
+//	if (currentArea.y1 > area.y1) {
+//		newArea.y1 = currentArea.y1;
+//	} else {
+//		newArea.y1 = area.y1;
+//	}
+//	//top
+//	if ((currentArea.y1 + currentArea.y2) < (area.y1 + area.y2)) {
+//		newArea.y2 = (currentArea.y1 + currentArea.y2) - newArea.y1;
+//	} else {
+//		newArea.y2 = (area.y1 + area.y2) - newArea.y1;
+//	}
+//	//left
+//	if (currentArea.x1 > area.x1) {
+//		newArea.x1 = currentArea.x1;
+//	} else {
+//		newArea.x1 = area.x1;
+//	}
+//	//right
+//	if ((currentArea.x1 + currentArea.x2) < (area.x1 + area.x2)) {
+//		newArea.x2 = (currentArea.x1 + currentArea.x2) - newArea.x1;
+//	} else {
+//		newArea.x2 = (area.x1 + area.x2) - newArea.x1;
+//	}
+//	mClippingArea.push(newArea);
+//	glScissor((GLsizei) ((newArea.x1)), (GLsizei) ((newArea.y1)),
+//			(GLint) ((newArea.x2)), (GLint) ((newArea.y2)));
+//}
 //
-// set the current texture in memory
-/// @param texture a Gluint
-///
-void Graphic::SetCurrentTexture(GLuint texture) {
-	mCurrentTexture = texture;
-}
+//void Graphic::PopClippingArea() {
+//	Rectangle newArea;
+//	mClippingArea.pop();
+//	if (mClippingArea.empty()) {
+//		newArea.y1 = 0.0f;
+//		newArea.y2 = (float) ((mHeightScreen));
+//		newArea.x1 = 0.0f;
+//		newArea.x2 = (float) ((mWidthScreen));
+//	} else {
+//		newArea = mClippingArea.top();
+//	}
+//	glScissor((GLsizei) ((newArea.x1)), (GLsizei) ((newArea.y1)),
+//			(GLint) ((newArea.x2)), (GLint) ((newArea.y2)));
+//}
 
-void Graphic::EnableClipping() {
-	glEnable(GL_SCISSOR_TEST);
-	//set scissor to the current area
-	Rectangle area;
-	if (mClippingArea.empty()) {
-		area.y1 = 0.0f;
-		area.y2 = (float) ((mHeightScreen));
-		area.x1 = 0.0f;
-		area.x2 = (float) ((mWidthScreen));
-	} else {
-		area = mClippingArea.top();
-	}
-	glScissor((GLsizei) ((area.x1)), (GLsizei) ((area.y1)), (GLint) ((area.x2)),
-			(GLint) ((area.y2)));
-}
-
-void Graphic::DisableClipping() {
-	glDisable(GL_SCISSOR_TEST);
-}
-
-//
-// Pushes a clipping area on the stack for drawing
-/// @param area a sRect
-///
-void Graphic::PushClippingArea(Rectangle area) {
-	Rectangle newArea;
-	Rectangle currentArea;
-	//get the current clipping area
-	if (!mClippingArea.empty()) {
-		currentArea = mClippingArea.top();
-	} else {
-		currentArea.y1 = 0.0f;
-		currentArea.y2 = (float) ((mHeightScreen));
-		currentArea.x1 = 0.0f;
-		currentArea.x2 = (float) ((mWidthScreen));
-	}
-	//make the new clipping area from the rectangle intersection
-	//bottom
-	if (currentArea.y1 > area.y1) {
-		newArea.y1 = currentArea.y1;
-	} else {
-		newArea.y1 = area.y1;
-	}
-	//top
-	if ((currentArea.y1 + currentArea.y2) < (area.y1 + area.y2)) {
-		newArea.y2 = (currentArea.y1 + currentArea.y2) - newArea.y1;
-	} else {
-		newArea.y2 = (area.y1 + area.y2) - newArea.y1;
-	}
-	//left
-	if (currentArea.x1 > area.x1) {
-		newArea.x1 = currentArea.x1;
-	} else {
-		newArea.x1 = area.x1;
-	}
-	//right
-	if ((currentArea.x1 + currentArea.x2) < (area.x1 + area.x2)) {
-		newArea.x2 = (currentArea.x1 + currentArea.x2) - newArea.x1;
-	} else {
-		newArea.x2 = (area.x1 + area.x2) - newArea.x1;
-	}
-	mClippingArea.push(newArea);
-	glScissor((GLsizei) ((newArea.x1)), (GLsizei) ((newArea.y1)),
-			(GLint) ((newArea.x2)), (GLint) ((newArea.y2)));
-}
-
-void Graphic::PopClippingArea() {
-	Rectangle newArea;
-	mClippingArea.pop();
-	if (mClippingArea.empty()) {
-		newArea.y1 = 0.0f;
-		newArea.y2 = (float) ((mHeightScreen));
-		newArea.x1 = 0.0f;
-		newArea.x2 = (float) ((mWidthScreen));
-	} else {
-		newArea = mClippingArea.top();
-	}
-	glScissor((GLsizei) ((newArea.x1)), (GLsizei) ((newArea.y1)),
-			(GLint) ((newArea.x2)), (GLint) ((newArea.y2)));
-}
-}
+}// Namespace END

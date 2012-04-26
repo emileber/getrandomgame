@@ -25,7 +25,6 @@ GLabel::GLabel(std::string text, std::string fontFileName) {
 }
 
 GLabel::~GLabel() {
-	// TODO Auto-generated destructor stub
 }
 
 void GLabel::Init() {

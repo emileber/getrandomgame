@@ -15,7 +15,6 @@ GameUI::GameUI() {
 }
 
 GameUI::~GameUI() {
-	// TODO Auto-generated destructor stub
 }
 
 void GameUI::Init() {

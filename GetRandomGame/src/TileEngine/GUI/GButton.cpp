@@ -8,6 +8,8 @@
 #include "GButton.h"
 #include <string>
 
+// TODO finish the GButton
+
 namespace TileEngine {
 
 GButton::GButton() {
@@ -15,7 +17,6 @@ GButton::GButton() {
 }
 
 GButton::~GButton() {
-	// TODO Auto-generated destructor stub
 }
 
 void GButton::Init() {

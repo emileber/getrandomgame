@@ -4,6 +4,11 @@
  *  Created on: 2011-12-17
  *      Author: Emile
  */
+
+#include <iostream>
+#include <sstream>
+#include <string>
+
 #include "SDL/SDL.h"
 #include "Timer.h"
 
@@ -18,7 +23,6 @@ Timer::Timer() {
 }
 
 Timer::~Timer() {
-	// TODO Auto-generated destructor stub
 }
 
 void Timer::Start() {
@@ -89,4 +93,21 @@ bool Timer::IsStarted() {
 bool Timer::IsPaused() {
 	return mIsPaused;
 }
+
+/**
+ * formatTime
+ *  return a readable time format string from a milisec value
+ */
+std::string Timer::FormatTime(uint32_t total) {
+	// Render the FPS on screen
+	uint32_t minute = abs(total / 60000);
+	uint32_t second = abs((total % 60000) / 1000);
+	uint32_t milisec = abs((total % 60000) - (second * 1000));
+
+	return NumberToString(minute) + ":" + NumberToString(second) + "."
+			+ NumberToString(milisec);
+	//string timeString = "Time: " + intToString(total);
+	//_sdl->renderText(10, 20, 3, timeString, 200);
+}
+
 } // end of namespace

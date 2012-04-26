@@ -9,7 +9,6 @@
 #include "Graphic.h"
 #include "Camera.h"
 #include "GraphicType.h"
-#include "SdlInterface.h"
 
 using namespace std;
 
@@ -57,7 +56,7 @@ void Texture::Load(std::string filename) {
 
 	SDL_Surface* surface = NULL;
 
-	surface = SdlInterface::getInstance()->LoadImage(filename);
+	surface = Graphic::getInstance()->LoadImage(filename);
 
 	if (surface == NULL) {
 		cout << "Failed to load the image: " << filename << ", Error: "
