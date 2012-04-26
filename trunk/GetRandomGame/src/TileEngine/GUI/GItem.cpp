@@ -10,10 +10,6 @@
 
 namespace TileEngine {
 
-GItem::~GItem() {
-	// TODO Auto-generated destructor stub
-}
-
 void GItem::Init() {
 	mXoffset = 0;
 	mYoffset = 0;

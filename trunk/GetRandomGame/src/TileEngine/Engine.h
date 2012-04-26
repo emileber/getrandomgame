@@ -13,26 +13,26 @@
  *      Start();
  *
  */
-
+#pragma once
 #ifndef TILEENGINE_H_
 #define TILEENGINE_H_
 
 #include "Singleton.h"
-#include "SdlInterface.h"
 #include "Environment.h"
 #include "InputHandler.h"
-#include "Global.h"
-#include "Graphic/Graphic.h"
 #include "Timer.h"
 
+//#include "Graphic/Graphic.h" // see below
+
 namespace TileEngine {
+
+class Graphic; // forward declaration
 
 class Engine: public Singleton<Engine> {
 	friend class Singleton<Engine> ;
 protected:
 	Engine();
 
-	SdlInterface * mSdl;
 	Graphic * mGraphic;
 	Environment * mEnvironment;
 	InputHandler * mInputHandler;

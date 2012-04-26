@@ -32,7 +32,6 @@ GTextLine::GTextLine() {
 }
 
 GTextLine::~GTextLine() {
-	// TODO Auto-generated destructor stub
 }
 
 void GTextLine::PushWord(const GWord* word, int width) {

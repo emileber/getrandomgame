@@ -10,12 +10,9 @@
 #include <cstdio>
 
 GrgInputHandler::GrgInputHandler() {
-	// TODO Auto-generated constructor stub
-
 }
 
 GrgInputHandler::~GrgInputHandler() {
-	// TODO Auto-generated destructor stub
 }
 
 bool GrgInputHandler::HandleInput(Environment* environment) {
@@ -31,6 +28,8 @@ bool GrgInputHandler::HandleInput(Environment* environment) {
 			//Quit the program
 			return true;
 		}
+
+		// TODO faire un switch de l'event type
 		if (event.key.keysym.sym != SDLK_LAST) {
 			uint32_t eventKey = event.key.keysym.sym;
 			//If a key was pressed
@@ -65,6 +64,12 @@ bool GrgInputHandler::HandleInput(Environment* environment) {
 
 				}
 			}
+
+			// On mouse motion
+			if (event.type == SDL_MOUSEMOTION) {
+				MouseMove(event, environment);
+			}
+
 		} // end here if event.key.keysym.sym == SDLK_LAST that is not handle in switch
 	} // end here if no keys is pressed
 
@@ -74,10 +79,10 @@ bool GrgInputHandler::HandleInput(Environment* environment) {
 	} else if (keystates[SDLK_RIGHT]) {
 		printf("right key is held down\n");
 		((GetRandomGame*) environment)->testFunction(1, 0);
-	} else if (keystates[SDLK_UP]){
+	} else if (keystates[SDLK_UP]) {
 		printf("up key is held down\n");
 		((GetRandomGame*) environment)->testFunction(0, 1);
-	}else if (keystates[SDLK_DOWN]){
+	} else if (keystates[SDLK_DOWN]) {
 		printf("down key is held down\n");
 		((GetRandomGame*) environment)->testFunction(0, -1);
 	}
@@ -92,3 +97,17 @@ bool GrgInputHandler::HandleInput(Environment* environment) {
 	return false;
 
 }
+
+void GrgInputHandler::MouseMove(const SDL_Event & event,
+		Environment* environment) {
+
+	((GetRandomGame*) environment)->testFunction(event.motion.x, event.motion.y);
+}
+
+
+
+
+
+
+
+

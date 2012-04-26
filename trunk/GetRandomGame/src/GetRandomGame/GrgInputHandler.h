@@ -14,6 +14,10 @@
 using namespace TileEngine;
 
 class GrgInputHandler: public InputHandler {
+
+private:
+	void MouseMove(const SDL_Event&, Environment*);
+
 public:
 	GrgInputHandler();
 	virtual ~GrgInputHandler();

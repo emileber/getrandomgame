@@ -5,17 +5,17 @@
  *      Author: Emile
  */
 
+// TODO code the world... class
+
 #include "World.h"
 
 namespace TileEngine {
 
 World::World() {
-	// TODO Auto-generated constructor stub
 
 }
 
 World::~World() {
-	// TODO Auto-generated destructor stub
 }
 
 }

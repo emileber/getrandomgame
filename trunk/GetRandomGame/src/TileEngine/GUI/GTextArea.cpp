@@ -8,6 +8,7 @@
 #include "GTextArea.h"
 #include "Graphic/Graphic.h"
 #include "Graphic/Camera.h"
+#include "Manager.h"
 #include <sstream>
 
 namespace TileEngine {
@@ -18,7 +19,6 @@ GTextArea::GTextArea() {
 }
 
 GTextArea::~GTextArea() {
-	// TODO Auto-generated destructor stub
 }
 
 void GTextArea::Init() {

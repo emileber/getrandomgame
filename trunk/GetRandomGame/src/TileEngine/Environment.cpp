@@ -4,8 +4,10 @@
  *  Created on: 2011-12-18
  *      Author: Emile
  */
-#include "Environment.h"
+
 #include <iostream>
+
+#include "Environment.h"
 
 using namespace std;
 
@@ -13,7 +15,6 @@ namespace TileEngine {
 
 Environment::Environment() {
 	cout << "new Environment" << endl;
-	mSdlInterface = SdlInterface::getInstance();
 	mGraphic = Graphic::getInstance();
 	mTextureManager = Manager<Texture>::getInstance();
 	mFrameCount = 0;

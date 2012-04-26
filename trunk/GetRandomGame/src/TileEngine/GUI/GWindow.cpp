@@ -5,13 +5,16 @@
  *      Author: Emile
  */
 
-#include "GWindow.h"
+// TODO finis GWindow cpp
+
 #include <set>
+
+#include "GWindow.h"
+
 
 namespace TileEngine {
 
 GWindow::GWindow() {
-	// TODO Auto-generated constructor stub
 
 }
 GWindow::GWindow(Sprite* sprite) {
@@ -20,7 +23,6 @@ GWindow::GWindow(Sprite* sprite) {
 	}
 }
 GWindow::~GWindow() {
-	// TODO Auto-generated destructor stub
 }
 
 void GWindow::Init() {

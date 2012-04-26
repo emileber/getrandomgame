@@ -10,6 +10,8 @@
  *      through it.
  */
 
+// TODO finish animation class
+
 #ifndef ANIMATION_H_
 #define ANIMATION_H_
 

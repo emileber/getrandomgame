@@ -8,8 +8,9 @@
 #ifndef INPUTHANDLER_H_
 #define INPUTHANDLER_H_
 
-#include "Environment.h"
 #include "SDL/SDL.h"
+
+#include "Environment.h"
 
 namespace TileEngine {
 

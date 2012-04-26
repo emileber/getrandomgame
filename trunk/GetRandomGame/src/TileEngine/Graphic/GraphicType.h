@@ -1,9 +1,33 @@
+/*
+ * GraphicType.h
+ *
+ *  Created on: 2012-01-25
+ *      Author: Emile
+ *
+ *      Some basic types, may change
+ */
+
+
 #ifndef GTYPES
 #define GTYPES
 
-#include "Global.h"
-
 namespace TileEngine {
+
+
+/**
+ * Layer enum
+ *  Layers go from 0 to 11 (makes a total of 12)
+ *  Somes are not define, wich let them available for future uses
+ */
+enum LayerNumber {
+	LAYER_BACKGROUND = 1,
+	LAYER_GROUND = 4,
+	LAYER_PEOPLE = 6,
+	LAYER_FOREGROUND = 8,
+	LAYER_MENU = 10,
+	LAYER_DEBUG = 11
+};
+
 ///
 ///Defines a Point with coordinates x and y
 ///

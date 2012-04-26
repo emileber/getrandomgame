@@ -8,9 +8,11 @@
 #ifndef GMENUITEM_H_
 #define GMENUITEM_H_
 
-#include "IClickable.h"
-#include "Global.h"
 #include <vector>
+
+#include "IClickable.h"
+//#include "Global.h"
+
 namespace TileEngine {
 
 /*
@@ -20,7 +22,9 @@ class GItem: public IClickable {
 public:
 	GItem() {
 	}
-	virtual ~GItem();
+	virtual ~GItem() {
+
+	}
 
 	virtual void Init() = 0;
 	virtual void Update() = 0;

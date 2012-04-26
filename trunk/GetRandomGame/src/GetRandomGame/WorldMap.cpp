@@ -22,7 +22,6 @@ WorldMap::WorldMap(int size) {
 }
 
 WorldMap::~WorldMap() {
-	// TODO Auto-generated destructor stub
 }
 
 void WorldMap::Scale(float ratio) {
@@ -58,7 +57,7 @@ void WorldMap::Draw() {
 		// Évitte de dessiner à l'extérieur de l'écran en bas
 		if ((Graphic::getInstance()->GetHeight()
 				- i * _grassSprite->Height() * mScale)
-				< -_grassSprite->Height()) {
+				< -_grassSprite->Height() * mScale) {
 			break;
 		}
 

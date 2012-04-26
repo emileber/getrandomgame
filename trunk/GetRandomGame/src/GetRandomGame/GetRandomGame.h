@@ -13,7 +13,6 @@
 #define GETRANDOMGAME_H_
 
 #include "Environment.h"
-#include "Global.h"
 
 using namespace TileEngine;
 

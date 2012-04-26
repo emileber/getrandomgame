@@ -15,10 +15,16 @@
 #ifndef TEXTURE_H_
 #define TEXTURE_H_
 
-#include "Global.h"
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#include <vector>
+
 #include "GraphicType.h"
 #include "Ressource.h"
-#include <vector>
+
+class SDL_Surface;
+
 
 namespace TileEngine {
 
@@ -44,7 +50,7 @@ public:
 	}
 
 	// return the OpenGL id for that texture
-	float GetId() const {
+	float GetTexture() const {
 		return mTexture;
 	}
 

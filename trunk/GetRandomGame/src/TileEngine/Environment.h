@@ -5,19 +5,21 @@
  *      Author: Emile
  *
  *      Abstract class, to handle basic game stuff.
+ *      A game is in fact a defined environment.
  */
 
 #ifndef ENVIRONMENT_H_
 #define ENVIRONMENT_H_
 
+#include "Manager.h"
+
 #include "World.h"
-//#include "Singleton.h"
-#include "SdlInterface.h"
 #include "Timer.h"
 #include "Graphic/Graphic.h"
 #include "Graphic/Texture.h"
 #include "GUI/GuiContainer.h"
-#include "Global.h"
+
+
 
 namespace TileEngine {
 
@@ -43,7 +45,6 @@ protected:
 	Uint32 mFrameCount;
 
 	World * mWorld;
-	SdlInterface * mSdlInterface;
 	Graphic * mGraphic;
 	Manager<Texture> * mTextureManager;
 	GuiContainer* mGuiContainer;
