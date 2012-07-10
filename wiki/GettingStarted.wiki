@@ -43,7 +43,6 @@ _Le dossier src contient toutes les classes qui doivent être compilées._
     * BiomeManager
     * DiamondSquare (relié à l'algo du même nom)
     * GetRandomGame (Sous-classe Environement, big mama du jeu)
-    * GRGInputHandler
     * Launcher *(MAIN)*
     * MapGenerator (Génère un monde)
     * WorldMap (un monde de notre jeu)
@@ -60,8 +59,9 @@ _Le dossier src contient toutes les classes qui doivent être compilées._
     * *GUI*
       * _contient les classes pour fabriquer des menus._
     * Global.h (Fichier ENTETE contenant constante et include relié à l'engine)
-    * Environment (Environment générique, redéfini par GetRandomGame)
-    * InputHandler (générique, contient pratiquement rien)
+    * Environment (Environment générique, C'est un état d'application "AppState")
+    * InputHandler (Dispatch les input dans les bonnes fonctions)
+    * EventInterface (interface à utiliser pour utiliser le InputHandler)
     * _(Deprecated) (1)SdlInterface (Encapsulation de fonction relié à SDL)_ Maintenant voir Graphic
     * (1)Engine (la boucle de jeu)
     * Timer (donne du temps en milisec avec le tick SDL)
@@ -101,16 +101,16 @@ Petite explication rapide de l’engin. Prendre note que la classe Engine est Si
 // voir le Launcher dans le dir GetRandomGame pour le code exact
 
 Engine::getInstance()->init(SCREEN_WIDTH, SCREEN_HEIGHT, "window caption", 
-                   "font.ttf", Environment, InputHandler);
+                   "font.ttf", Environment * stateInitial);
 
 Engine::getInstance()->start();
 }}}
 
-Il est important de faire Init en premier, mais ça on s'en fou, je l'ai fait, on risque de plus y toucher.
+Il est important de faire Init en premier, mais ça on s'en fou, je l'ai fait, on risque plus d'y toucher.
 
 == Création ==
 
-À sa création, l'Engine initialise l'interface Graphic ainsi que l'environment.
+À sa création, l'Engine initialise l'interface Graphic ainsi que l'environment donné en premier.
 
 NOTE: Graphic est singleton aussi ainsi que tous les Manager graphique.
 
@@ -170,9 +170,9 @@ Désactive le vertical sync de ta carte graphique pour voir le maximum de FPS qu
 
 == La classe Environment ==
 
-Celle du namespace TileEngine est vraiment générique et ne contient que des fonctions à redéfinir ou presque. Voir GetRandomGame qui est la sous-classe Environment de notre jeu.
+Un environnement est un état (state) de l'application. Ex.: Splash Screen, Main Menu, le jeu, crédit sont tous des environnements.
 
-L’environnement crée un monde et s'occupe d'updater les objets actifs dont notre personnage Héro évidement et ensuite de l'afficher (Draw) en succession. C'est-à-dire, L'Engine appel le Draw d'environment qui appel le Draw du World, lui qui appel le Draw de chaque partie (Area, tuiles, etc.) et ensuite l'environment appel le Draw des éléments actifs, soit les personnages et monstres.
+Celle du namespace TileEngine est vraiment générique et ne contient que des fonctions à redéfinir, elle est abstraite.
 
 ----
 = L'interface graphique avec SDL (un démon) et OpenGL (le diable en personne) =
@@ -187,7 +187,7 @@ Lorsque terminé, l'interface permettra les choses suivantes:
   * Rotation
   * Resize (done)
   * Teinte et multi-teinte (done) (couleur ajusté, comme les biomes dans Minecraft, les textures seront en grayscale)
-  * Éventuellement, un éclairage dynamique.
+  * un éclairage dynamique. (almost done, disons fonctionnel, à optimiser)
 
 == Son contenu ==
 
