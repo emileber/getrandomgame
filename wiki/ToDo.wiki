@@ -34,18 +34,19 @@ Donc maintenant que tout est diponible pour starter, il ne vous reste plus qu'à
   * <font size="3" color="blue">Paufiner le Tile Engine (Emile)</font>
     * <font color="green">Ajout d'openGL (done)</font>
     * <font color="green">Gestion de l'affichage (done)</font>
+    * <font color="green">Light Engine (almost done)</font>
     * Les menu/interface (inventaire, stats, hotbar, healt/xp/mana bar, etc) EN COURS
       * ça implique faire des classes générique genre Button et Labels et Menu, voir Class Diagram et Maquette
-    * Gestion des contrôles
+    * <font color="green">Gestion des contrôles (done)</font>
     * Peut-être Aspect Réseau
-    * Game State
-      * Menu principal
+    * <font color="green">Game State
+      * Menu principal (done)</font>
       * Login au serveur et loading screen (si réseau)
-  * <font size="3">Les Tokens</font>
 
 === Le Jeu ===
-  * <font size="3" color="blue">Créer le Monde [World (voir la page)] (Alexandre DT est pas mal la dessus)</font>
-    * une fois une tile map affichée, il faut le coté RANDOM de la map
+  * <font size="3" color="blue">Le Monde [World (voir la page)]
+    * tile map (Emile)
+    * RANDOM de la map (Alexandre DT)</font>
   * <font size="3">Les Tokens</font>
     * Ainsi que des états comme (en feu, gelé, électrifiant, etc, voir [Features features])
   * <font size="3">Le système de génération d'item</font>
