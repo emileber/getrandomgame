@@ -120,8 +120,10 @@ and add the folowing library Search Path (Libraries -L) juste en dessous
 "${workspace_loc:/${ProjName}/lib/GLEW/lib}"
 }}}
 
-MinGW C++ Linker > Miscellaneous
-Linker flags: -mwindows
+<font color="red">*the linker flag below is optionnal and shouldn't be used unless it won't compile*</font>
+
+<font color="gray">MinGW C++ Linker > Miscellaneous
+Linker flags: -mwindows</font>
 
 _Note: Pas besoin d'ajouter le dossier de jeu comme include puisqu'il est considéré par défaut comme le dossier de développement._
 
@@ -154,6 +156,12 @@ The names may change but <font color="red">*the order shouldn't be changed*</fon
 
 ----
 = Possible Errors and Debugging tips =
+
+== unrecognised emulation mode:windows ==
+
+Remove the -mwindows linker flag.
+
+if it doesn't work, [http://stackoverflow.com/q/663811 Stack Overflow might help]
 
 == Pure virtual stuff? ==
 
