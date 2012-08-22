@@ -129,19 +129,26 @@ _Note: Pas besoin d'ajouter le dossier de jeu comme include puisqu'il est consid
 
 == Build le projet ==
 
-  # Clique sur le bouton avec un Marteau qui veut dire: Build "DEBUG" for the project "GetRandomGame"
-    * S'il y a une erreur, voir la FAQ en bas, ou bien ouvrir une Issue, Merci.
-  # Voila le projet devrait être presque prêt pour être utilisé.
+  # Click on the debug button (little hammer) which means: Build "DEBUG" for the project "GetRandomGame"
+    * If there's an error, see the FAQ or open an Issue. Thanks.
+  # Now, all that's left is to add the dll files beside the Binary that we have just created.
 
 == Ajouter les DLL ==
 
-Prend les DLL suivant qui se trouve dans les dossiers Bin ou Lib de chaque sous-dossier du dossier Lib du projet et les placer à coter du GetRandomGame.exe
+Take the following DLL which are in the BIN or LIB folder and place them beside GetRandomGame.exe in the DEBUG folder.
 
+  * freetype6.dll
+  * ftgl.dll
   * SDL.dll
   * SDL_image.dll
-  * ftgl.dll
-  * freetype6.dll
 
+=== For a release Build ==
+
+Add those: (that can all be found in a MinGW sub-folder)
+  * libgcc_s_dw2-1.dll 
+  * libpng12-0.dll
+  * libstdc++-6.dll
+  * zlib1.dll
 
 == Linker flags ==
 
@@ -176,13 +183,15 @@ Il est primordial de la redéfinir dans la sous-classe.
 
 == Application Crashes on start up? ==
 
-L'application plante au démarrage? Lorsque tu debug, ça te donne ça?
+L'application plante au démarrage? While debugging, you see something like that?
 
 {{{
 gdb: unknown target exception 0xc0000135 at 0x7724f52f
 }}}
 
 Avec ce genre d'erreur lors du debug, il est facile d'avoir un message plus clair en utilisant le gdb (débugger) en ligne de commande.
+
+You should try using the gdb in the windows command line (DOS emulator).
 
 {{{
 C:\Users\Emile\workspace\GetRandomGame\Debug>gdb GetRandomGame
