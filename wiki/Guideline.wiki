@@ -9,7 +9,7 @@ Table Of Content:
 ----
 = Project related rules =
 == Const use ==
-Les Font en particulier ne devraient jamais être modifiés puisqu'ils sont partagés par plusieurs objets. Donc chaque variable Font utilisé dans un objet devrait idéalement être comme ça:
+Les Font (et Texture) en particulier ne devraient jamais être modifiés puisqu'ils sont partagés par plusieurs objets. Donc chaque variable Font utilisé dans un objet devrait idéalement être comme ça:
 
 {{{
 // Reçoit un pointeur non-constant vers une variable "font" constante (read-only)
@@ -32,29 +32,53 @@ protected:
 }}}
 
 
-= Useful Functions =
+= Useful Functions (#include "Util/Util.h") =
 
-== Number to string ==
+== The Util namespace ==
 
-Can be found in SdlInterface right now as a Template function.
+Can be found in the Util directory right now.
 
 {{{
-         /**
-	 * NumberToString
-	 *  cast any Number base type to string...
-	 */
-	template<typename T>
-	std::string NumberToString(T number) {
+/**
+ * Utility functions
+ */
+namespace Util {
 
-		std::stringstream ss; //create a stringstream
-		ss << number; //add number to the stream
+std::vector<std::string> & split(const std::string & s, char delim,
+		std::vector<std::string> & elems);
+std::vector<std::string> split(const std::string & s, char delim);
+std::string formatTime(long int total);
 
-		return ss.str(); //return a string with the contents of the stream
-	}
+/**
+ * Template functions
+ */
 
+/**
+ * NumToStr cast any number T to a string. Use that one for outputting numbers.
+ * @param number anything in fact that can be outputed to a string
+ * @return an std::string with the passed argument
+ */
+template<typename T>
+std::string numToStr(T number) {
+	std::stringstream ss; //create a stringstream
+	ss << number; //add number to the stream
+	return ss.str(); //return a string with the contents of the stream
+}
+
+/**
+ * cast any string to a specify T number. Use that one for inputs.
+ * @param Text that you whant to cast to a number
+ * @return a T number or Zero if not castable
+ */
+template<typename T>
+T strToNbr(const std::string &Text) {
+	std::istringstream ss(Text);
+	T result;
+	return ss >> result ? result : 0; // return zero if not castable
+}
 }}}
 
-== Split a String with a Custom delimiter ==
+== Split a String with a Custom delimiter (in the Util namespace) ==
 
 [http://stackoverflow.com/a/236803/1218980 Source]
 
