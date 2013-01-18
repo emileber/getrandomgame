@@ -32,37 +32,23 @@ Example
    class Name
 }}}
 
-==Class Library Names==
-
-  * Now that name spaces are becoming more widely implemented, name spaces should be used to prevent class name conflicts among libraries from different vendors and groups.
-  * When not using name spaces, it's common to prevent class name clashes by prefixing class names with a unique string. Two characters is sufficient, but a longer length is fine.
-
-Example
-
-John Johnson's complete data structure library could use JJ as a prefix, so classes would be:
-   
-{{{
-class JjLinkList
-   {
-   }
-}}}
-
 
 ==Method Names==
 
-  * Use the same rule as for class names.
+  * The first character should be lower case.
+  * All word beginnings after the first letter should be upper case as with class names.
 
 ===_Justification_===
 
-Of all the different naming strategies many people found this one the best compromise.
+Of all the different naming strategies many people found this one the best compromise. And it doesn't change from Java dev and the STL is all like that.
 
 Example
 {{{
    class NameOneTwo
    {
    public:
-      int                   DoIt();
-      void                  HandleError();
+      int                   doIt();
+      void                  handleError();
    }
 }}}
 
@@ -81,8 +67,8 @@ Example
    class NameOneTwo
    {
    public:
-      int                   VarAbc();
-      int                   ErrorNumber();
+      int                   varAbc();
+      int                   errorNumber();
    private:
       int                   mVarAbc;
       int                   mErrorNumber;
@@ -106,7 +92,7 @@ Example
    class NameOneTwo
    {
    public:
-      int                   StartYourEngines(
+      int                   startYourEngines(
                                Engine& rSomeEngine, 
                                Engine& rAnotherEngine);
    }
@@ -115,7 +101,7 @@ Example
 
 ==Pointer Variables==
 
-  * (FUCK THAT) pointers should be prepended by a 'p' in most cases
+  * (FUCK THAT, not necessary but may help reading the code) pointers should be prepended by a 'p' in most cases
   * place the `*` close to the pointer type not the variable name
 
 ===_Justification_===
@@ -151,6 +137,75 @@ section is some name that identifies why the code is chunked together. The class
 ----
 =Documentation=
 
+== Doxygen specifications ==
+Format your comment using the [http://www.stack.nl/~dimitri/doxygen/manual/index.html Doxygen documentation] like this:
+
+{{{
+/*!
+ *  @Util.cpp
+ *  @brief     	Generic Template and functions
+ *  @details   	more detailed info
+ *  @author    	E. Bergeron
+ *  @date      	2012-02-13
+ *  @pre	you must include Util.h and call it like Util::theFunction();
+ *  @copyright 	Prismal Studio 2008-2013 www.prismalstudio.com
+ */
+
+/**
+ * Split a string "s" at each "delim" char and push the tokens into the created vector "elems"
+ * @param s a constant string reference to be split
+ * @param delim the character used to split the string "s"
+ * @return the "elems" vector reference
+ */
+std::vector<std::string> Util::split(const std::string & s, char delim) {
+	std::vector<std::string> elems;
+	return split(s, delim, elems);
+}
+}}}
+
+== Commit comments ==
+
+<font color="red">*Commit comments are obligatory.*</font> They are important to keep track of what has been done and something to find why something doesn't work anymore. Review your commit options/modifications before committing to prevent errors. If you do not follow that rule, you may lose your committer privilege. 
+
+Here's a hint to help you organize your commit comments, keep a text file for the future commit comment like this:
+<font color="green"><pre>
+ADDED
+- added reload function in engine that reload graphics of the active environment
+- added a LightObject class
+- added a vector of Environment in the Engine class
+- Active attribute to tile (green rect around active)
+- Full camera support
+- Art folder in docs folder (containing art assets)
+- a new test tileset (the third)
+
+REMOVED
+- textx and testy support (almost, currently useless)
+- dependencies between Environments
+
+FIXED
+- how the world use the screen dimension (twice fixed)
+- Fullscreen/window mode display font correctly
+- how lightEngine draw lights
+- How the engine handle switching app Environment
+
+BUG FOUND
+- fullscreen dosn’t work well
+
+TODO
+- make a lighting draw
+- enable resizable window mode
+- fullscreen
+- Smooth camera
+</pre>
+</font>
+That is a perfect comment.
+
+DO NOT DO THIS:
+<font color="red">
+<pre>
+fukken DungeonGenerator nigger
+</pre>
+</font>
 ==Comments Should Tell a Story==
 
 Consider your comments a story describing the system. Expect your comments to be extracted by a robot and formed into a man page. Class comments are one part of the story, method signature comments are another part of the story, method arguments another part, and method implementation yet another part. All these parts should weave together and inform someone else at another point of time just exactly what you did and why.
@@ -177,7 +232,7 @@ The better you are at orchestrating all these elements together the clearer your
 
 I don't really consider unit tests a question answering device because if you can't understand the code by reading it, reading something else about the code you don't understand won't help you understand it better.
 
-==Include Statement Documentation==
+==Include Statement Documentation (May help) ==
 
 Include statements should be documented, telling the user why a particular file was included. If the file includes a class used by the class then it's useful to specify a class relationship:
   * ISA - this class inherits from the class in the include file.
