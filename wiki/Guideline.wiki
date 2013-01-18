@@ -8,6 +8,91 @@ Table Of Content:
 <wiki:toc max_depth="2" />
 ----
 = Project related rules =
+
+== #include Rules ==
+=== Forward Declaration ===
+Voir cette [http://stackoverflow.com/a/553869/1218980 question sur Stack Overflow]
+
+Exemple de forward declaration
+
+{{{
+// GetRandomGame.h
+
+// Specific and absolutely necessary includes
+#include "Environment.h"
+#include "World/WorldCoord.h"
+#include "Graphic/Texture.h"
+
+// necessary STL stuff
+#include <vector>
+
+// forward declaration
+class WorldMap;
+class Tile;
+// forward declare a template
+template<typename T>
+class Manager;
+// forward declare classes inside a namespace
+namespace TileEngine {
+class Engine;
+class LightEngine;
+class Camera;
+class GuiContainer;
+class Sprite;
+class GLabel;
+class FPoint;
+}
+}}}
+
+{{{
+// GetRandomGame.cpp
+
+#include "Engine.h"
+
+// the app state
+#include "GetRandomGame.h"
+
+// world map related
+#include "WorldMap.h"
+#include "MapGenerator.h"
+#include "DungeonGenerator.h"
+#include "World/Tile.h"
+
+// Generic graphic classes
+#include "Graphic/LightEngine.h"
+#include "Graphic/Texture.h"
+#include "Graphic/Camera.h"
+#include "Graphic/Animation.h"
+#include "Graphic/Font.h"
+#include "Graphic/Behavior/GraphicTranslation.h"
+
+// GUI related
+#include "GUI/GLabel.h"
+#include "GUI/GTextArea.h"
+#include "GameUI/GameUI.h"
+
+// Generic Template and functions
+#include "Manager.h"
+#include "Util.h"
+
+// STL stuff
+#include <ctime>
+#include <math.h>
+
+// the unique namespace we're using. The other must be specified like OtherNamespace::theFunction();
+using namespace TileEngine;
+}}}
+
+=== Chose importante à se souvenir ===
+  * NEVER put "using namespace Anamspace;" in a header file. You may put it once in a CPP file.
+  * Always include files from the more specific ones to the more general ones. Like that:
+    * #include "ParentClass.h"
+    * #include "SomeClassYouCreated.h"
+    * #include "AgenericTemplateClass.h"
+    * #include `<`AnyStlClass`>`
+    * #include `<`likeString`>`
+  * put the whole path to your file, don't include the directory inside the project config file.
+
 == Const use ==
 Les Font (et Texture) en particulier ne devraient jamais être modifiés puisqu'ils sont partagés par plusieurs objets. Donc chaque variable Font utilisé dans un objet devrait idéalement être comme ça:
 
