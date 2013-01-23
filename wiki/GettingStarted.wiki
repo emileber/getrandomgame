@@ -39,20 +39,24 @@ _Le dossier src contient toutes les classes qui doivent être compilées._
       * Dock
       * SunkenCity
       * ZoneType (classe parente)
-    * Biome (relié à la génération de monde)
-    * BiomeManager
-    * DiamondSquare (relié à l'algo du même nom)
-    * GetRandomGame (Sous-classe Environement, big mama du jeu)
+    * *Game UI* _contient le code relatif aux interfaces graphiques._
+    * *generation* _code de generation de map._
+      * Biome (relié à la génération de monde)
+      * BiomeManager
+      * DiamondSquare (relié à l'algo du même nom)
+      * MapGenerator (Génère un monde)
+      * WorldMap (un monde de notre jeu)
+    * CharacterTestEnvironment (État qui sert pour les tests de personnage)
+    * GetRandomGame (Sous-classe Environement, état applicatif du jeu)
+    * MainMenuEnvironment (État du menu principal)
     * Launcher *(MAIN)*
-    * MapGenerator (Génère un monde)
-    * WorldMap (un monde de notre jeu)
   * *TileEngine* _Dossier racine du moteur et est aussi un namespace_
     * *Graphic* _Les classes reliées à l'affichage avec OpenGL_
       * Texture : Ressource (draw itself on Draw calls)
       * Sprite (contient un pointeur de texture et de rect pour faciliter la création d'image)
       * MultiTintedSprite : Sprite (permet de recolorer chaque coin indépendamment)
       * (1)Camera (the view point)
-      * (1)Graphic (Interface Singleton)
+      * (1)Graphic (initialise la fenetre)
       * Animation : Ressource - pas encore implémenté
       * GraphicType (défini les structures du type rect, section et couleur)
       * Font : Ressource (pour l'affichage de text TrueType font .ttf)
@@ -76,13 +80,16 @@ _Le dossier src contient toutes les classes qui doivent être compilées._
 === Le dossier docs ===
 Contient les fichiers relatifs à la documentation du projet.
   * evolution _contient des images du projet à travers le dévelopement._
-  * issue _contient les images relatives aux erreurs rencontrées dans le projet._
+  * issue _contient les images/docs relatifs aux erreurs rencontrées dans le projet._
+  * art _contient les fichiers sources ainsi que des images d'art du projet._
 === Le dossier font ===
 Il parle de lui-même, il contient les polices de caractère.
 === Le dossier image ===
 contient les images que le projet utilise.
 === Le dossier lib ===
-<font color="red">Important, ce dossier doit être exclu du Build autant pour le Debug que la Release (si ce n'est pas déjà fait) voir [Setup].</font> Puisqu'il contient des sources, les IDE tendent à essayer de les compiler par défaut.
+<font color="red">*IMPÉRATIF, ne jamais modifier ce dossier.*
+
+Important, ce dossier doit être exclu du Build autant pour le Debug que la Release (si ce n'est pas déjà fait) voir [Setup].</font> Puisqu'il contient des sources, les IDE tendent à essayer de les compiler par défaut.
 
 Il contient les sources, bibliothèques et dll des Libraries utilisées dans le projet. Le projet "link" vers c'est fichiers.
 
@@ -93,17 +100,28 @@ Je vais faire référence souvent à ce fichier, c'est le fichier de constante d
 ----
 = Le Tile Engine =
 
-Petite explication rapide de l’engin. Prendre note que la classe Engine est Singleton.
+Petite explication rapide de l’engin. Prendre note que la classe Engine est Singleton. Bien que cela lui donne une scope global, il est déconseillé de l'appelé en utilisant cette propriété. Cela changera probablement dans le futur.
+
+L'Engine est en fait un mixte de la boucle de jeu et la machine à états finis de l'application. Les états sont des sous-classes d'Environment (exemple, GetRandomGame, MainMenuEnvironment, CharacterTestEnvironment).
 
 == Pour le starter ==
 
 {{{
-// voir le Launcher dans le dir GetRandomGame pour le code exact
+// Get a pointer to the engine
+// which serves as a app state machine
+Engine * eng = Engine::getInstance();
 
-Engine::getInstance()->init(SCREEN_WIDTH, SCREEN_HEIGHT, "window caption", 
-                   "font.ttf", Environment * stateInitial);
+// push the Environment(s) (app state) we want
+eng->PushEnvironment(new MainMenuEnvironment(eng));
+eng->PushEnvironment(new GetRandomGame(eng));
 
-Engine::getInstance()->start();
+// init it with custom screen size
+if (eng->Init(SCREEN_WIDTH, SCREEN_HEIGHT, "Tile Game test")) {
+	// then start this sh!t up
+	eng->Start();
+}else{
+	std::cout << "Error in Engine INIT..." << std::endl;
+}
 }}}
 
 Il est important de faire Init en premier, mais ça on s'en fou, je l'ai fait, on risque plus d'y toucher.
@@ -119,39 +137,36 @@ Ensuite, il appelle run() qui start le gameLoop.
 == Le Game Loop ==
 
 {{{
-         /**
-         *  GAME LOOP
-         */
-        while (!_quit) {
-                /**
-                 * each iteration, do this:
-                 */
+/**
+	 *  GAME LOOP
+	 */
+	while (!IsExit()) {
+		/**
+		 * each iteration, do this:
+		 */
+		mFrameTimer.Start(); //Calcul le temps d'execution de l'iteration
 
-                _frameTimer.start(); //Calcul le temps d'execution de l'iteration
+		mGraphic->ClearScreen(); // clear the screen
+		// Do all the draw OPs FIRST
+		GetActiveEnvironment()->Draw();
+		// then send the data to the Graphic Device (video card)
+		// while the input and update are processing
+		mGraphic->FlushBuffers();
 
-                // Collect and handle inputs informations (return false on exit)
-                _quit = _inputHandler->handleInput(_environment);
+		// Collect and handle inputs informations (return false on exit)
+		if (mInputHandler->HandleInput(GetActiveEnvironment())) {
+			Exit();
+		}
+		GetActiveEnvironment()->Update(); // UPDATE the environment
+		FpsRegulator(); // show FPS information
 
-                _environment->update(); // UPDATE the environment
+		mGraphic->FlipBuffers(); // flip the screen
 
-                if (DEBUG) {
-                        fpsRegulator(); // show FPS information
-                }
+		// wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
+		while (mFrameTimer.GetTimerTicks() < 1000 / FRAMES_PER_SECOND)
+			;
 
-
-                _graphic->clearScreen(); // (OpenGL)clear the screen
-
-                // all the draw OPs
-                _environment->draw(); // call le draw de toute
-
-                _graphic->flipBuffers(); // (OpenGL)flip the screen
-
-                // wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
-                while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
-                        ;
-                frameCount++; // test frame count
-        } // End of the GAME LOOP
-
+	} // End of the GAME LOOP
 }}}
 
 == Regulation des Frame par seconde ==
@@ -180,11 +195,12 @@ Celle du namespace TileEngine est vraiment générique et ne contient que des fo
 Bon alors j'ai encapsulé le boute chiant donc vous n'aurai pas a jouer avec des trucs d'affichage.
 
 Lorsque terminé, l'interface permettra les choses suivantes:
-  * afficher des images (done)(même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire, bien que l'on ne le voit pas, serait idéalement à éviter coté d'optimiser)
+  * afficher des images (done)(même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire, bien que l'on ne le voit pas, serait idéalement à éviter question d'optimiser)
   * afficher du [GettingStarted#le_texte texte] (done)
   * Sur x Layer différentes (et ajustable à volonter)
   * transparence (done)
-  * Rotation
+  * Rotation (done)
+  * flip horizontal/vertical (done)
   * Resize (done)
   * Teinte et multi-teinte (done) (couleur ajusté, comme les biomes dans Minecraft, les textures seront en grayscale)
   * un éclairage dynamique. (almost done, disons fonctionnel, à optimiser)
