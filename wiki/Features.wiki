@@ -11,15 +11,12 @@ Table Of Content:
 [http://www.thespecialistsltd.com/files/RPG7-(replica)_0.jpg]
 = RPG: Role Playing.. Gun? =
 
-	Last video of the project:
-
-	<wiki:video url="http://www.youtube.com/watch?v=bEBxr5hiRTg"/>
-
 	[http://code.google.com/p/getrandomgame/wiki/Setup Setup ton Environnement de développement]
 
 	Then take a look at [Crafting Craftings] and the [SpellSystem spell system]
 
 ----
+
 = Tu veux aider? =
   # va voir les [http://code.google.com/p/getrandomgame/issues/list issues]
   # Apprend [GettingStarted Comment ça fonctionne] et [setup installe-toi] un environnement de développement
@@ -30,6 +27,7 @@ _Example of a tile-based game/engine:_
 [http://www.refrag.com/wp-content/uploads/2009/03/tileset2.png]
 
 ----
+
 = Would be cool to have =
 
 == World Related ==
@@ -37,14 +35,18 @@ _Example of a tile-based game/engine:_
   * Dimension/Plan (Éthéré, mort, etc)
   * Triggered Dynamic Events
   * Dynamic lighting
+  * Multi-floored map
 
-_An example of a Triggered Dynamic Event:_
+_An example of a Triggered Dynamic Event (Goblin invasion in Terraria):_
 
-[http://cdn.gamefront.com/wp-content/uploads/2011/08/Terraria4.jpg]
+[http://letsplayindie.com/wp-content/uploads/2012/03/Terraria-GoblinArmy.jpg]
 
 ----
-== Magie ==
-=== Buff et Curse ===
+
+==Magie==
+
+===Buff et Curse===
+
   * l'état du personnage affecte les actions qu'il porte
   * Finish moves/special ou des buffs après plusieurs hit de suite
   * Stun / aveuglé / paralysé / Silence / Pétrifié / en feu / Gelé / Sourd / confu / sleep / bleeding / poisonned / slowed
@@ -54,40 +56,50 @@ _Difficile d'attaquer lorsqu'on est presque mort:_
 
 [http://www.foxnews.com/images/267901/3_61_captain_america.jpg]
 
-=== [SpellSystem Spell] ===
+===The SpellSystem===
+
   * qui affecte la vision du joueur (tenebre, lumière)
-  * Possibilité de Critique
+  * Possibilité de Critique/fumble
   * Téléportation de groupe (création de portail)
   * Lévitation
   * Aura
   * Summon
   * ressurection
   * souhait
-  * COMBINAISON de spell
+  * COMBINAISON de spell?
   * MASS DESTRUCTION
   * [http://faqs.ign.com/articles/913/913599p1.html Lost odyssey spell list]
 
 ----
-== [Crafting Crafting] ==
+
+== The Crafting System ==
+
+  * Artisanat (Créer des tables, des coffres, des lits pour meubler les maisons)
+  * Gathering (Ramasser des plantes pour faire des remedes, bucher du bois pour faire des meubles)
   * Potions:
     * vision nocturne
+    * guérison
   * Récupération d'équipement Magique (shard, ou rune, etc)
+    * Salvaging items
   * [Crafting Alchemy] qui vaut la peine, pas de crap useless puis longue
   * [Crafting Crafting] diversifié (Un personnage devrait pouvoir etre un artisan si il le décide)
   * Possibilité de miner, de cultiver des herbes, de bucher du bois (style Ultima Online)
-  * Métier d'artisanat (Créer des tables, des coffres, des lits pour meubler les maisons)
-  * Métier de crafting, gathering (Ramasser des plantes pour faire des remedes, bucher du bois pour faire des meubles)
 
 ----
+
 ==Game Rules Related==
+
   * Chance de réussite ou d'échec
   * XP sont un mixe de [http://en.wikipedia.org/wiki/Experience_point#Cash-In_Advancement cash-IN], [http://en.wikipedia.org/wiki/Experience_point#Free-form_advancement Free-form advancement] et [http://en.wikipedia.org/wiki/Experience_point#Activity-based_progression Activity based]
 
 ===Skill===
+
   * Silent Cast
   
 ----
+
 == Other Stuff ==
+
   * Transporter quelqu'un
   * Distance de vision variable (capacité à faire un zoom-out)
   * Possibilité d'avoir des ailes
