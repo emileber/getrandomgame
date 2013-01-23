@@ -128,12 +128,6 @@ Each class definition should be in its own file where each file is named directl
 In general each class should be implemented in one source file:
   * ClassName.cpp
 
-===But When it Gets Really Big...===
-
-If the source file gets too large or you want to avoid compiling templates all the time then add additional files named according to the following rule:
-  * ClassName_section.cpp
-section is some name that identifies why the code is chunked together. The class name and section name are separated by '_'.
-
 ----
 =Documentation=
 
