@@ -1,0 +1,261 @@
+# The Kingdom of Get Random Game #
+
+
+Table Of Content:
+
+
+---
+
+# Exemple de carte du monde #
+## Height Map ##
+![http://25.media.tumblr.com/87e892a615feb477725c76aaee1a2bbb/tumblr_mh23ytPs351qej9iao2_1280.jpg](http://25.media.tumblr.com/87e892a615feb477725c76aaee1a2bbb/tumblr_mh23ytPs351qej9iao2_1280.jpg)
+
+## Precipitation map ##
+
+![http://25.media.tumblr.com/d2afc6ea11cc8f4fb99b6dec3f1fc014/tumblr_mh23ytPs351qej9iao1_1280.jpg](http://25.media.tumblr.com/d2afc6ea11cc8f4fb99b6dec3f1fc014/tumblr_mh23ytPs351qej9iao1_1280.jpg)
+
+## Biome Map ##
+<pre>
+e = EAU évidement<br>
+<br>
+A = High Mountain<br>
+M = mountain<br>
+<br>
+W = wild jungle<br>
+J = jungle<br>
+s = flooded savannah<br>
+S = savannah<br>
+d = Badlands<br>
+D = arid desert<br>
+P = Swamp<br>
+F = feuillu<br>
+B = Woodlands<br>
+h = marsh<br>
+G = Grassland<br>
+C = boreal forest<br>
+b = boreal grassland<br>
+Z = frozen forest<br>
+I = taiga<br>
+H = thundra<br>
+</pre>
+![http://25.media.tumblr.com/8a2c3ded352a61eb17a96c9a99595851/tumblr_mh23ytPs351qej9iao3_1280.jpg](http://25.media.tumblr.com/8a2c3ded352a61eb17a96c9a99595851/tumblr_mh23ytPs351qej9iao3_1280.jpg)
+
+## Objectif ##
+![http://rpgmaker.net/media/content/games/82/screenshots/worldmap_label_large.png](http://rpgmaker.net/media/content/games/82/screenshots/worldmap_label_large.png)
+
+
+---
+
+# How far can we walk? #
+
+La dimension de la carte du monde sera déterminé en Région. Trois dimensions de base détermineront la taille du monde, soit:
+  * Petit (33x33)
+  * Moyen (65x65)
+  * [Très] Grand (129x129)
+
+Chaque case de la carte du monde sera une région composé d'aire de tuile (Area):
+  * 129x129 Area
+
+et chaque case d'une région sera une aire (Area Map) composé de tuile (Tile):
+  * 17x17 Tile
+
+## Complexity of the map ##
+
+Chaque Area doit être généré en fonction des autres Area autour de lui sans quoi il y aurait des changements linéaires visibles entre chaque Area.
+
+---
+
+# Générer un monde aléatoirement #
+
+...sans que ca soit dla marde.
+
+Ça semble beaucoup plus complexe que ce ne l'est vraiment
+
+## La taille ##
+
+Premièrement, il faut décider de la taille du monde, le monde doit être un carré avec un coté égal a 2^x +1(5, 9, 17, 33, 65, 129, 257,4097...) reste a voir quelle taille on veux le monde...
+
+## Génération de la carte ##
+
+> Ensuite commence la vrai génération, qui va débuter par la création d'une carte vierge qui va comme suit:
+
+  1. on génère une carte d'élévation
+  1. on skew la carte de température par rapport a la carte d'élévation et a la latitude
+  1. on génère une carte de température
+  1. on skew la carte des précipitations par rapport aux deux précédentes cartes
+  1. on génère une carte de précipitations
+  1. on skew la carte de densité végétale par rapport aux cartes précédentes
+  1. on génère une carte de densité végétale
+  1. on arrondi les coins
+
+> maintenant le point intéressant, comment on fait?
+
+## Comment? Diamond Square! ##
+
+[Fichier Excel](http://getrandomgame.googlecode.com/files/map_gen2.xls) avec des exemples
+
+> Toutes les cartes sont générées de manière similaire avec l’algorithme de Diamond Square qui est une application 2d de l’algorithme de midpoint displacement. Cet algorithme s'applique a une ligne et consiste a diviser la ligne en deux, ajouter une valeur aléatoire au point milieu, ce qui divise la ligne en deux ligne, et ainsi de suite pour les autres lignes
+
+ex:
+
+![http://gameprogrammer.com/fractal/mpd1.gif](http://gameprogrammer.com/fractal/mpd1.gif)
+
+![http://gameprogrammer.com/fractal/mpd2.gif](http://gameprogrammer.com/fractal/mpd2.gif)
+
+![http://gameprogrammer.com/fractal/mpd3.gif](http://gameprogrammer.com/fractal/mpd3.gif)
+
+> Le range permis de "random" reste a voir, mais cet algorithme permet de générer de très bons terrains.
+
+> Donc l'algorithme que nous utiliserons pour la génération des maps doit ressembler à celui-ci, mais pour générer de l'élévation sur une map en 2d. Le principe est simple, toutes les case commencent avec une valeur par défaut(entrée dans les étapes de skew, plus haut). Ensuite on fait un carré avec les case qui ont été visités(par défaut les coins) et on ajoute la moyenne des coins+random a cette valeur. C'est l'Étape square de diamond square. La deuxieme étape(diamond) consiste a faire des losanges avec les cases visités et d’ajouter  la moyenne des coins+random à leurs point milieu. On répète les deux étapes jusqu’à-ce que toutes les cases aient été visitées.
+
+Voici comment l’algorithme marche :
+
+![http://danielbeard.files.wordpress.com/2010/08/diamond-square-algorithm.png](http://danielbeard.files.wordpress.com/2010/08/diamond-square-algorithm.png)
+
+Les points noirs sont les cases déjà visitées, les points verts sont les cases qui seront visitées dans l'étape courante.
+
+> Comme on peut le voir c'est un algorithme simple a programmer qui va nous permettre d'avoir des cartes complexes.
+
+Donc une fois que cet algorithme a généré la première carte (élévation) on peux se servir de cette carte pour influencer(skewer) les résultats qu'on aura pour la deuxième carte(température).
+
+## Pseudo code ##
+
+```
+// pseudo code
+espace = Largeur;
+tant que espace > 1 faire
+{
+  espace = espace / 2;
+
+  pour chaque carre de largeur espace faire
+  {
+    etape du carre;
+  }
+
+  pour chaque diamant de largeur espace faire
+  {
+    etape du diamant;
+  }
+}
+
+// code
+// Indice de bout de matrice
+unsigned int unSpacing = m_unSize - 1;
+
+while (unSpacing > 1) 
+{ 
+  int unHalfSpacing = unSpacing / 2;
+
+  // Etape du carré
+  for (unsigned int unI = unHalfSpacing; unI < m_unSize; unI += unSpacing) 
+  { 
+    for (unsigned int unJ = unHalfSpacing; unJ < m_unSize ; unJ += unSpacing ) 
+    { 
+      m_vectPoints[unI][unJ] = SquareStep(unI, unJ, unHalfSpacing ) + Randomize() * unSpacing * m_fVariability; 
+    } 
+  } 
+
+  // Etape du diamant
+  for (unsigned int unI = 0; unI < m_unSize; unI += unHalfSpacing) 
+  { 
+    unsigned int unJStart = ((unI/unHalfSpacing) % 2 == 0 ) ? unHalfSpacing : 0; 
+
+    for (unsigned int unJ = unJStart; unJ < m_unSize ; unJ += unSpacing ) 
+    { 
+      m_vectPoints[unI][unJ] = DiamondStep(unI, unJ, unHalfSpacing ) + Randomize() * unSpacing *  m_fVariability;
+    } 
+  } 
+
+  // Adaptation de l'écart 
+  unSpacing = unHalfSpacing;
+} 
+```
+
+
+
+
+
+## Exemple rapide ##
+voici donc la carte de tantôt avec des valeurs (généré par moi) dedans
+```
+-10	-10	-8	-5	-8	-7	-6	-8	-10
+-10	-5	-8	-4	-10	-5	-4	-6	-8
+-3	-4	-1	0	-4	-6	-2	3	-8
+-5	-3	0	1	-3	0	0	10	6
+3	0	1	2	0	0	12	20	15
+3	3	2	4	5	6	9	15	12
+4	4	6	4	6	8	9	15	10
+3	2	7	3	4	9	10	12	10
+4	1	8	2	2	5	6	7	8
+```
+
+On considère ce qui es en bas de 0 comme de l'eau.
+On a donc une carte de 9x9 de température a faire, généralement la température est plus froide aux pôles et en altitude, et plus chaude en mer.
+Donc la carte de température, avant modification ressemblerait a ceci
+```
+0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	-1	0
+0	0	0	1	0	0	0	-2	0
+2	0	1	1	0	1	0	-2	-1
+3	3	4	3	2	1	-1	-3	-2
+3	2	3	2	0	0	0	-2	-2
+1	1	1	1	0	-1	-1	-3	-2
+2	0	0	1	0	-2	-1	-2	-3
+0	0	0	0	0	-2	-1	-1	-2
+```
+Je n'ai utilisé aucun algorithme formel pour avoir ça, mais ça donne une idée.
+Reste qu'a repasser l'algorithme diamond square(plus haut) pour avoir une map complete
+> On fait ca pour les quatres map (altitude, température,  précipitation, végétation)  et chaque case a assez d'information pour savoir quelle genre de case elle est(désert foret taiga tundra...), on a donc un monde vierge
+
+## Reference ##
+[Generating Random Fractal Terrain](http://gameprogrammer.com/fractal.html)
+
+[DiamondSquare pour la génération de terrain](http://hiko-seijuro.developpez.com/articles/diamond-square/)
+
+
+---
+
+# Biomes #
+
+![http://www.marietta.edu/~biol/biomes/whittaker.jpg](http://www.marietta.edu/~biol/biomes/whittaker.jpg)
+
+
+---
+
+
+Bon, maintenant que le jeu nous a fait une belle map vide il viens le temps d'ajouter des choses dedans.
+
+
+## Comment le randomeur ajoute des places ##
+
+j'ai pas pris un algorythme hyper mathémathique pour cette étape la, ce qui se passe c'est que le jeu va toute regarder les tuile de la map et passer un espece de djikstra pour avoir le biome au complet. Donc si le jeu tombe sur une case qu'il n'a pas encore ajouter dans un biomes il va l'ajouter dans un biome cocher la cocher, et regarder autour s'il y aurait pas une autre case a mettre dans ce biomes la, récursivement.
+
+ensuite une fois que le jeu a défini ses biomes il vas passer les biomes et leur dire de placer le stock qu'ils ont a placer (dongeon ports, villes, etc) et déterminer plus ou moins au hasard ce qu'ils place et plus ou moins au hasard ou il le placent en prenant un point au hasard dans le vecteur de point et en vérifiant quelques conditions, défini dans les types de spread.
+
+
+## jveux progger pis j'ai ben d'l'imagination pour ajout des places ##
+
+
+
+c'est super facile d'ajouter des Types de zone dans le jeu, tout ce qui a faire c'est
+
+
+1)on crée une nouvelle classe qui hérite de ZoneType(le .h risque d'etre pareil aux autres)
+
+
+2) on redéfini les variable membres dans le constructeur, ce qui consiste a mettre une rareté(chifre plutot arbitraire pour l'instant, plus c'est ba plus c'est rare, des entier plus gros que 0 uniquement) a associé une lettre, mettre la lettre du biome et instancier un SpreadRules pour determiner comment la zone se place.
+
+
+3)on instancie cette nouvelle classe et on la met dans le vecteur de trucs possible du biomes
+
+
+4)on run le jeu, si en ouvrant la map excel plante c'est que ca a marché!
+
+
+5)reste a ajoute une couleur pour le caractère dans la fonction XMLDmp de worldMap, je ne crois pas que ce sois le cas avec excel 2010 mais excel 2003 a une palette de couleur très limitée, donc il va falloir trouvé une alternative ou se débrouillé avec les lettres...
+
+# Tileset et Sprite sheet #
+
+[Auto-tiling](http://www.codeproject.com/Articles/106884/Implementing-Auto-tiling-Functionality-in-a-Tile-M)
+
+[Auto-tiling again](http://wilbefast.com/2011/02/06/tricky-auto-tiling/)

@@ -1,0 +1,9 @@
+# Proposition systèmes #
+
+Pour faciliter les intéractions entre les différentes entitées, et sans que cela vienne alourdir la boucle de jeu, je propose un système par message entre les entitées.
+
+Cela peut se faire en implémentant une interface pour les entitées dont nous voulons des interactions. Il suffit ensuite a cette entitée d'envoyer des messages, ou d'en recevoir certains types, ce qui peut faciliter les changements d'états.
+
+La base est très simple, un token implémente une interface (classe virtuelle) lui permettant d'envoyer des messages a une classe de gestion des messages. Celui-ci ré-envoie l'information aux entités écoutants ce type de message. Nous pouvons donc passer en paramètres plusieurs types, objets, etc. Cela peut également servir à gérer les attaques et dégâts entre différents monstres/joueurs.
+
+Lien wikipedia : http://en.wikipedia.org/wiki/Observer_pattern

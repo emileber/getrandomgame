@@ -1,0 +1,84 @@
+# Spell System #
+
+
+Table Of Content:
+
+
+---
+
+
+# We must think abuot the folowing #
+  * Replayability
+  * Creative freedom
+  * Ease of use
+  * Feeling of magic
+
+# Spell Creation #
+
+---
+
+## Fixed spells ##
+Every magic user has a set of spells he finds, can choose from or receives when levelling up. The spells are all predefined by the game designers. This is the most basic type of spell system one can have and is perhaps also the most used.
+
+## Random spells ##
+Every magic user has a set of spells he finds, can choose from or receives when levelling up. These spells are generated randomly by the game system using a set of rules. It's basically the same type of system that many RPGs use for generation of random items, but used for spells instead.
+
+## Grammar skeleton ##
+The spell caster has basically a set of sentences where he fills in the blanks (for example by clicking at the sources/targets in turn or by dragging the elements which will fill the blanks onto their position in the sentence). This is a similar system to how actions are performed in many point-and-click adventure games.
+
+## Grammar ##
+A spell is built up using a simple language with strict semantics. This is a similar system to how early adventure games with a text based interface handled actions though it might be implemented as a sequence of button clicks in stead of a text interface. The simplest type of this system has a fixed set of words which each control an aspect of the spell. It can on the other hand be as complex as a complete programming language.
+
+## Accumulative ##
+Spells are built up by different pieces each adding or removing effects from the total effect pool.
+
+## Adjustable ##
+Spells are usually represented as fixed types but might be adjusted with respect to duration, targets, type etc.
+
+# Limiting spell count and power #
+
+---
+
+When designing a spell system one must consider ways to limit the amount and power of spells usable by a single person. In some systems magic users need some place to draw their energy from - either an internal or an external source in others they're limited by the number of spells they're able to cast.
+
+## Counter ##
+Each spell has a cost and the spell caster has a counter which represents how much spell power he has. The counter is usually represented by one of these things:
+
+## Mana ##
+An abstract energy that usually only magic users posses.
+
+## Stamina ##
+The spell caster is being worn out by using magic (even though this solution is normally just another way of saying "mana" since the stamina isn’t really used for much else).
+
+## Hitpoints ##
+The spell caster literally drains his life force to be able to use magic.
+
+## Soulpower ##
+The spell caster gains souls/spiritual power by killing enemies which he can use as power for magic casting.
+
+## Preparing ##
+The spell caster has to prepare/memorize spells and decide which spells he’s going to use the night before he’s actually using it.
+
+## Limited number ##
+The spell caster can only cast a limited amount of spells per day – this count is usually related to spell level.
+
+## Binding ##
+A spell must be bound to a character or an item to be usable. Draining The spell caster must drain either their spell power or spells from other items or creatures.
+
+# Additional #
+
+---
+
+Random ideas that don't fit into any other categories are presented here.
+
+## Misfire ##
+Magic is considered by many as chaotic by nature and might therefore misfire or backfire resulting in anything from the wizard's wand turning into a bouquet of flowers to the end of the world by sudden implosion.
+
+## Accumulation ##
+Each spell thrown within a certain period of time will empower the same or similar spells.
+
+## Winds of magic ##
+Each spell is associated with a certain wind of magic or alignment (hereby referred to as wind). Each spell cast of a certain wind will empower further spells of the same wind but at the same time decrease the power of spells of the opposite wind.
+
+## Summoning ##
+The magic user is basically a summoner and his spells are channeled through a summoned creature.

@@ -1,0 +1,126 @@
+# Le game doc #
+
+
+Documentation de DUPA sur ce que DUPA connait :
+
+Table Of Content:
+
+
+---
+
+# le WAT? (pas de h) #
+
+> Getarandomgame est une idée qu'on a 888888888888888888888888888888888, l'idée est de faire un monde ou vous n'êtes PAS le héro, ou vou n'ête PAS l'élu et ou vous n'êtes PAS le meilleur dans quoi que ce soit.
+
+> À la base Getarandomgame est un jue ou le monde est généré aléatoirement et ou l'évolution est dynamique. Qu'entend-je par là? En gros l'univers de Getarandomgame n'evolue pas uniquement autour du joueur mais autour d'interaction pertinentes entre NPCs; Le joueur pourrait patienter jusqu'a mourir de faim et le monde évoluerait pareil. Le monde n'ayant donc pas besoin du joueur pour avancé celui-ci est laissé libre d'agir comme il lui plait dans l'univers qui lui est présenté.
+
+Donc plusieurs mot clés :
+  * méchanique du jeu, (captain obvious to the rescue)
+  * monde généré aléatoirement
+  * intelligence artificielle qui permet une évolution dynamique, sans pour autant nécéssité un ordi de la mafia.
+
+[Plus d'info](GetRandomGame.md)
+
+Je vais m'attarder sur les deux derniers points, le reste serait a voir en équipe, autour d'une bière...
+donc:
+
+# Générer un monde aléatoirement #
+...sans que ca soit dla marde.
+
+Ca semble beacoup plus complexe que ce ne l'est vraiment
+
+## La taille ##
+
+premierement il faut décider de la taille du monde, le monde doit être un carré avec un coté égal a 2^x +1(5,9,257,4097...) reste a voir quelle taille on veux le monde...
+
+## Génération de la carte ##
+
+ensuite commence la vrai génération, qui va débuter par la création d'une carte vierge qui va comme suit:
+
+on génère une carte d'élévation
+on skew la carte de température par rapport a la carte d'élévation et a la latitude
+on génère une carte de température
+on skew la carte des précipitations par rapport aux deux précédentes cartes
+on génère une carte de précipitations
+on skew la carte de densité végétale par rapport aux cartes précédentes
+on génère une carte de densité végétale
+on arrondi les coins
+
+> maintenant le point interessant, comment on fait?
+
+## Comment? Diamond Square! ##
+
+> Toutes les cartes sont générées de manière similaire aavec l'algorythme de diamond square qui est une application 2d de l'algorythme de midpoint displacement. Cet algorytme s'applique a une ligne et consiste a diviser la ligne en deux, ajouter une valeur aléatoire au point millieu, ce qui divise la ligne en deux ligne, et ainsi de suite pour les autres lignes
+
+ex:
+
+![http://gameprogrammer.com/fractal/mpd1.gif](http://gameprogrammer.com/fractal/mpd1.gif)
+
+![http://gameprogrammer.com/fractal/mpd2.gif](http://gameprogrammer.com/fractal/mpd2.gif)
+
+![http://gameprogrammer.com/fractal/mpd3.gif](http://gameprogrammer.com/fractal/mpd3.gif)
+
+
+pardonnez mes talents de paints
+
+> Le range permis de random reste a voir, mais cet algorythme permet de généré de très bons terrains.
+
+> Donc l'algorythem que nous utiliserons pour la génération des maps doit ressemble a celui-ci, mais pour généré de l'élévation sur une map en 2d. Le principe est simple, toutes les case commencent avec une valeur par défaut(entrée dans les étapes de skew, plus haut). Ensuite on fait un carré avec les case qui ont été visités(par défaut les coins) et on ajoute la moyenne des coins+random a cette valeur. C'est l'Étape square de diamond square. La deuxieme étpae(diamond) consiste a faire des losanges avec les cases visités et d'jouter  la moyenne des coins+random a leurs point millieu. On répète les deux étapes jusqu'a-ce que toutes les cases aies été visités.
+
+Voici comment l'algorythme marche :
+
+![http://danielbeard.files.wordpress.com/2010/08/diamond-square-algorithm.png](http://danielbeard.files.wordpress.com/2010/08/diamond-square-algorithm.png)
+
+encore une fois, pardonnez mes paints skills, les points noirs sont les cases déja visités, les points verts sont les cases qui seront visités pendant l'étape.
+
+> Comme on peut le voir c'est un algorythme simple a programmer qui va nous permettre d'avoir des cartes complexes.
+
+Donc une fois que cet algorythme a généré la premiere carte (élévation) on peux se servir de cette carte pour influencer(skewer) les résultats qu'on auras pour la deuxième carte(température)
+
+
+voici donc la carte de tantot avec des valeurs (généré par moi) dedans
+```
+-10	-10	-8	-5	-8	-7	-6	-8	-10
+-10	-5	-8	-4	-10	-5	-4	-6	-8
+-3	-4	-1	0	-4	-6	-2	3	-8
+-5	-3	0	1	-3	0	0	10	6
+3	0	1	2	0	0	12	20	15
+3	3	2	4	5	6	9	15	12
+4	4	6	4	6	8	9	15	10
+3	2	7	3	4	9	10	12	10
+4	1	8	2	2	5	6	7	8
+```
+On considère ce qui es en bas de 0 comme de l'eau.
+On a donc une carte de 9x9 de température a faire, géralement la température est plus froide aux pôles et en altitude, et plus chaude en mer.
+Donc la carte de température, avant modification ressemblerait a ceci
+```
+0	0	0	0	0	0	0	0	0
+0	0	0	0	0	0	0	-1	0
+0	0	0	1	0	0	0	-2	0
+2	0	1	1	0	1	0	-2	-1
+3	3	4	3	2	1	-1	-3	-2
+3	2	3	2	0	0	0	-2	-2
+1	1	1	1	0	-1	-1	-3	-2
+2	0	0	1	0	-2	-1	-2	-3
+0	0	0	0	0	-2	-1	-1	-2
+```
+Je n'ai utilisé aucun algorythme formel pour avoir ca, mais ca donne une idée.
+Reste qu'a repassé l'agorythem diamond square(plus haut) pour avoir une map complete
+> On fait ca pour les quatres map (altitude, température,  précipitation, végétation)  et chaque case a assez d'information pour savoir quelle genre de case elle est(désert foret taiga tundra...), on a donc un monde vierge
+
+EDIT : vue le test de émille, on s'est rendu compte que c'est vachement important de smoother le random ou on a un monde de bouette. donc le principe c'est de se gosser une variable x qui va diviser le résultat du random pour chaque iteration de de diamond square. donc avant de repasse un diamond square on divise les bornes du random par x.
+
+allright maintenant on a un monde vierge dans lequel on peut disposer des ressources naturelles qui vont amener des villes.
+
+Donc pour placer des trucs sur la map il faut commencer par la splitter par agglomération naturel(grosse montagne, lac, forêt tropicale), chacun de ses agglomérations devront se peupler seul. Chaque agglomération a un certain nombre de ressource spéciale(arbre de magie, mine de sel, thorium) et de quartier/point d’intérêt(combiné) a placer dans sa superficie, proportionnelle a la taille de la dite agglomération avec un peu de random, quand même.
+
+donc on fait l'agglomération en vérifiant la qualité d'une tuile, et des tuiles voisine qui partagent ses qualités, récursivement, donc l'algorithme va parcourir la map un peu comme djikstra le ferais jusqua ce que tous les agglomérations soit highligthés.
+
+
+L’agglomération place en premier ses ressources naturelles, réparties aux hasard a travers sa superficie, de maniere complètement aveugle.
+
+ensuite on place les viles/points d’intérêts, on les éloignes les un des autres et on les place de manière pertinente en fonction du type d'Agglomération et des ressources naturelles placées(pas de villes en plein millieu de l'océan les villages minier sont proche des mines). Lorsque l'agglomération place une villes elle détermine la taille de la ville, en quartier, et les place généralement en cercle/carré , collé un sur l'autre, comme l’agglomération a uniquement un nombre de quartier le random peux placé plusieurs petits villages ou une énorme ville, la taille maximum de la ville est aussi décidé par le type d'aglomération.
+
+on peux scrapper ces agglomérations après la générations des villes/ressources/point d'intèrets.
+
+reste a peaufiner ca et génère des plus petites région.

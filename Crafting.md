@@ -1,0 +1,121 @@
+# Crafting #
+
+
+Table Of Content:
+
+
+---
+
+
+# Info general #
+
+Système de ressources qu'on acquert selon le biome et le climat
+Région minière, foret dense, différentes essences de bois, minérais variés
+
+Grandes catégories : Ressource naturelles, produit
+
+Profession de gathering et de transformation
+
+# MÉTIER #
+
+## GATHERING ##
+
+### Mining : ###
+
+En bordure de montagne, ou dans différentes régions on retrouve du minérais
+Le minérais dépend de l'endroit et non du skill
+Le skill influence le nombre et la qualité de la ressource qu'on gather
+En minant on retrouve des ore de différente qualité/densité qui doivent etre fondu en lingot pour l'utilisation
+
+Exemple : mithril (minerais above average) on le retrouve à partir d'un certaine hauteur, ou d'une certaine profondeur,
+ou selon un certain climat
+
+Le mithril nécessite par exemple 70 mining puisque c'est un minerai quand même rare
+
+A 70 on obtient du minérai standard, si notre skill est plus bas, on a quand meme une chance dans trouver par hasard ou en gossant,
+mais en plus petite concentration (ca en prend plus pour faire des lingots)
+
+L'inverse est aussi vrai, avec mettons 90 mining c'est vraiment facile de miner un niveau 70 alors on est plus en mesure de <
+l'extraire correctement
+
+Donc nécessite 3 sprite, ore normal style coal dans minecraft, l'ore egrainé parce qu'on l'a mal miné, et une grosse roche parce qu'on est bon
+
+Il y a aussi une partie de hasard dans la trouvaille, un bon mineur peu quand meme trouvé de l'ore de marde
+
+Des mécaniques similaires vont s'appliquer aux autres domaines
+
+### Lumberjacking ###
+(Différentes essence de bois, différentes qualité de buche, certaines sont juste esthétique (ébène, bois noir super classe, ou encore du chaine,
+couleur normale mais fucking resistante)
+
+### Herboristerie ###
+(Mining mais avec des plantes, fonctionne sur le même principe)
+
+## PRODUCTION ##
+
+### Cultivateur ###
+
+On ramasse des seeds avec herboristerie qui permet d'ensemancer des champs (faire pousser des ingrédients d'alchimie, de la nourriture, des plantes)
+Les récoltes dépendent du biome, certaines plantes sont plus a l'aise dans un climat froid, certains ont besoin de beaucoup de pluie etc
+Basé sur des propriétés/modifier dans le système de stat, à disctuer
+
+
+### Fishing ###
+Permet de pêcher divers types de poisson, des items randoms (des bottes .. ) des cartes aux trésors
+
+
+
+## TRANSFORMATION ##
+
+### Tailoring : ###
+Permet de faire des armures en cuir, en os, des vetements, transformer les fibres obtenus en cultivant en tissus etc
+
+### Tinkering : ###
+Faire des outils, des gadget, plus mécanique/engineering
+
+### Fletching : ###
+Faire des arcs et des flèches
+
+### Ébénisterie : ###
+Fait des meubles, bateaux, etc plus décoratif, transforme le bois en planche etc
+
+### Alchimie : ###
+Poison, potions, bandages etc
+
+### Blacksmithing : ###
+Self-explanatory
+
+
+---
+
+
+# Notes #
+
+Chaque skill permet des spécialisations, niveau de détails a discuter
+
+Par exemple, dans Star Wars Galaxies, un vieux mmo, le crafting était excessivement détaillé et exhaustif au point ou faire un gun nécessite plusieurs partie par exemple,
+le canon, la gachette etc qui devait etre produit par des joueurs
+
+Étant donné que le crafting est un apprentissage plutôt qu'un skill inné, je crois qu'il est inutile de limiter le choix des skills
+
+Par contre, les skills devrait etre long et couteux a monter, un artisan expérimenté avec de longues années d'expérience et des ressources de bonne qualité devrait produire des items
+qui dépassent la plupart des objets que l'on retrouve/achete pour n'être surpassé que par les objets magiques/legendaires/unique rare
+
+Plutot que de grinder 10 000 minerais de fer et de spammer des épées jusqu'a etre un grand maitre il faut élaborer un processus qui sera lent mais qui récompense l'effort
+
+Un nobody ne devient pas un maitre artisan sur un coup de tete
+
+A explorer l'idée du temps (Exemple faire une épée prend 2 minutes mais permet d'évoluer, versus un item par click mais qu'on spamme)
+
+Donc, le crafting doit etre un investissement, pas quelque chose de d'obligatoire
+
+Différent niveau de qualité avec la même mécanique qu'on retrouve dans mining, ex une épée qui prend 50, si on la fait avec 50, elle est standard, si on la fait avec 40, c'est un prototype, un modele subpar
+alors que si on la fait avec 70, elle est exceptionnel
+
+Arme normale : durabilité standard, +1 dmg
+Arme excep : plus durable, +2 dmg
+
+Pas besoin de blocker les paths, un blacksmith peut etre un Armor et un weaponsmith si il est met le temps
+
+L'idée est que le crafting soit un investissement en soi mais que ca en vaille la peine, contrairement a l'idée habituelle ou le crafting est obligatoire et facile a monter mais les
+items sont remplacés par tout ce qu'on trouve sur le chemin

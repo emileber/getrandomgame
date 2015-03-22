@@ -1,0 +1,251 @@
+# C++ Coding Standard #
+
+
+
+Table Of Content:
+
+
+---
+
+# The Complete Standard #
+
+see [this](http://www.possibility.com/Cpp/CppCodingStandard.html)
+
+
+---
+
+# Naming Standard #
+
+## Class Names ##
+
+  * Use upper case letters as word separators, lower case for the rest of a word
+  * First character in a name is upper case
+  * No underbars (`'_'`)
+### _Justification_ ###
+
+Of all the different naming strategies many people found this one the best compromise.
+
+Example
+
+```
+   class NameOneTwo
+  
+   class Name
+```
+
+
+## Method Names ##
+
+  * The first character should be lower case.
+  * All word beginnings after the first letter should be upper case as with class names.
+
+### _Justification_ ###
+
+Of all the different naming strategies many people found this one the best compromise. And it doesn't change from Java dev and the STL is all like that.
+
+Example
+```
+   class NameOneTwo
+   {
+   public:
+      int                   doIt();
+      void                  handleError();
+   }
+```
+
+## Class Attribute Names ##
+
+  * Attribute names should be prepended with the character 'm'.
+  * After the 'm' use the same rules as for class names.
+  * 'm' always precedes other name modifiers like 'p' for pointer.
+
+### _Justification_ ###
+
+Prepending 'm' prevents any conflict with method names. Often your methods and attribute names will be similar, especially for accessors.
+
+Example
+```
+   class NameOneTwo
+   {
+   public:
+      int                   varAbc();
+      int                   errorNumber();
+   private:
+      int                   mVarAbc;
+      int                   mErrorNumber;
+      String*               mpName;
+   }
+```
+
+
+## Method Argument Names ##
+
+  * The first character should be lower case.
+  * All word beginnings after the first letter should be upper case as with class names.
+
+### _Justification_ ###
+
+  * You can always tell which variables are passed in variables.
+  * You can use names similar to class names without conflicting with class names.
+
+Example
+```
+   class NameOneTwo
+   {
+   public:
+      int                   startYourEngines(
+                               Engine& rSomeEngine, 
+                               Engine& rAnotherEngine);
+   }
+```
+
+
+## Pointer Variables ##
+
+  * (FUCK THAT, not necessary but may help reading the code) pointers should be prepended by a 'p' in most cases
+  * place the `*` close to the pointer type not the variable name
+
+### _Justification_ ###
+
+  * The idea is that the difference between a pointer, object, and a reference to an object is important for understanding the code, especially in C++ where -> can be overloaded, and casting and copy semantics are important.
+  * Pointers really are a change of type so the `*` belongs near the type. One reservation with this policy relates to declaring multiple variables with the same type on the same line. In C++ the pointer modifier only applies to the closest variable, not all of them, which can be very confusing, especially for newbies. You want to have one declaration per line anyway so you can document each variable.
+
+Example
+```
+  String* pName= new String;
+
+  String* pName, name, address; // note, only pName is a pointer.
+```
+
+## Naming Class Files ##
+
+### Class Definition in One File ###
+
+Each class definition should be in its own file where each file is named directly after the class's name:
+  * ClassName.h
+
+### Implementation in One File ###
+
+In general each class should be implemented in one source file:
+  * ClassName.cpp
+
+
+---
+
+# Documentation #
+
+## Doxygen specifications ##
+Format your comment using the [Doxygen documentation](http://www.stack.nl/~dimitri/doxygen/manual/index.html) like this:
+
+```
+/*!
+ *  @Util.cpp
+ *  @brief     	Generic Template and functions
+ *  @details   	more detailed info
+ *  @author    	E. Bergeron
+ *  @date      	2012-02-13
+ *  @pre	you must include Util.h and call it like Util::theFunction();
+ *  @copyright 	Prismal Studio 2008-2013 www.prismalstudio.com
+ */
+
+/**
+ * Split a string "s" at each "delim" char and push the tokens into the created vector "elems"
+ * @param s a constant string reference to be split
+ * @param delim the character used to split the string "s"
+ * @return the "elems" vector reference
+ */
+std::vector<std::string> Util::split(const std::string & s, char delim) {
+	std::vector<std::string> elems;
+	return split(s, delim, elems);
+}
+```
+
+## Commit comments ##
+
+<font color='red'><b>Commit comments are obligatory.</b></font> They are important to keep track of what has been done and something to find why something doesn't work anymore. Review your commit options/modifications before committing to prevent errors. If you do not follow that rule, you may lose your committer privilege.
+
+Here's a hint to help you organize your commit comments, keep a text file for the future commit comment like this:
+<font color='green'><pre>
+ADDED<br>
+- added reload function in engine that reload graphics of the active environment<br>
+- added a LightObject class<br>
+- added a vector of Environment in the Engine class<br>
+- Active attribute to tile (green rect around active)<br>
+- Full camera support<br>
+- Art folder in docs folder (containing art assets)<br>
+- a new test tileset (the third)<br>
+<br>
+REMOVED<br>
+- textx and testy support (almost, currently useless)<br>
+- dependencies between Environments<br>
+<br>
+FIXED<br>
+- how the world use the screen dimension (twice fixed)<br>
+- Fullscreen/window mode display font correctly<br>
+- how lightEngine draw lights<br>
+- How the engine handle switching app Environment<br>
+<br>
+BUG FOUND<br>
+- fullscreen dosn’t work well<br>
+<br>
+TODO<br>
+- make a lighting draw<br>
+- enable resizable window mode<br>
+- fullscreen<br>
+- Smooth camera<br>
+</pre>
+</font>
+That is a perfect comment.
+
+DO NOT DO THIS:
+<font color='red'>
+<pre>
+fukken DungeonGenerator nigger<br>
+</pre>
+</font>
+## Comments Should Tell a Story ##
+
+Consider your comments a story describing the system. Expect your comments to be extracted by a robot and formed into a man page. Class comments are one part of the story, method signature comments are another part of the story, method arguments another part, and method implementation yet another part. All these parts should weave together and inform someone else at another point of time just exactly what you did and why.
+
+## Document Decisions ##
+
+Comments should document decisions. At every point where you had a choice of what to do place a comment describing which choice you made and why. Archeologists will find this the most useful information.
+
+## Comment All Questions a Programmer May Have When Looking at Your Code ##
+
+At every point in your code think about what questions a programmer may have about the code. It's crucial you answer all those questions somehow, someway. If you don't, as the code writer, answer those questions, who will?
+If you think your code is so clear and wonderful that nobody will have any questions then you are lying to yourself. I have never seen a large system with this wonderful self-documenting code feature. I've seen very few small libraries are even a single class that are so wonderfully self-documented.
+
+You have a lot of tools at your disposal to answer questions:
+
+  1. A brain to think up the questions you should be answering. Why? Who? When? How? What?
+  1. Variable names.
+  1. Class names.
+  1. Class decomposition.
+  1. Method decomposition.
+  1. File names.
+  1. Documentation at all levels: package, class, method, attribute, inline.
+The better you are at orchestrating all these elements together the clearer your code will be to everyone else.
+
+I don't really consider unit tests a question answering device because if you can't understand the code by reading it, reading something else about the code you don't understand won't help you understand it better.
+
+## Include Statement Documentation (May help) ##
+
+Include statements should be documented, telling the user why a particular file was included. If the file includes a class used by the class then it's useful to specify a class relationship:
+  * ISA - this class inherits from the class in the include file.
+  * HASA - this class contains, that is has as a member attribute, the class in the include file. This class owns the memory and is responsible for deleting it.
+  * USES - this class uses something from the include file.
+  * HASA-USES - this class keeps a pointer or reference to the class in the include file, but this class does not own the memory.
+
+Example
+```
+#ifndef XX_h
+#define XX_h
+
+// SYSTEM INCLUDES
+//
+#include                              // standard IO interface
+#include                             // HASA string interface
+#include                               // USES auto_ptr
+```
+Notice how just by reading the include directives the code is starting to tell you a story of why and how it was built.

@@ -1,0 +1,513 @@
+# Getting Started #
+
+
+Table Of Content:
+
+
+---
+
+# IMPORTANT #
+<font color='red'>if you don't have your development environment ready:</font>
+
+  1. [see this](Setup.md);
+  1. And read the [Standard](Standard.md) and prepare to follow it;
+  1. Then take a quick look at the [Guideline](Guideline.md).
+Also, before starting to code:
+  1. Update the sources
+  1. Build
+  1. and RUN it to be sure it's fully fonctionnal before adding your stuff.
+
+
+---
+
+# OMG there's a lot of files #
+
+Ne vous perdez pas, je suis la!
+
+Donc, jusqu'à maintenant, le projet est divisé en 2 parties distinctes, soit le Tile Engine et le Jeu (notre but).
+
+Le jeu utilise le Tile Engine qui lui est générique et ne devrait pas contenir de code spécifique au jeu évidement. En gros, le Tile Engine comprend la base dans le Dossier TileEngine et le Jeu contient ses fichiers, qui héritent du Tile Engine, dans le dossier GetRandomGame. Chaque classe de l'Engine est dans le namespace TileEngine. Le dossier Util contient des classes génériques n'étant pas spécifique au moteur ni au jeu.
+
+Voici une ébauche rapide de ce qu'il contiennent présentement en date de la [r75](https://code.google.com/p/getrandomgame/source/detail?r=75):
+### Le dossier src ###
+_Le dossier src contient toutes les classes qui doivent être compilées._
+  * **GetRandomGame** _est le dossier racine du projet de jeu_
+    * **Biomes**
+      * WaterBiome (la mer)
+      * _...et les autres biomes._
+    * **ZoneType** _Contient les types de zone._
+      * DockQuarter
+      * Dock
+      * SunkenCity
+      * ZoneType (classe parente)
+    * **Game UI** _contient le code relatif aux interfaces graphiques._
+    * **generation** _code de generation de map._
+      * Biome (relié à la génération de monde)
+      * BiomeManager
+      * DiamondSquare (relié à l'algo du même nom)
+      * MapGenerator (Génère un monde)
+      * WorldMap (un monde de notre jeu)
+    * CharacterTestEnvironment (État qui sert pour les tests de personnage)
+    * GetRandomGame (Sous-classe Environement, état applicatif du jeu)
+    * MainMenuEnvironment (État du menu principal)
+    * Launcher **(MAIN)**
+  * **TileEngine** _Dossier racine du moteur et est aussi un namespace_
+    * **Graphic** _Les classes reliées à l'affichage avec OpenGL_
+      * Texture : Ressource (draw itself on Draw calls)
+      * Sprite (contient un pointeur de texture et de rect pour faciliter la création d'image)
+      * MultiTintedSprite : Sprite (permet de recolorer chaque coin indépendamment)
+      * (1)Camera (the view point)
+      * (1)Graphic (initialise la fenetre)
+      * Animation : Ressource - pas encore implémenté
+      * GraphicType (défini les structures du type rect, section et couleur)
+      * Font : Ressource (pour l'affichage de text TrueType font .ttf)
+    * **GUI**
+      * _contient les classes pour fabriquer des menus._
+    * Global.h (Fichier ENTETE contenant constante et include relié à l'engine)
+    * Environment (Environment générique, C'est un état d'application "AppState")
+    * InputHandler (Dispatch les input dans les bonnes fonctions)
+    * EventInterface (interface à utiliser pour utiliser le InputHandler)
+    * _(Deprecated) (1)SdlInterface (Encapsulation de fonction relié à SDL)_ Maintenant voir Graphic
+    * (1)Engine (la boucle de jeu)
+    * Timer (donne du temps en milisec avec le tick SDL)
+    * World (monde de jeu générique, presque vide aussi, c'est a redéfinir dans le jeu)
+  * **Util** _contient les classes utilitaires génériques n'ayant pas de lien direct avec le projet_
+    * Singleton (Template pour créer des singleton sans avoir a implémenter le code dans chaque classe)
+    * (1)Manager (Template class, sert de genre de Factory)
+    * Ressource (Classe Abstraite Pure pour les ressources du manager)
+    * Point
+    * Rectangle
+(1) = Singleton, class Specific : class Parent
+### Le dossier docs ###
+Contient les fichiers relatifs à la documentation du projet.
+  * evolution _contient des images du projet à travers le dévelopement._
+  * issue _contient les images/docs relatifs aux erreurs rencontrées dans le projet._
+  * art _contient les fichiers sources ainsi que des images d'art du projet._
+### Le dossier font ###
+Il parle de lui-même, il contient les polices de caractère.
+### Le dossier image ###
+contient les images que le projet utilise.
+### Le dossier lib ###
+<font color='red'><b>IMPÉRATIF, ne jamais modifier ce dossier.</b></li></ul>
+
+Important, ce dossier doit être exclu du Build autant pour le Debug que la Release (si ce n'est pas déjà fait) voir <a href='Setup.md'>Setup</a>.</font> Puisqu'il contient des sources, les IDE tendent à essayer de les compiler par défaut.<br>
+<br>
+Il contient les sources, bibliothèques et dll des Libraries utilisées dans le projet. Le projet "link" vers c'est fichiers.<br>
+<br>
+<h2>Global.h WTF?</h2>
+
+Je vais faire référence souvent à ce fichier, c'est le fichier de constante du moteur et des Enumerations (comme les Layer présentement). Il est peut-être mauvais de passer les constantes comme ça, ça reste à revérifier et c'est pas définitif.<br>
+<br>
+<hr />
+<h1>Le Tile Engine</h1>
+
+Petite explication rapide de l’engin. Prendre note que la classe Engine est Singleton. Bien que cela lui donne une scope global, il est déconseillé de l'appelé en utilisant cette propriété. Cela changera probablement dans le futur.<br>
+<br>
+L'Engine est en fait un mixte de la boucle de jeu et la machine à états finis de l'application. Les états sont des sous-classes d'Environment (exemple, GetRandomGame, MainMenuEnvironment, CharacterTestEnvironment).<br>
+<br>
+<h2>Pour le starter</h2>
+
+<pre><code>// Get a pointer to the engine
+// which serves as a app state machine
+Engine * eng = Engine::getInstance();
+
+// push the Environment(s) (app state) we want
+eng->PushEnvironment(new MainMenuEnvironment(eng));
+eng->PushEnvironment(new GetRandomGame(eng));
+
+// init it with custom screen size
+if (eng->Init(SCREEN_WIDTH, SCREEN_HEIGHT, "Tile Game test")) {
+	// then start this sh!t up
+	eng->Start();
+}else{
+	std::cout << "Error in Engine INIT..." << std::endl;
+}
+```
+
+Il est important de faire Init en premier, mais ça on s'en fou, je l'ai fait, on risque plus d'y toucher.
+
+## Création ##
+
+À sa création, l'Engine initialise l'interface Graphic ainsi que l'environment donné en premier.
+
+NOTE: Graphic est singleton aussi ainsi que tous les Manager graphique.
+
+Ensuite, il appelle run() qui start le gameLoop.
+
+## Le Game Loop ##
+
+```
+/**
+	 *  GAME LOOP
+	 */
+	while (!IsExit()) {
+		/**
+		 * each iteration, do this:
+		 */
+		mFrameTimer.Start(); //Calcul le temps d'execution de l'iteration
+
+		mGraphic->ClearScreen(); // clear the screen
+		// Do all the draw OPs FIRST
+		GetActiveEnvironment()->Draw();
+		// then send the data to the Graphic Device (video card)
+		// while the input and update are processing
+		mGraphic->FlushBuffers();
+
+		// Collect and handle inputs informations (return false on exit)
+		if (mInputHandler->HandleInput(GetActiveEnvironment())) {
+			Exit();
+		}
+		GetActiveEnvironment()->Update(); // UPDATE the environment
+		FpsRegulator(); // show FPS information
+
+		mGraphic->FlipBuffers(); // flip the screen
+
+		// wait the time left after the last loop (timeLeft = timeEachLoop - timeTakenThisLoop)
+		while (mFrameTimer.GetTimerTicks() < 1000 / FRAMES_PER_SECOND)
+			;
+
+	} // End of the GAME LOOP
+```
+
+## Regulation des Frame par seconde ##
+
+On voit dans la ligne:
+```
+while (_frameTimer.get_ticks() < 1000 / FRAMES_PER_SECOND)
+			;
+```
+que la boucle est géré par FPS. Elle attend seulement le temps restant pour garder sont taux de FPS.
+
+Le cap de FPS devrait tourner autour de 60 fps idéalement. Si votre code le fais descendre en bas de ce cap, optimisez! Lorsque le jeu sera terminé, le FPS ne devra idéalement **jamais descendre en dessous de 24** qui est la limite pour garder une fluidité.
+
+### Ton app bloque a 60 fps? ###
+Désactive le vertical sync de ta carte graphique pour voir le maximum de FPS que ta machine atteint.
+
+## La classe Environment ##
+
+Un environnement est un état (state) de l'application. Ex.: Splash Screen, Main Menu, le jeu, crédit sont tous des environnements.
+
+Celle du namespace TileEngine est vraiment générique et ne contient que des fonctions à redéfinir, elle est abstraite.
+
+
+---
+
+# L'interface graphique avec SDL (un démon) et OpenGL (le diable en personne) #
+
+Bon alors j'ai encapsulé le boute chiant donc vous n'aurai pas a jouer avec des trucs d'affichage.
+
+Lorsque terminé, l'interface permettra les choses suivantes:
+  * afficher des images (done)(même en dehors de l'écran, ça fais pas d'erreur c'est correct et normal de le faire, bien que l'on ne le voit pas, serait idéalement à éviter question d'optimiser)
+  * afficher du [texte](GettingStarted#le_texte.md) (done)
+  * Sur x Layer différentes (et ajustable à volonter)
+  * transparence (done)
+  * Rotation (done)
+  * flip horizontal/vertical (done)
+  * Resize (done)
+  * Teinte et multi-teinte (done) (couleur ajusté, comme les biomes dans Minecraft, les textures seront en grayscale)
+  * un éclairage dynamique. (almost done, disons fonctionnel, à optimiser)
+
+## Son contenu ##
+
+Ce qui est interessant:
+```
+ // Les fonctions de dessins: 
+Graphic::getInstance()->drawRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+ // drawFilledRectangle(GLfloat x, GLfloat y, GLfloat width, GLfloat height, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+ // drawLine(GLfloat x, GLfloat y, GLfloat x2, GLfloat y2, GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+
+```
+La plupart des fonctions sont auto-explicatives. **PAR CONTRE**, elles sont quand même lente et ne devraient être utilisées à la légère.
+
+## Comment afficher une image? ##
+
+  1. Crée une Sprite, MultiTintedSprite ou une Animation
+  1. À chaque iteration, appeler la fonction "draw" de cet objet. (soit dans le draw de l'environnement ou de la classe parente)
+
+```
+
+// Load une Sprite
+// NOTE: tonImage.png doit avoir des dimensions d'une puissance de 2 (obligatoire) et idéalement carré (mais pas obligatoire)
+// @param string filename
+// @param SectionRect section de la texture à dessiner, NULL pour tout dessiner
+Sprite * imageTest = new Sprite("image/tonImage.png", new Section(x, y, width, height));
+
+// dessine une image
+imageTest->draw(float x, float y, float scale = 1, float rotation = 0, const Color3f * color = NULL, float alpha = 1);
+
+```
+
+## Comment afficher du texte ##
+
+Pour un affichage directe
+  1. Load un Font
+  1. À chaque itération, appel la fonction Draw du Font avec ton texte en parametre.
+Sinon, pour un affichage de texte dans une Interface (relativement tout le texte), utiliser un GLabel.
+
+```
+
+// passe par le Manager pour éviter d'ouvrir plusieurs fois un fichier
+// NOTE: un font devrait toujours être chargé dans un pointeur de constante Font, comme ça,
+//       il est possible de pointer vers un autre Font, mais il est impossible de modifier le font.
+const Font * _fontTest = Manager<Font>::getInstance()->LoadRessource("font/FontFile.ttf");
+
+// puis appel draw
+_fontTest->Draw("Bayvania Crossing", x, y, red, green, blue, alpha);
+```
+
+
+---
+
+# Util #
+
+Dans notre projet, il y a un dossier nommé Util. Il contient des classes et des templates génériques qui ne font pas parti du namespace TileEngine. Ils sont par contre essentiels.
+
+## Singleton ##
+
+Le [concept du singleton](http://en.wikipedia.org/wiki/Singleton_pattern) est de limiter la création d'une classe à une instance unique et de la rendre en même temps globale. Pour y arriver, nous laissons le soin à la classe elle-même de gérer sa création par le biais du Design Pattern nommé Singleton.
+
+J'ai donc inclue un Template du Singleton qui nous permet de facilement créer une classe singleton. Comment y arriver?
+  1. Crée une nouvelle classe et fais la hériter de Singleton`<taClasse>`
+  1. Ensuite, question de respecter le principe du Singleton, ajoute la classe singleton comme étant un FRIEND comme ceci "friend class Singleton`<taClasse>`;"
+  1. Place les constructeur/destructeur dans la partie privé de la classe
+  1. accède de n'importe où à l'instance unique de ta classe avec: "taClasse::getInstance();"
+
+### Exemple de Singleton ###
+```
+class TaClasse: public Singleton<TaClasse> {
+	friend class Singleton<TaClasse> ;
+public:
+
+	// fonctions public
+private:
+	TaClasse() {
+	}
+	virtual ~TaClasse() {
+	}
+
+	// membres privés
+};
+```
+
+## Manager et Ressource ##
+
+De façon à limiter l'ouverture d'un fichier et de son chargement à une unique fois, il nous faut une classe qui gère cela et nous l'appelons ici le Manager. De façon à avoir accès à un Manager unique et ce partout, chaque Manager doit être Singleton et c'est pourquoi la classe créé gère cela elle-même.
+
+Le Manager est une classe Template, donc elle s'ajuste au contenu qu'elle gère mais pour s'assurer du bon fonctionnement de la classe et de l'implémentation des bonnes fonctions, chaque classe que le manager devra géré DOIT IMPÉRATIVEMENT hériter de la classe abstraite Ressource.
+
+Son utilisation:
+  1. `Manager<TaSousClasseRessource>::getInstance()`;
+  1. Ensuite, utiliser la fonction LoadRessource(string filename)
+  1. Retourne à tout coup une instance de TaSousClasseRessource et automatiquement l'ajoute aux ressources chargées
+    * Si la ressource est déjà chargé, il retourne l'instance déjà chargé.
+
+**IMPORTANT** Le Manager se sert du nom de fichier (string filename) pour classer et donc savoir ce qui est déjà chargé.
+```
+// Load une texture qui est une sous classe de Ressource
+Texture * textureTest = Manager<Texture>::getInstance()->loadRessource(filename);
+```
+
+### la classe Manager ###
+```
+/*
+ * Manager.h
+ *
+ *  Created on: 2012-02-13
+ *      Author: Emile
+ *
+ *      Generic Template to manage Ressource sub-class.
+ *      It protects you from loading a file/ressource twice.
+ *
+ *      Note: NO NEED TO CREATE, IT'S A SINGLETON
+ *      (view the design pattern singleton for more info)
+ *
+ *      To have access to it:
+ *      Manager<YourRessourceSubClass>::getInstance();
+ *
+ *      To get a ressource:
+ *      Manager<YourRessourceSubClass>::getInstance()->LoadRessource("yourFilePath");
+ *
+ *      The file path serves as a key, if you use LoadRessource with
+ *      a file that has already been loaded, you'll get the pointer to
+ *      that Ressource.
+ *
+ *
+ */
+
+#ifndef MANAGER_H_
+#define MANAGER_H_
+
+#include "Singleton.h"
+#include <iostream>
+#include <map>
+#include "Ressource.h"
+
+template<typename T>
+class Manager: public Singleton<Manager<T> >{
+	friend class Singleton<Manager<T> > ;
+public:
+
+	/**
+	 * Load the ressource only if not already register
+	 *  string filename is the key
+	 *  T * is a pointer to the ressource itself
+	 */
+	T * LoadRessource(std::string filename) {
+		if (!IsLoaded(filename)) {
+			T * newRessource = new T();
+			newRessource->Load(filename);
+			RegisterRessource(newRessource);
+			return newRessource;
+		}
+		return mRessourceMap[filename];
+	}
+
+	/**
+	 * Clear the map
+	 */
+	void DeleteAllRessource() {
+		typename std::map<std::string, T*>::iterator pos =
+				mRessourceMap.begin();
+		while (pos != mRessourceMap.end()) {
+			delete (*pos).second;
+			pos++;
+		}
+		mRessourceMap.clear();
+	}
+
+	/**
+	 * Reload all the ressource in the map
+	 */
+	void ReloadAllRessource() {
+		typename std::map<std::string, T*>::iterator pos =
+				mRessourceMap.begin();
+		while (pos != mRessourceMap.end()) {
+			(*pos).second->Reload();
+			pos++;
+		}
+	}
+
+	/**
+	 * Return true if filename is already loaded
+	 */
+	bool IsLoaded(std::string filename) {
+		if (mRessourceMap.find(filename) != mRessourceMap.end()) {
+			return true;
+		}
+		return false;
+	}
+
+	/// Add a ressource to manage
+	void RegisterRessource(T * ressource) {
+		if (!IsLoaded(ressource->GetFilename())) {
+			mRessourceMap[ressource->GetFilename()] = ressource;
+		}
+	}
+	/// Removes a texture from management
+	void UnRegisterRessource(T * ressource) {
+		if (IsLoaded(ressource->GetFilename())) {
+			mRessourceMap.erase(ressource->GetFilename());
+		}
+	}
+
+	void ListAllRessourceKey() {
+		typename std::map<std::string, T*>::iterator pos =
+				mRessourceMap.begin();
+		std::cout << "Ressource Map contain:" << std::endl;
+		while (pos != mRessourceMap.end()) {
+			std::cout << (*pos).first << std::endl;
+			pos++;
+		}
+		std::cout << "_ressourceMap::END" << std::endl;
+	}
+
+protected:
+	Manager() {
+	}
+	virtual ~Manager() {
+		DeleteAllRessource();
+	}
+private:
+	std::map<std::string, T *> mRessourceMap;
+};
+
+#endif /* MANAGER_H_ */
+
+```
+
+### Ressource ###
+La classe abstraite pure Ressource sert uniquement à être hérité par une sous-classe qui sera géré par le Manager de la classe en question.
+
+Son utilisation (Exemple avec Texture):
+  1. Texture hérite de Ressource
+  1. Texture redéfini la fonction load(string filename) et c'est OBLIGATOIRE
+  1. ensuite il est possible facilement de faire `Manager<Texture>::getInstance()` pour obtenir un gestionnaire de Ressource
+
+```
+class Ressource {
+public:
+	Ressource() {
+		_filename = "";
+		_isLoaded = false;
+	}
+	virtual ~Ressource() {}
+
+	/**
+	 * Pure virtual function
+	 * MUST be implement
+	 */
+	virtual void load(std::string filename) = 0;
+
+	std::string getFilename() const {
+		return _filename;
+	}
+	bool isLoaded() const {
+		return _isLoaded;
+	}
+protected:
+	std::string _filename;
+	bool _isLoaded;
+};
+```
+
+
+---
+
+# Les menus aka L'interface Graphique #
+
+## Explication ##
+Les menus sont composé de plusieurs objets de contrôle simple comme un bouton, du texte, une fenêtre, etc. Tous ces objets sont gérés par la classe GuiContainer.
+
+Présentement, j'ai pensé que chaque projet devrait redéfinir GuiContainer pour ainsi redéfinir Init et créer sa propre interface.
+
+en code:
+```
+
+// on se crée un nouveau pointeur (une seule fois)
+GuiContainer * mGuiContainer = new GameUI();
+
+// ************************
+// Partie utile
+//*************************
+// on crée une Label de texte
+_testCoordLabel = new GLabel("test a afficher", "font/file.ttf");
+
+// Offset de possition
+_testCoordLabel->SetOffset(10, 10);
+
+// couleur, ici blanc
+_testCoordLabel->SetColor(255, 255, 255);
+
+// et on ajoute le contrôle
+mGuiContainer->PushMenu(_testCoordLabel);
+
+//on en ajoute autant que nécessaire
+
+// ************************
+// fin de la Partie utile
+//*************************
+
+// puis on draw
+mGuiContainer->Draw();
+
+```
